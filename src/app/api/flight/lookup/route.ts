@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { FlightData } from "@/lib/types";
 
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 const cache = new Map<
   string,
   { data: FlightData; expiresAt: number }
@@ -11,33 +11,26 @@ function normalizeFlightNumber(input: string): string {
   return input.replace(/\s+/g, " ").trim().toUpperCase();
 }
 
-function parseAviationStackResponse(
-  body: unknown,
-  fallbackFlightNumber: string
-): FlightData | null {
-  if (!body || typeof body !== "object" || !Array.isArray((body as { data?: unknown }).data)) {
-    return null;
-  }
-  const data = (body as { data: unknown[] }).data;
-  const first = data[0];
-  if (!first || typeof first !== "object") return null;
-
-  const flight = first as {
-    flight_status?: string;
-    departure?: {
-      terminal?: string;
-      gate?: string | null;
-      scheduled?: string;
-      delay?: number;
-    };
-    airline?: { name?: string };
-    flight?: { iata?: string; number?: string };
+type AviationStackFlight = {
+  flight_status?: string;
+  departure?: {
+    iata?: string;
+    airport?: string;
+    terminal?: string;
+    gate?: string | null;
+    scheduled?: string;
+    delay?: number;
   };
+  airline?: { name?: string };
+  flight?: { iata?: string; number?: string };
+};
 
+function parseSingleFlight(
+  flight: AviationStackFlight,
+  fallbackFlightNumber: string
+): FlightData {
   const dep = flight.departure;
-  const scheduled = dep?.scheduled
-    ? new Date(dep.scheduled)
-    : null;
+  const scheduled = dep?.scheduled ? new Date(dep.scheduled) : null;
   const boardingTime = scheduled
     ? new Date(scheduled.getTime() - 35 * 60 * 1000)
     : null;
@@ -51,6 +44,8 @@ function parseAviationStackResponse(
   return {
     flightNumber: (flight.flight?.iata ?? fallbackFlightNumber).replace(/\s/g, ""),
     airline: flight.airline?.name ?? "Unknown",
+    departureAirportIata: dep?.iata ?? undefined,
+    departureAirportName: dep?.airport ?? undefined,
     terminal: dep?.terminal ? `Terminal ${dep.terminal}` : "—",
     gate: dep?.gate ?? null,
     boardingTime: boardingTime
@@ -60,9 +55,46 @@ function parseAviationStackResponse(
           hour12: true,
         })
       : "—",
-    minutesUntilBoarding: 40, // API doesn't provide; could derive from scheduled vs now
+    minutesUntilBoarding: 40,
     status,
   };
+}
+
+function pickBestMatch(
+  flights: AviationStackFlight[],
+  fallbackFlightNumber: string,
+  flightDate: string,
+  departureAirportIata: string
+): AviationStackFlight | null {
+  if (!flights.length) return null;
+
+  const depIataUpper = departureAirportIata.trim().toUpperCase();
+  const targetDate = flightDate.trim(); // YYYY-MM-DD
+
+  // Filter by departure airport if provided
+  let candidates = flights;
+  if (depIataUpper) {
+    candidates = flights.filter(
+      (f) => (f.departure?.iata ?? "").toUpperCase() === depIataUpper
+    );
+    if (candidates.length === 0) candidates = flights; // fallback if no match
+  }
+
+  // Filter by date if provided (match scheduled departure date)
+  if (targetDate) {
+    const byDate = candidates.filter((f) => {
+      const scheduled = f.departure?.scheduled;
+      if (!scheduled) return true; // keep if no date
+      const d = new Date(scheduled);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}` === targetDate;
+    });
+    if (byDate.length > 0) candidates = byDate;
+  }
+
+  return candidates[0] ?? null;
 }
 
 export async function POST(request: Request) {
@@ -70,6 +102,16 @@ export async function POST(request: Request) {
     const body = await request.json().catch(() => ({}));
     const raw = (body?.flightNumber ?? body?.flight_number ?? "").toString();
     const normalized = normalizeFlightNumber(raw);
+    const flightDate =
+      typeof body?.flightDate === "string"
+        ? body.flightDate
+        : typeof body?.flight_date === "string"
+          ? body.flight_date
+          : "";
+    const departureAirportIata =
+      typeof body?.departureAirportIata === "string"
+        ? body.departureAirportIata.trim().toUpperCase()
+        : "";
 
     if (!normalized) {
       return NextResponse.json(
@@ -78,7 +120,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const cacheKey = normalized.replace(/\s/g, "");
+    const cacheKeyBase = normalized.replace(/\s/g, "");
+    const cacheKeyParts = [cacheKeyBase];
+    if (departureAirportIata) cacheKeyParts.push(departureAirportIata);
+    if (flightDate) cacheKeyParts.push(flightDate);
+    const cacheKey = cacheKeyParts.join(":");
     const cached = cache.get(cacheKey);
     if (cached && cached.expiresAt > Date.now()) {
       return NextResponse.json(cached.data);
@@ -90,7 +136,13 @@ export async function POST(request: Request) {
       const url = new URL("https://api.aviationstack.com/v1/flights");
       url.searchParams.set("access_key", apiKey);
       url.searchParams.set("flight_iata", flightIata);
-      url.searchParams.set("limit", "1");
+      if (departureAirportIata) {
+        url.searchParams.set("dep_iata", departureAirportIata);
+      }
+      // Request more results when we may need to filter (multiple same-day flights)
+      const limit = departureAirportIata ? 5 : 10;
+      url.searchParams.set("limit", String(limit));
+      // Free tier does not support flight_date; we filter by date client-side.
 
       const res = await fetch(url.toString(), { next: { revalidate: 0 } });
       const data = await res.json();
@@ -104,7 +156,11 @@ export async function POST(request: Request) {
         );
       }
 
-      const mapped = parseAviationStackResponse(data, normalized);
+      const flights: AviationStackFlight[] = Array.isArray(data?.data)
+        ? data.data.filter((f: unknown): f is AviationStackFlight => f != null && typeof f === "object")
+        : [];
+      const selected = pickBestMatch(flights, normalized, flightDate, departureAirportIata);
+      const mapped = selected ? parseSingleFlight(selected, normalized) : null;
       if (mapped) {
         cache.set(cacheKey, {
           data: mapped,
@@ -112,12 +168,36 @@ export async function POST(request: Request) {
         });
         return NextResponse.json(mapped);
       }
+
+      // Flights returned but none matched date/airport filter
+      if (flights.length > 0) {
+        return NextResponse.json(
+          {
+            error:
+              "No flight matched your date or airport. Try adjusting your search or add your gate manually.",
+          },
+          { status: 404 }
+        );
+      }
+
+      // API responded but no flight in result (e.g. not found or future flight)
+      if (Array.isArray(data?.data) && data.data.length === 0) {
+        return NextResponse.json(
+          {
+            error:
+              "Flight not found or no live data. Try another flight number or add your gate manually after search.",
+          },
+          { status: 404 }
+        );
+      }
     }
 
     // Stub when no key or no API result
     const stub: FlightData = {
       flightNumber: normalized,
       airline: "American Airlines",
+      departureAirportIata: "JFK",
+      departureAirportName: "John F Kennedy International Airport",
       terminal: "Terminal 4",
       gate: "B12",
       boardingTime: "2:45 PM",

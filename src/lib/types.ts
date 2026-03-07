@@ -1,6 +1,10 @@
 export interface FlightData {
   flightNumber: string;
   airline: string;
+  /** IATA code of departure airport (e.g. "JFK") — from AviationStack, used for correct terminal mapping */
+  departureAirportIata?: string;
+  /** Full name of departure airport — from AviationStack */
+  departureAirportName?: string;
   terminal: string;
   gate: string | null;
   boardingTime: string;

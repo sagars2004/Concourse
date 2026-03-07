@@ -95,6 +95,8 @@ export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({}));
     const terminal = typeof body?.terminal === "string" ? body.terminal : "";
+    const departureAirportIata =
+      typeof body?.departureAirportIata === "string" ? body.departureAirportIata : undefined;
     const _gate = body?.gate;
     const minutesUntilBoarding =
       typeof body?.minutesUntilBoarding === "number"
@@ -106,7 +108,9 @@ export async function POST(request: Request) {
 
     let list: FoodRecommendationItem[];
 
-    const airport = terminal ? getAirportData(terminal) : null;
+    const airport = terminal
+      ? getAirportData(terminal, departureAirportIata)
+      : null;
     if (airport) {
       list = buildFromRag(airport, minutesUntilBoarding);
     } else {

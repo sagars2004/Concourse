@@ -8,11 +8,13 @@ import { useConcourse } from "@/context/concourse-context";
 
 export function FlightInput() {
   const [value, setValue] = useState("AA 203");
+  const [date, setDate] = useState("");
+  const [airport, setAirport] = useState("");
   const { lookupFlight, step } = useConcourse();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    lookupFlight(value);
+    lookupFlight(value, date || undefined, airport ? airport.trim().toUpperCase() : undefined);
   };
 
   return (
@@ -31,27 +33,62 @@ export function FlightInput() {
         </div>
         <form
           onSubmit={handleSubmit}
-          className="mx-auto flex max-w-md items-center gap-3"
+          className="mx-auto flex max-w-md flex-col gap-3"
         >
-          <div className="relative flex-1">
-            <Plane className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Flight number (e.g. AA 203)"
-              className="h-12 pl-10 text-base"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
+          <div className="flex items-center gap-3">
+            <div className="relative flex-1">
+              <Plane className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Flight number (e.g. AA 203)"
+                className="h-12 pl-10 text-base"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                disabled={step === "loading"}
+              />
+            </div>
+            <Button
+              type="submit"
+              size="lg"
+              className="h-12 gap-2 px-6"
               disabled={step === "loading"}
-            />
+            >
+              <Search className="h-4 w-4" />
+              <span className="hidden sm:inline">Search</span>
+            </Button>
           </div>
-          <Button
-            type="submit"
-            size="lg"
-            className="h-12 gap-2 px-6"
-            disabled={step === "loading"}
-          >
-            <Search className="h-4 w-4" />
-            <span className="hidden sm:inline">Search</span>
-          </Button>
+          <div className="grid w-full gap-3 sm:grid-cols-2">
+            <div className="flex flex-col gap-1 text-left text-sm text-muted-foreground">
+              <label className="text-xs font-medium uppercase tracking-wide">
+                Departure airport <span className="normal-case font-normal">(optional)</span>
+              </label>
+              <Input
+                placeholder="e.g. DFW, JFK"
+                className="h-10 text-sm uppercase"
+                value={airport}
+                onChange={(e) => setAirport(e.target.value.toUpperCase().slice(0, 3))}
+                disabled={step === "loading"}
+                maxLength={3}
+              />
+              <p className="text-xs">
+                Helps when the same flight number operates from multiple airports.
+              </p>
+            </div>
+            <div className="flex flex-col gap-1 text-left text-sm text-muted-foreground">
+              <label className="text-xs font-medium uppercase tracking-wide">
+                Flight date
+              </label>
+              <Input
+                type="date"
+                className="h-10 text-sm"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                disabled={step === "loading"}
+              />
+              <p className="text-xs">
+                When you&apos;re flying. Helps pick the right trip when there are multiple.
+              </p>
+            </div>
+          </div>
         </form>
       </div>
     </section>

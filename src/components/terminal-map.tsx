@@ -7,28 +7,32 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useConcourse } from "@/context/concourse-context";
 import { getTerminalMapData } from "@/data/airports/map-coordinates";
 
-const MAPBOX_TOKEN = typeof window !== "undefined" ? (process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "") : "";
 const DARK_STYLE = "mapbox://styles/mapbox/dark-v11";
+
+function getMapboxToken(): string {
+  if (typeof window === "undefined") return "";
+  return process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
+}
 
 export function TerminalMap() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<unknown>(null);
   const [ready, setReady] = useState(false);
-  const { flightData, recommendations, step } = useConcourse();
+  const { flightData, gateOverride, terminalOverride, recommendations, step } = useConcourse();
+
+  const mapboxToken = getMapboxToken();
+  const terminal = terminalOverride ?? flightData?.terminal ?? "";
+  const gate = gateOverride ?? flightData?.gate ?? "B12";
+  const airportIata = flightData?.departureAirportIata ?? null;
 
   useEffect(() => {
-    if (step !== "results" || !flightData || !MAPBOX_TOKEN || !containerRef.current) {
+    if (step !== "results" || !flightData || !mapboxToken || !containerRef.current) {
       setReady(true);
       return;
     }
 
-    const gate = flightData.gate ?? "B12";
     const vendorNames = recommendations.slice(0, 4).map((r) => r.name);
-    const mapData = getTerminalMapData(
-      flightData.terminal,
-      gate,
-      vendorNames
-    );
+    const mapData = getTerminalMapData(terminal, gate, vendorNames, airportIata);
 
     if (!mapData) {
       setReady(true);
@@ -43,7 +47,7 @@ export function TerminalMap() {
 
       const mapboxgl = (mapboxglMod as { default?: unknown }).default ?? mapboxglMod;
       const MapboxGL = mapboxgl as typeof import("mapbox-gl");
-      (MapboxGL as unknown as { accessToken: string }).accessToken = MAPBOX_TOKEN;
+      (MapboxGL as unknown as { accessToken: string }).accessToken = mapboxToken;
 
       map = new MapboxGL.Map({
         container: containerRef.current,
@@ -74,14 +78,26 @@ export function TerminalMap() {
           el.style.border = "2px solid #0c1222";
           el.style.cursor = "pointer";
 
-          new MapboxGL.Marker({ element: el })
+          const popupHtml = `<div style="padding: 6px 10px; font-size: 14px; font-weight: 600; color: #f1f5f9; background: #1e293b; border-radius: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">${pt.label}</div>`;
+          const popup = new MapboxGL.Popup({
+            offset: 12,
+            closeButton: false,
+            closeOnClick: false,
+          })
+            .setHTML(popupHtml)
+            .setLngLat([pt.lng, pt.lat]);
+
+          const marker = new MapboxGL.Marker({ element: el })
             .setLngLat([pt.lng, pt.lat])
-            .setPopup(
-              new MapboxGL.Popup({ offset: 12 }).setHTML(
-                `<strong>${pt.label}</strong>`
-              )
-            )
+            .setPopup(popup)
             .addTo(map!);
+
+          el.addEventListener("mouseenter", () => {
+            popup.setLngLat([pt.lng, pt.lat]).addTo(map!);
+          });
+          el.addEventListener("mouseleave", () => {
+            popup.remove();
+          });
         });
 
         if (mapData.route.length >= 2) {
@@ -119,14 +135,17 @@ export function TerminalMap() {
       if (map) map.remove();
       mapRef.current = null;
     };
-  }, [step, flightData, recommendations]);
+  }, [step, flightData, recommendations, terminal, gate, airportIata, mapboxToken]);
 
   if (step !== "results") return null;
 
-  const hasToken = !!(
-    typeof window !== "undefined" && process.env.NEXT_PUBLIC_MAPBOX_TOKEN
-  );
+  const hasToken = !!mapboxToken;
   const hasFlight = !!flightData;
+  const vendorNamesForMap = recommendations.slice(0, 4).map((r) => r.name);
+  const mapDataForRender = hasFlight && hasToken
+    ? getTerminalMapData(terminal, gate, vendorNamesForMap, airportIata)
+    : null;
+  const hasMapData = !!mapDataForRender;
 
   if (!hasToken || !hasFlight) {
     return (
@@ -155,9 +174,9 @@ export function TerminalMap() {
                     Interactive Terminal Map
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {hasToken
-                      ? "Set NEXT_PUBLIC_MAPBOX_TOKEN to show the map"
-                      : "Mapbox GL JS — add NEXT_PUBLIC_MAPBOX_TOKEN to enable"}
+                    {!hasToken
+                      ? "Add NEXT_PUBLIC_MAPBOX_TOKEN to .env to enable the map."
+                      : "Complete your flight search to see your gate and nearby food."}
                   </p>
                   <p className="text-xs text-muted-foreground/50">
                     {flightData
@@ -173,11 +192,52 @@ export function TerminalMap() {
     );
   }
 
+  if (hasFlight && hasToken && !hasMapData) {
+    return (
+      <section className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Map className="h-5 w-5 text-primary" />
+          <h2 className="text-xl font-semibold">Terminal Map</h2>
+        </div>
+        <Card className="overflow-hidden">
+          <CardContent className="p-0">
+            <div className="relative flex h-64 flex-col items-center justify-center bg-card sm:h-80">
+              <div
+                className="absolute inset-0 opacity-[0.03]"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(var(--color-foreground) 1px, transparent 1px), linear-gradient(90deg, var(--color-foreground) 1px, transparent 1px)",
+                  backgroundSize: "32px 32px",
+                }}
+              />
+              <div className="relative flex flex-col items-center gap-4 text-muted-foreground">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-secondary/50">
+                  <Navigation className="h-7 w-7 text-primary/40" />
+                </div>
+                <div className="space-y-1.5 text-center">
+                  <p className="text-sm font-medium text-foreground/60">
+                    Map not available for this airport
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Maps are available for 50+ airports (e.g. EWR, LGA, ALB, BOS, PHL, ATL, MIA, ORD, LAX). Your flight is from {flightData?.departureAirportName ?? airportIata ?? "an airport we don’t have yet"}.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+    );
+  }
+
   return (
     <section className="space-y-4">
-      <div className="flex items-center gap-2">
-        <Map className="h-5 w-5 text-primary" />
-        <h2 className="text-xl font-semibold">Terminal Map</h2>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <Map className="h-5 w-5 text-primary" />
+          <h2 className="text-xl font-semibold">Terminal Map</h2>
+        </div>
+        <p className="text-xs text-muted-foreground">Schematic — gate and food locations are approximate.</p>
       </div>
       <Card className="overflow-hidden">
         <CardContent className="relative p-0">

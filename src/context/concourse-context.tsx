@@ -34,16 +34,22 @@ interface ConcourseState {
   error: string | null;
   sessionId: string;
   gateOverride: string | null;
+  terminalOverride: string | null;
+  boardingTimeOverride: string | null;
+  minutesUntilBoardingOverride: number | null;
   gateChangeAlert: GateChangeAlert | null;
 }
 
 interface ConcourseContextValue extends ConcourseState {
   setError: (error: string | null) => void;
-  lookupFlight: (flightNumber: string) => Promise<void>;
+  lookupFlight: (flightNumber: string, flightDate?: string, departureAirportIata?: string) => Promise<void>;
   setGateOverride: (gate: string | null) => void;
+  setTerminalOverride: (terminal: string | null) => void;
+  setBoardingTimeOverride: (time: string | null) => void;
+  setMinutesUntilBoardingOverride: (minutes: number | null) => void;
   setDietaryPreferences: (prefs: string[]) => void;
   savePreferences: (prefs: string[]) => Promise<void>;
-  loadRecommendations: (dietaryPrefsOverride?: string[]) => Promise<void>;
+  loadRecommendations: (dietaryPrefsOverride?: string[], terminalOverride?: string | null, minutesUntilBoardingOverride?: number | null) => Promise<void>;
   sendChatMessage: (content: string) => Promise<void>;
   setInitialMessages: (messages: ChatMessage[]) => void;
   clearResults: () => void;
@@ -60,6 +66,9 @@ const defaultState: ConcourseState = {
   error: null,
   sessionId: "",
   gateOverride: null,
+  terminalOverride: null,
+  boardingTimeOverride: null,
+  minutesUntilBoardingOverride: null,
   gateChangeAlert: null,
 };
 
@@ -76,7 +85,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
     setState((s) => ({ ...s, error }));
   }, []);
 
-  const lookupFlight = useCallback(async (flightNumber: string) => {
+  const lookupFlight = useCallback(async (flightNumber: string, flightDate?: string, departureAirportIata?: string) => {
     setState((s) => ({ ...s, step: "loading", error: null }));
     try {
       const res = await fetch("/api/flight/lookup", {
@@ -84,6 +93,8 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           flightNumber: flightNumber.replace(/\s+/g, " ").trim(),
+          flightDate: flightDate || undefined,
+          departureAirportIata: departureAirportIata || undefined,
         }),
       });
       const data = await res.json();
@@ -97,12 +108,13 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
         error: null,
       }));
 
-      // Load recommendations after flight is set
+      // Load recommendations after flight is set (use departure airport so we map to correct terminal, e.g. JFK T4 vs LAX T4)
       const recRes = await fetch("/api/recommendations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           terminal: data.terminal,
+          departureAirportIata: data.departureAirportIata ?? undefined,
           gate: data.gate,
           dietaryPreferences: state.dietaryPreferences,
           minutesUntilBoarding: data.minutesUntilBoarding ?? 40,
@@ -119,7 +131,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
         messages: [
           {
             role: "assistant",
-            content: `Hey there! I see you're flying ${data.flightNumber} out of ${data.terminal}, Gate ${data.gate ?? "TBD"}. You've got about ${data.minutesUntilBoarding} minutes — that's basically luxury time in airport land. I've found some great food options near your gate. Want me to tell you more about any of them?`,
+            content: `Hey there! I see you're flying ${data.flightNumber} out of ${data.departureAirportName ?? data.departureAirportIata ?? "the airport"}${data.terminal !== "—" ? `, ${data.terminal}` : ""}, Gate ${data.gate ?? "TBD"}. You've got about ${data.minutesUntilBoarding} minutes — that's basically luxury time in airport land. I've found some great food options near your gate. Want me to tell you more about any of them?`,
           },
         ],
       }));
@@ -134,6 +146,18 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
 
   const setGateOverride = useCallback((gate: string | null) => {
     setState((s) => ({ ...s, gateOverride: gate }));
+  }, []);
+
+  const setTerminalOverride = useCallback((terminal: string | null) => {
+    setState((s) => ({ ...s, terminalOverride: terminal }));
+  }, []);
+
+  const setBoardingTimeOverride = useCallback((time: string | null) => {
+    setState((s) => ({ ...s, boardingTimeOverride: time }));
+  }, []);
+
+  const setMinutesUntilBoardingOverride = useCallback((minutes: number | null) => {
+    setState((s) => ({ ...s, minutesUntilBoardingOverride: minutes }));
   }, []);
 
   const setDietaryPreferences = useCallback((prefs: string[]) => {
@@ -161,19 +185,26 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
   );
 
   const loadRecommendations = useCallback(
-    async (dietaryPrefsOverride?: string[]) => {
+    async (
+      dietaryPrefsOverride?: string[],
+      terminalOverrideArg?: string | null,
+      minutesUntilBoardingOverrideArg?: number | null
+    ) => {
       const s = state;
       if (!s.flightData) return;
       const prefs = dietaryPrefsOverride ?? s.dietaryPreferences;
+      const terminal = terminalOverrideArg !== undefined ? terminalOverrideArg : (s.terminalOverride ?? s.flightData.terminal);
+      const minutes = minutesUntilBoardingOverrideArg !== undefined ? minutesUntilBoardingOverrideArg : (s.minutesUntilBoardingOverride ?? s.flightData.minutesUntilBoarding ?? 40);
       try {
         const res = await fetch("/api/recommendations", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            terminal: s.flightData.terminal,
+            terminal: terminal ?? s.flightData.terminal,
+            departureAirportIata: s.flightData.departureAirportIata ?? undefined,
             gate: s.gateOverride ?? s.flightData.gate,
             dietaryPreferences: prefs,
-            minutesUntilBoarding: s.flightData.minutesUntilBoarding ?? 40,
+            minutesUntilBoarding: minutes ?? 40,
           }),
         });
         const data = await res.json();
@@ -184,7 +215,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
         // Keep existing recommendations
       }
     },
-    [state.flightData, state.dietaryPreferences, state.gateOverride]
+    [state.flightData, state.dietaryPreferences, state.gateOverride, state.terminalOverride, state.minutesUntilBoardingOverride]
   );
 
   const sendChatMessage = useCallback(
@@ -242,6 +273,9 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
       recommendations: [],
       messages: [],
       gateOverride: null,
+      terminalOverride: null,
+      boardingTimeOverride: null,
+      minutesUntilBoardingOverride: null,
       gateChangeAlert: null,
       error: null,
     }));
@@ -325,6 +359,9 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
       setError,
       lookupFlight,
       setGateOverride,
+      setTerminalOverride,
+      setBoardingTimeOverride,
+      setMinutesUntilBoardingOverride,
       setDietaryPreferences,
       savePreferences,
       loadRecommendations,
@@ -339,6 +376,9 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
       setError,
       lookupFlight,
       setGateOverride,
+      setTerminalOverride,
+      setBoardingTimeOverride,
+      setMinutesUntilBoardingOverride,
       setDietaryPreferences,
       savePreferences,
       loadRecommendations,

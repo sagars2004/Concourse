@@ -45,7 +45,25 @@ const terminalToKey: Record<string, string> = {
   "t3": "ord-terminal3",
 };
 
-export function getAirportData(terminalLabel: string): AirportData | null {
+/** Build airport key from IATA + terminal for unambiguous lookup (e.g. "JFK" + "4" → "jfk-terminal4"). */
+function airportKeyFromIataAndTerminal(airportIata: string, terminal: string): string | null {
+  const iata = airportIata.toLowerCase().trim();
+  const t = terminal.toLowerCase().replace(/^terminal\s*/i, "").trim();
+  const key = `${iata}-terminal${t}`;
+  if (airports[key]) return key;
+  const keyAlt = `${iata}-t${t}`;
+  return airports[keyAlt] ? keyAlt : null;
+}
+
+export function getAirportData(
+  terminalLabel: string,
+  airportIata?: string | null
+): AirportData | null {
+  if (airportIata) {
+    const terminalPart = terminalLabel.replace(/^terminal\s*/i, "").trim() || terminalLabel;
+    const key = airportKeyFromIataAndTerminal(airportIata, terminalPart);
+    if (key) return airports[key];
+  }
   const normalized = terminalLabel.toLowerCase().trim();
   const key = terminalToKey[normalized] ?? normalized.replace(/\s+/g, "-");
   return airports[key] ?? null;
