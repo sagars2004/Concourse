@@ -1,12 +1,28 @@
 import { NextResponse } from "next/server";
+import { getSupabase } from "@/lib/supabase";
 
-// In-memory store for stub. Keyed by sessionId. Phase 3 will use Supabase.
-const store = new Map<string, string[]>();
+const inMemoryStore = new Map<string, string[]>();
 
 export async function GET(request: Request) {
   try {
     const sessionId = request.headers.get("x-session-id") ?? "";
-    const tags = store.get(sessionId) ?? ["none"];
+
+    const supabase = getSupabase();
+    if (supabase && sessionId) {
+      const { data, error } = await supabase
+        .from("preferences")
+        .select("dietary_tags")
+        .eq("session_id", sessionId)
+        .maybeSingle();
+
+      if (!error && data?.dietary_tags?.length) {
+        return NextResponse.json({
+          dietaryPreferences: data.dietary_tags as string[],
+        });
+      }
+    }
+
+    const tags = inMemoryStore.get(sessionId) ?? ["none"];
     return NextResponse.json({ dietaryPreferences: tags });
   } catch {
     return NextResponse.json(
@@ -24,8 +40,28 @@ export async function POST(request: Request) {
       ? body.dietaryPreferences
       : ["none"];
 
-    if (sessionId) store.set(sessionId, dietaryPreferences);
+    const supabase = getSupabase();
+    if (supabase && sessionId) {
+      await supabase.from("sessions").upsert(
+        { id: sessionId },
+        { onConflict: "id" }
+      );
 
+      const { error } = await supabase.from("preferences").upsert(
+        {
+          session_id: sessionId,
+          dietary_tags: dietaryPreferences,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "session_id" }
+      );
+
+      if (!error) {
+        return NextResponse.json({ dietaryPreferences });
+      }
+    }
+
+    if (sessionId) inMemoryStore.set(sessionId, dietaryPreferences);
     return NextResponse.json({ dietaryPreferences });
   } catch {
     return NextResponse.json(

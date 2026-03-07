@@ -1,0 +1,50 @@
+{
+  "airport": "JFK",
+  "terminal": "Terminal 4",
+  "description": "JFK Terminal 4 — major international hub with a wide range of dining.",
+  "zones": [
+    { "id": "B14", "name": "Gate B14 area", "walkMinutesFromB12": 4 },
+    { "id": "food_court", "name": "Central Food Court", "walkMinutesFromB12": 6 },
+    { "id": "B22", "name": "Gate B22 area", "walkMinutesFromB12": 9 },
+    { "id": "B36", "name": "Gate B36 area", "walkMinutesFromB12": 13 }
+  ],
+  "vendors": [
+    {
+      "name": "Shake Shack",
+      "cuisine": "Burgers · American",
+      "zoneId": "B14",
+      "dietaryTags": ["vegetarian"],
+      "tags": ["Fast Casual", "Burgers"],
+      "avgWaitMinutes": 5,
+      "opinion": "Best burger in T4, hands down. The ShackBurger is worth every second of that walk."
+    },
+    {
+      "name": "Panda Express",
+      "cuisine": "Chinese · Asian",
+      "zoneId": "food_court",
+      "dietaryTags": [],
+      "tags": ["Quick Serve", "Chinese"],
+      "avgWaitMinutes": 3,
+      "opinion": "Solid and reliable. The orange chicken hits different when you're in a rush."
+    },
+    {
+      "name": "Blue Ribbon Sushi",
+      "cuisine": "Japanese · Sushi",
+      "zoneId": "B22",
+      "dietaryTags": ["vegetarian", "gluten-free"],
+      "tags": ["Sit Down", "Japanese", "Sushi"],
+      "avgWaitMinutes": 12,
+      "opinion": "Excellent sushi for an airport, but you'll need to eat fast. Worth it if you're craving it."
+    },
+    {
+      "name": "Tigin Irish Pub",
+      "cuisine": "Irish · American",
+      "zoneId": "B36",
+      "dietaryTags": ["vegetarian"],
+      "tags": ["Sit Down", "Pub Food"],
+      "avgWaitMinutes": 15,
+      "opinion": "Great fish and chips, but it's a hike. With only 40 min, I'd skip it this time."
+    }
+  ],
+  "tips": "Skip the pizza at B14 — walk the extra two minutes to Shake Shack. Terminal 4 has the best food options at JFK."
+}

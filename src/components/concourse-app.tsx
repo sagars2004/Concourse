@@ -1,6 +1,7 @@
 "use client";
 
 import { ConcourseProvider, useConcourse } from "@/context/concourse-context";
+import { ErrorBoundary } from "@/components/error-boundary";
 import { Header } from "@/components/header";
 import { GateAlert } from "@/components/gate-alert";
 import { ErrorBanner } from "@/components/error-banner";
@@ -57,9 +58,11 @@ export function ConcourseApp() {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-      <ConcourseProvider>
-        <ConcourseContent />
-      </ConcourseProvider>
+      <ErrorBoundary>
+        <ConcourseProvider>
+          <ConcourseContent />
+        </ConcourseProvider>
+      </ErrorBoundary>
     </div>
   );
 }

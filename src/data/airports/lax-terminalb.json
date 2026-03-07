@@ -1,0 +1,31 @@
+{
+  "airport": "LAX",
+  "terminal": "Terminal B",
+  "description": "LAX Terminal B — domestic terminal with solid quick-serve and sit-down options.",
+  "zones": [
+    { "id": "gates_20s", "name": "Gates 20-29", "walkMinutesFromB12": 5 },
+    { "id": "mid", "name": "Mid-terminal", "walkMinutesFromB12": 8 },
+    { "id": "gates_40s", "name": "Gates 40-49", "walkMinutesFromB12": 12 }
+  ],
+  "vendors": [
+    {
+      "name": "Umami Burger",
+      "cuisine": "Burgers · American",
+      "zoneId": "gates_20s",
+      "dietaryTags": ["vegetarian"],
+      "tags": ["Fast Casual", "Burgers"],
+      "avgWaitMinutes": 8,
+      "opinion": "LA staple. Worth the walk if you have 25+ minutes."
+    },
+    {
+      "name": "Lemonade",
+      "cuisine": "California · Healthy",
+      "zoneId": "mid",
+      "dietaryTags": ["vegetarian", "vegan", "gluten-free"],
+      "tags": ["Quick Serve", "Healthy"],
+      "avgWaitMinutes": 4,
+      "opinion": "Quick, fresh, and actually good. My go-to when I'm short on time."
+    }
+  ],
+  "tips": "Terminal B is compact. Lemonade is your best bet for speed and quality. Avoid the generic coffee kiosks — there's a decent Starbucks near gate 25."
+}

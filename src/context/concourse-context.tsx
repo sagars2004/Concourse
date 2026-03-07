@@ -6,6 +6,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import type {
@@ -17,6 +18,13 @@ import { getOrCreateSessionId } from "@/lib/session";
 
 type Step = "idle" | "loading" | "results";
 
+export interface GateChangeAlert {
+  visible: boolean;
+  previousGate: string;
+  newGate: string;
+  message: string;
+}
+
 interface ConcourseState {
   step: Step;
   flightData: FlightData | null;
@@ -26,6 +34,7 @@ interface ConcourseState {
   error: string | null;
   sessionId: string;
   gateOverride: string | null;
+  gateChangeAlert: GateChangeAlert | null;
 }
 
 interface ConcourseContextValue extends ConcourseState {
@@ -38,6 +47,8 @@ interface ConcourseContextValue extends ConcourseState {
   sendChatMessage: (content: string) => Promise<void>;
   setInitialMessages: (messages: ChatMessage[]) => void;
   clearResults: () => void;
+  dismissGateAlert: () => void;
+  simulateGateChange: () => Promise<void>;
 }
 
 const defaultState: ConcourseState = {
@@ -49,6 +60,7 @@ const defaultState: ConcourseState = {
   error: null,
   sessionId: "",
   gateOverride: null,
+  gateChangeAlert: null,
 };
 
 const ConcourseContext = createContext<ConcourseContextValue | null>(null);
@@ -93,6 +105,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
           terminal: data.terminal,
           gate: data.gate,
           dietaryPreferences: state.dietaryPreferences,
+          minutesUntilBoarding: data.minutesUntilBoarding ?? 40,
         }),
       });
       const recData = await recRes.json();
@@ -160,6 +173,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
             terminal: s.flightData.terminal,
             gate: s.gateOverride ?? s.flightData.gate,
             dietaryPreferences: prefs,
+            minutesUntilBoarding: s.flightData.minutesUntilBoarding ?? 40,
           }),
         });
         const data = await res.json();
@@ -228,9 +242,82 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
       recommendations: [],
       messages: [],
       gateOverride: null,
+      gateChangeAlert: null,
       error: null,
     }));
   }, []);
+
+  const dismissGateAlert = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      gateChangeAlert: s.gateChangeAlert
+        ? { ...s.gateChangeAlert, visible: false }
+        : null,
+    }));
+  }, []);
+
+  const applyGateChange = useCallback(
+    (previousGate: string, newGate: string, flightNumber: string) => {
+      const message = `Gate change: Your flight ${flightNumber} has moved from Gate ${previousGate} to Gate ${newGate}. Don't worry — I've updated your recommendations so you're still good to go!`;
+      setState((s) => ({
+        ...s,
+        gateOverride: newGate,
+        gateChangeAlert: {
+          visible: true,
+          previousGate,
+          newGate,
+          message: `Your flight ${flightNumber} has moved from Gate ${previousGate} to Gate ${newGate}. Recommendations updated!`,
+        },
+        messages: [
+          ...s.messages,
+          {
+            role: "assistant",
+            content: message,
+          },
+        ],
+      }));
+      setTimeout(() => loadRecommendations(), 0);
+    },
+    [loadRecommendations]
+  );
+
+  const applyGateChangeRef = useRef(applyGateChange);
+  applyGateChangeRef.current = applyGateChange;
+
+  const simulateGateChange = useCallback(async () => {
+    const { flightData } = state;
+    if (!flightData) return;
+    try {
+      const res = await fetch(
+        `/api/gate/status?flightNumber=${encodeURIComponent(flightData.flightNumber)}&simulateGateChange=true`
+      );
+      const data = await res.json();
+      if (res.ok && data.changed && data.previousGate && data.gate) {
+        applyGateChangeRef.current(data.previousGate, data.gate, flightData.flightNumber);
+      }
+    } catch {
+      // Ignore
+    }
+  }, [state.flightData]);
+
+  useEffect(() => {
+    if (state.step !== "results" || !state.flightData) return;
+    const flightNumber = state.flightData.flightNumber;
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(
+          `/api/gate/status?flightNumber=${encodeURIComponent(flightNumber)}`
+        );
+        const data = await res.json();
+        if (res.ok && data.changed && data.previousGate && data.gate) {
+          applyGateChangeRef.current(data.previousGate, data.gate, flightNumber);
+        }
+      } catch {
+        // Ignore
+      }
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [state.step, state.flightData?.flightNumber]);
 
   const value = useMemo<ConcourseContextValue>(
     () => ({
@@ -244,6 +331,8 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
       sendChatMessage,
       setInitialMessages,
       clearResults,
+      dismissGateAlert,
+      simulateGateChange,
     }),
     [
       state,
@@ -256,6 +345,8 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
       sendChatMessage,
       setInitialMessages,
       clearResults,
+      dismissGateAlert,
+      simulateGateChange,
     ]
   );
 

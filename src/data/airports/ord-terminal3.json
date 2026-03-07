@@ -1,0 +1,31 @@
+{
+  "airport": "ORD",
+  "terminal": "Terminal 3",
+  "description": "ORD Terminal 3 — United-heavy terminal with reliable food options.",
+  "zones": [
+    { "id": "G8", "name": "Gate G8 area", "walkMinutesFromB12": 3 },
+    { "id": "H12", "name": "Gate H12 area", "walkMinutesFromB12": 7 },
+    { "id": "K6", "name": "Gate K6 area", "walkMinutesFromB12": 11 }
+  ],
+  "vendors": [
+    {
+      "name": "Tortas Frontera",
+      "cuisine": "Mexican",
+      "zoneId": "G8",
+      "dietaryTags": ["vegetarian"],
+      "tags": ["Quick Serve", "Mexican"],
+      "avgWaitMinutes": 6,
+      "opinion": "Rick Bayless at the airport. Seriously good tortas — get there before the rush."
+    },
+    {
+      "name": "Wicker Park Sushi",
+      "cuisine": "Japanese · Sushi",
+      "zoneId": "H12",
+      "dietaryTags": ["vegetarian", "gluten-free"],
+      "tags": ["Sit Down", "Sushi"],
+      "avgWaitMinutes": 10,
+      "opinion": "Surprisingly good for ORD. Give yourself 25 min if you're doing sit-down."
+    }
+  ],
+  "tips": "Tortas Frontera is the best quick meal in T3. If you have time, Wicker Park Sushi is a step above typical airport sushi."
+}

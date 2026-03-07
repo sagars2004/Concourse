@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Concourse
+
+**Your AI-powered airport food concierge.** Never miss your flight chasing food again. Enter your flight number and get time-aware, gate-smart food recommendations with a witty AI guide.
+
+Built for the **DigitalOcean Gradient AI Hackathon 2026**.
+
+## Features
+
+- **Flight lookup** — Enter flight number (e.g. AA 203); get airline, terminal, gate, and boarding time (AviationStack API or stub).
+- **Time-aware recommendations** — Food options ranked by walk time with green/yellow/red confidence.
+- **Dietary preferences** — Filter by vegetarian, vegan, gluten-free, halal, kosher (stored in Supabase).
+- **Terminal map** — Mapbox GL map with gate and vendor markers (when token is set).
+- **Chat with Concourse** — AI persona powered by DigitalOcean Gradient (when API key is set).
+- **Gate change alerts** — Polling + demo “Simulate gate change” with re-routed recommendations and persona alert.
+
+## Tech Stack
+
+- **Frontend:** Next.js 16 (App Router), Tailwind CSS, Shadcn-style UI
+- **APIs:** Next.js API routes, AviationStack (flight data), Supabase (preferences)
+- **AI:** DigitalOcean Gradient (chat + persona)
+- **Map:** Mapbox GL JS
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install and run
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 2. Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.example` to `.env.local` and fill in what you need:
 
-## Learn More
+```bash
+cp .env.example .env.local
+```
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Phase | Description |
+|----------|--------|-------------|
+| `AVIATIONSTACK_API_KEY` | 2 | [aviationstack.com](https://aviationstack.com/signup/free) — flight lookup |
+| `NEXT_PUBLIC_SUPABASE_URL` | 3 | Supabase project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | 3 | Supabase service role key |
+| `NEXT_PUBLIC_MAPBOX_TOKEN` | 5 | [Mapbox](https://account.mapbox.com/) — terminal map |
+| `DO_GRADIENT_API_KEY` | 4 | DigitalOcean Gradient — AI chat |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Without these, the app still runs with stub/mock data.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Supabase (optional)
 
-## Deploy on Vercel
+To persist dietary preferences:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Create a project at [supabase.com](https://supabase.com).
+2. In the SQL Editor, run the contents of `supabase/schema.sql`.
+3. Add `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to `.env.local`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deploy on DigitalOcean App Platform
+
+1. Push the repo to GitHub.
+2. In [DigitalOcean](https://cloud.digitalocean.com/), go to **Apps** → **Create App** → choose the repo.
+3. Configure as a **Web Service**; build command: `npm run build`; run command: `npm start`.
+4. Add all environment variables from `.env.example` in the App’s **Settings** → **App-Level Environment Variables**.
+5. Deploy. The app will be available at the provided URL.
+
+## Demo flow
+
+1. Enter a flight number (e.g. `AA 203`) and click Search.
+2. Confirm flight details; edit gate if needed.
+3. Set dietary preferences; recommendations update.
+4. Use “Simulate gate change (demo)” in the flight card to trigger a gate change and see the alert + updated recommendations and chat message.
+5. Ask Concourse questions in the chat (stub or Gradient, depending on `DO_GRADIENT_API_KEY`).
+
+## License
+
+See repository license.

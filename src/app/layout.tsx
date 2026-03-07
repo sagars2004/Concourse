@@ -11,7 +11,21 @@ export const metadata: Metadata = {
   title: "Concourse — Your AI Airport Food Concierge",
   description:
     "Never miss your flight chasing food again. Concourse gives you time-aware, gate-smart food recommendations powered by AI.",
+  openGraph: {
+    title: "Concourse — Your AI Airport Food Concierge",
+    description:
+      "Never miss your flight chasing food again. Time-aware, gate-smart airport food recommendations powered by AI.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Concourse — Your AI Airport Food Concierge",
+    description:
+      "Never miss your flight chasing food again. Time-aware, gate-smart airport food recommendations powered by AI.",
+  },
 };
+
+export const viewport = { width: "device-width", initialScale: 1 };
 
 export default function RootLayout({
   children,

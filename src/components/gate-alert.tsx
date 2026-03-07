@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { AlertTriangle, X } from "lucide-react";
+import { useConcourse } from "@/context/concourse-context";
 
 export function GateAlert() {
-  const [visible, setVisible] = useState(true);
+  const { gateChangeAlert, dismissGateAlert } = useConcourse();
 
-  if (!visible) return null;
+  if (!gateChangeAlert?.visible) return null;
 
   return (
     <div className="w-full border-b border-warning/20 bg-warning/5">
@@ -15,12 +15,11 @@ export function GateAlert() {
           <AlertTriangle className="h-4 w-4 shrink-0 text-warning" />
           <p className="text-sm text-warning">
             <span className="font-semibold">Gate Change: </span>
-            Your flight AA 203 has moved from Gate B12 to Gate B18.
-            Recommendations updated!
+            {gateChangeAlert.message}
           </p>
         </div>
         <button
-          onClick={() => setVisible(false)}
+          onClick={dismissGateAlert}
           className="shrink-0 text-warning/60 transition-colors hover:text-warning"
           aria-label="Dismiss alert"
         >
