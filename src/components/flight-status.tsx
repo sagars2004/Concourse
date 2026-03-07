@@ -1,17 +1,57 @@
+"use client";
+
+import { useState } from "react";
 import { Plane, Clock, MapPin, Building2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useConcourse } from "@/context/concourse-context";
 
 export function FlightStatus() {
+  const { flightData, gateOverride, setGateOverride } = useConcourse();
+  const [editingGate, setEditingGate] = useState(false);
+  const [editValue, setEditValue] = useState("");
+
+  if (!flightData) return null;
+
+  const gate = gateOverride ?? flightData.gate ?? "—";
+  const statusLabel =
+    flightData.status === "on_time"
+      ? "On Time"
+      : flightData.status === "delayed"
+        ? "Delayed"
+        : "Cancelled";
+
+  const startEdit = () => {
+    setEditValue(gate === "—" ? "" : gate);
+    setEditingGate(true);
+  };
+
+  const saveGate = () => {
+    const v = editValue.trim();
+    setGateOverride(v || null);
+    setEditingGate(false);
+  };
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-4">
         <CardTitle className="flex items-center gap-2">
           <Plane className="h-5 w-5 text-primary" />
-          Flight AA 203
+          Flight {flightData.flightNumber}
         </CardTitle>
-        <Badge variant="success">On Time</Badge>
+        <Badge
+          variant={
+            flightData.status === "on_time"
+              ? "success"
+              : flightData.status === "delayed"
+                ? "warning"
+                : "destructive"
+          }
+        >
+          {statusLabel}
+        </Badge>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
@@ -19,7 +59,7 @@ export function FlightStatus() {
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
               Airline
             </p>
-            <p className="font-medium">American Airlines</p>
+            <p className="font-medium">{flightData.airline}</p>
           </div>
           <div className="space-y-1.5">
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
@@ -27,7 +67,7 @@ export function FlightStatus() {
             </p>
             <div className="flex items-center gap-1.5">
               <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
-              <p className="font-medium">Terminal 4</p>
+              <p className="font-medium">{flightData.terminal}</p>
             </div>
           </div>
           <div className="space-y-1.5">
@@ -35,17 +75,40 @@ export function FlightStatus() {
               Gate
             </p>
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
-                <p className="font-medium">B12</p>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 px-2 text-xs text-primary"
-              >
-                Edit
-              </Button>
+              {editingGate ? (
+                <div className="flex items-center gap-2">
+                  <Input
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    placeholder="Gate"
+                    className="h-8 w-20 text-sm"
+                    autoFocus
+                  />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 px-2 text-xs"
+                    onClick={saveGate}
+                  >
+                    Save
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
+                    <p className="font-medium">{gate}</p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 px-2 text-xs text-primary"
+                    onClick={startEdit}
+                  >
+                    Edit
+                  </Button>
+                </>
+              )}
             </div>
           </div>
           <div className="space-y-1.5">
@@ -55,8 +118,10 @@ export function FlightStatus() {
             <div className="flex items-center gap-1.5">
               <Clock className="h-3.5 w-3.5 text-muted-foreground" />
               <p className="font-medium">
-                2:45 PM{" "}
-                <span className="text-sm text-primary">(40 min)</span>
+                {flightData.boardingTime}{" "}
+                <span className="text-sm text-primary">
+                  ({flightData.minutesUntilBoarding} min)
+                </span>
               </p>
             </div>
           </div>

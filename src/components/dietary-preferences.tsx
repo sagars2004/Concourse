@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import { UtensilsCrossed } from "lucide-react";
+import { useConcourse } from "@/context/concourse-context";
 
-const preferences = [
+const PREFERENCE_OPTIONS = [
   { id: "none", label: "No Restrictions" },
   { id: "vegetarian", label: "Vegetarian" },
   { id: "vegan", label: "Vegan" },
@@ -13,23 +14,48 @@ const preferences = [
 ];
 
 export function DietaryPreferences() {
-  const [selected, setSelected] = useState<string[]>(["none"]);
+  const {
+    dietaryPreferences,
+    setDietaryPreferences,
+    savePreferences,
+    loadRecommendations,
+    sessionId,
+    step,
+  } = useConcourse();
+
+  // Load preferences from API on mount when we have a session
+  useEffect(() => {
+    if (!sessionId || step !== "results") return;
+    fetch("/api/preferences", { headers: { "x-session-id": sessionId } })
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data.dietaryPreferences) && data.dietaryPreferences.length > 0) {
+          setDietaryPreferences(data.dietaryPreferences);
+        }
+      })
+      .catch(() => {});
+  }, [sessionId, step, setDietaryPreferences]);
 
   const togglePreference = (id: string) => {
+    let next: string[];
     if (id === "none") {
-      setSelected(["none"]);
-      return;
-    }
-
-    setSelected((prev) => {
-      const without = prev.filter((p) => p !== "none");
+      next = ["none"];
+    } else {
+      const without = dietaryPreferences.filter((p) => p !== "none");
       if (without.includes(id)) {
         const result = without.filter((p) => p !== id);
-        return result.length === 0 ? ["none"] : result;
+        next = result.length === 0 ? ["none"] : result;
+      } else {
+        next = [...without, id];
       }
-      return [...without, id];
+    }
+    setDietaryPreferences(next);
+    savePreferences(next).then(() => {
+      loadRecommendations(next);
     });
   };
+
+  if (step !== "results") return null;
 
   return (
     <div className="space-y-3">
@@ -40,8 +66,8 @@ export function DietaryPreferences() {
         </h3>
       </div>
       <div className="flex flex-wrap gap-2">
-        {preferences.map((pref) => {
-          const isSelected = selected.includes(pref.id);
+        {PREFERENCE_OPTIONS.map((pref) => {
+          const isSelected = dietaryPreferences.includes(pref.id);
           return (
             <button
               key={pref.id}
