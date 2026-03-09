@@ -1,6 +1,9 @@
 import jfkT4 from "./jfk-terminal4.json";
 import laxTb from "./lax-terminalb.json";
 import ordT3 from "./ord-terminal3.json";
+import lgaTb from "./lga-terminalb.json";
+import ewrTc from "./ewr-terminalc.json";
+import rduT2 from "./rdu-terminal2.json";
 
 export interface AirportZone {
   id: string;
@@ -16,6 +19,16 @@ export interface AirportVendor {
   tags: string[];
   avgWaitMinutes: number;
   opinion: string;
+  /** For filtering: budget | mid | splurge. Used with preference filters and RAG. */
+  priceRange?: "budget" | "mid" | "splurge";
+  /** For filtering: quick-serve | sit-down | bar | food-hall. */
+  serviceType?: string;
+  /** For filtering: breakfast, lunch, dinner, anytime. */
+  mealTypes?: string[];
+  /** For filtering: american, italian, coffee, etc. Matches CUISINE_OPTIONS ids. */
+  cuisineCategories?: string[];
+  /** One-line description for RAG and display. */
+  shortDescription?: string;
 }
 
 export interface AirportData {
@@ -34,6 +47,12 @@ const airports: Record<string, AirportData> = {
   "lax-tb": laxTb as AirportData,
   "ord-terminal3": ordT3 as AirportData,
   "ord-t3": ordT3 as AirportData,
+  "lga-terminalb": lgaTb as AirportData,
+  "lga-tb": lgaTb as AirportData,
+  "ewr-terminalc": ewrTc as AirportData,
+  "ewr-tc": ewrTc as AirportData,
+  "rdu-terminal2": rduT2 as AirportData,
+  "rdu-t2": rduT2 as AirportData,
 };
 
 const terminalToKey: Record<string, string> = {
@@ -69,4 +88,4 @@ export function getAirportData(
   return airports[key] ?? null;
 }
 
-export { jfkT4, laxTb, ordT3 };
+export { jfkT4, laxTb, ordT3, lgaTb, ewrTc, rduT2 };

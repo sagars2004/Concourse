@@ -21,6 +21,11 @@ type AviationStackFlight = {
     scheduled?: string;
     delay?: number;
   };
+  arrival?: {
+    iata?: string;
+    airport?: string;
+    scheduled?: string;
+  };
   airline?: { name?: string };
   flight?: { iata?: string; number?: string };
 };
@@ -30,9 +35,11 @@ function parseSingleFlight(
   fallbackFlightNumber: string
 ): FlightData {
   const dep = flight.departure;
-  const scheduled = dep?.scheduled ? new Date(dep.scheduled) : null;
-  const boardingTime = scheduled
-    ? new Date(scheduled.getTime() - 35 * 60 * 1000)
+  const arr = flight.arrival;
+  const scheduledDep = dep?.scheduled ? new Date(dep.scheduled) : null;
+  const scheduledArr = arr?.scheduled ? new Date(arr.scheduled) : null;
+  const boardingTime = scheduledDep
+    ? new Date(scheduledDep.getTime() - 35 * 60 * 1000)
     : null;
   const status =
     flight.flight_status === "cancelled"
@@ -40,6 +47,11 @@ function parseSingleFlight(
       : (dep?.delay ?? 0) > 0
         ? ("delayed" as const)
         : ("on_time" as const);
+
+  let flightDurationMinutes: number | undefined;
+  if (scheduledDep && scheduledArr && scheduledArr > scheduledDep) {
+    flightDurationMinutes = Math.round((scheduledArr.getTime() - scheduledDep.getTime()) / (60 * 1000));
+  }
 
   return {
     flightNumber: (flight.flight?.iata ?? fallbackFlightNumber).replace(/\s/g, ""),
@@ -57,6 +69,11 @@ function parseSingleFlight(
       : "—",
     minutesUntilBoarding: 40,
     status,
+    scheduledDepartureIso: dep?.scheduled ?? undefined,
+    scheduledArrivalIso: arr?.scheduled ?? undefined,
+    arrivalAirportIata: arr?.iata ?? undefined,
+    arrivalAirportName: arr?.airport ?? undefined,
+    flightDurationMinutes,
   };
 }
 
@@ -108,6 +125,9 @@ export async function POST(request: Request) {
         : typeof body?.flight_date === "string"
           ? body.flight_date
           : "";
+    // When user doesn't provide a date, default to today so countdown can fall back to it if API lacks scheduled time
+    const effectiveFlightDate =
+      flightDate || new Date().toISOString().slice(0, 10);
     const departureAirportIata =
       typeof body?.departureAirportIata === "string"
         ? body.departureAirportIata.trim().toUpperCase()
@@ -127,7 +147,7 @@ export async function POST(request: Request) {
     const cacheKey = cacheKeyParts.join(":");
     const cached = cache.get(cacheKey);
     if (cached && cached.expiresAt > Date.now()) {
-      return NextResponse.json(cached.data);
+      return NextResponse.json({ ...cached.data, flightDate: flightDate || effectiveFlightDate });
     }
 
     const apiKey = process.env.AVIATIONSTACK_API_KEY;
@@ -166,7 +186,7 @@ export async function POST(request: Request) {
           data: mapped,
           expiresAt: Date.now() + CACHE_TTL_MS,
         });
-        return NextResponse.json(mapped);
+        return NextResponse.json({ ...mapped, flightDate: flightDate || effectiveFlightDate });
       }
 
       // Flights returned but none matched date/airport filter
@@ -203,6 +223,12 @@ export async function POST(request: Request) {
       boardingTime: "2:45 PM",
       minutesUntilBoarding: 40,
       status: "on_time",
+      scheduledDepartureIso: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
+      scheduledArrivalIso: new Date(Date.now() + 5 * 60 * 60 * 1000).toISOString(),
+      arrivalAirportIata: "LAX",
+      arrivalAirportName: "Los Angeles International Airport",
+      flightDurationMinutes: 180,
+      flightDate: flightDate || effectiveFlightDate,
     };
     return NextResponse.json(stub);
   } catch (e) {

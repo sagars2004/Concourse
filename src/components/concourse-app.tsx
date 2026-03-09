@@ -8,7 +8,7 @@ import { ErrorBanner } from "@/components/error-banner";
 import { FlightInput } from "@/components/flight-input";
 import { FlightStatus } from "@/components/flight-status";
 import { FlightStatusSkeleton } from "@/components/loading-skeleton";
-import { DietaryPreferences } from "@/components/dietary-preferences";
+import { PreferenceFiltersSection } from "@/components/preference-filters";
 import { FoodRecommendations } from "@/components/food-recommendations";
 import { TerminalMap } from "@/components/terminal-map";
 import { ChatInterface } from "@/components/chat-interface";
@@ -39,7 +39,7 @@ function ConcourseContent() {
             <>
               <div className="space-y-6">
                 <FlightStatus />
-                <DietaryPreferences />
+                <PreferenceFiltersSection />
               </div>
               <FoodRecommendations />
               <TerminalMap />

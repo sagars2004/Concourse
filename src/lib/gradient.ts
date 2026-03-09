@@ -24,20 +24,23 @@ const DEFAULT_MODEL = "llama3.3-70b-instruct";
 /**
  * Send chat to Gradient. Uses the agent endpoint if GRADIENT_AGENT_ENDPOINT and
  * GRADIENT_AGENT_ACCESS_KEY are set (agent orchestration); otherwise uses serverless inference.
+ * Optional extraContext is appended to the system prompt (e.g. current user preferences for RAG/agent).
  */
 export async function concourseChat(
   messages: { role: string; content: string }[],
-  systemPrompt?: string
+  systemPrompt?: string,
+  extraContext?: string
 ): Promise<string> {
   if (agentEndpoint && agentAccessKey) {
-    return concourseChatViaAgent(messages, systemPrompt);
+    return concourseChatViaAgent(messages, systemPrompt, extraContext);
   }
 
   const client = getGradientClient();
   if (!client) throw new Error("Gradient not configured");
 
-  const fullMessages = systemPrompt
-    ? [{ role: "system" as const, content: systemPrompt }, ...messages]
+  const system = [systemPrompt, extraContext].filter(Boolean).join("\n\n");
+  const fullMessages = system
+    ? [{ role: "system" as const, content: system }, ...messages]
     : messages;
 
   const completion = await client.chat.completions.create({
@@ -55,11 +58,13 @@ export async function concourseChat(
 /** Call the DigitalOcean Gradient agent endpoint (supports RAG, subagents, orchestration). */
 async function concourseChatViaAgent(
   messages: { role: string; content: string }[],
-  systemPrompt?: string
+  systemPrompt?: string,
+  extraContext?: string
 ): Promise<string> {
   const url = `${agentEndpoint}/api/v1/chat/completions`;
-  const fullMessages = systemPrompt
-    ? [{ role: "system", content: systemPrompt }, ...messages]
+  const system = [systemPrompt, extraContext].filter(Boolean).join("\n\n");
+  const fullMessages = system
+    ? [{ role: "system", content: system }, ...messages]
     : messages;
 
   const res = await fetch(url, {

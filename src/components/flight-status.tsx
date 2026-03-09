@@ -1,12 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Plane, Clock, MapPin, Building2, RefreshCw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useConcourse } from "@/context/concourse-context";
+import {
+  getTimezoneForAirport,
+  formatTimeInTimezone,
+  formatFlightDuration,
+  getTimezoneDisplayLabel,
+  EASTERN_TIMEZONE,
+  EST_OFFSET_HOURS,
+  addHoursToIso,
+} from "@/lib/airport-timezones";
 
 export function FlightStatus() {
   const {
@@ -14,29 +23,149 @@ export function FlightStatus() {
     gateOverride,
     terminalOverride,
     boardingTimeOverride,
-    minutesUntilBoardingOverride,
     setGateOverride,
     setTerminalOverride,
     setBoardingTimeOverride,
-    setMinutesUntilBoardingOverride,
     loadRecommendations,
     simulateGateChange,
   } = useConcourse();
   const [editingGate, setEditingGate] = useState(false);
   const [editingTerminal, setEditingTerminal] = useState(false);
   const [editingBoardingTime, setEditingBoardingTime] = useState(false);
-  const [editingMinutes, setEditingMinutes] = useState(false);
   const [editGateValue, setEditGateValue] = useState("");
   const [editTerminalValue, setEditTerminalValue] = useState("");
   const [editBoardingTimeValue, setEditBoardingTimeValue] = useState("");
-  const [editMinutesValue, setEditMinutesValue] = useState("");
 
   if (!flightData) return null;
 
+  const departureTz = useMemo(
+    () => getTimezoneForAirport(flightData.departureAirportIata),
+    [flightData.departureAirportIata]
+  );
+  const isEastern = departureTz === EASTERN_TIMEZONE;
+  const departureTimeDisplay = useMemo(() => {
+    if (flightData.scheduledDepartureIso) {
+      const iso = isEastern ? addHoursToIso(flightData.scheduledDepartureIso, EST_OFFSET_HOURS) : flightData.scheduledDepartureIso;
+      return formatTimeInTimezone(iso ?? flightData.scheduledDepartureIso, departureTz);
+    }
+    return "—";
+  }, [flightData.scheduledDepartureIso, departureTz, isEastern]);
+  const boardingTimeComputed = useMemo(() => {
+    if (!flightData.scheduledDepartureIso) return "—";
+    const dep = new Date(flightData.scheduledDepartureIso);
+    const boarding = new Date(dep.getTime() - 35 * 60 * 1000);
+    const iso = isEastern ? addHoursToIso(boarding.toISOString(), EST_OFFSET_HOURS) : boarding.toISOString();
+    return formatTimeInTimezone(iso ?? boarding.toISOString(), departureTz);
+  }, [flightData.scheduledDepartureIso, departureTz, isEastern]);
+  const arrivalTimeDisplay = useMemo(() => {
+    if (flightData.scheduledArrivalIso) {
+      const arrTz = getTimezoneForAirport(flightData.arrivalAirportIata);
+      const isArrivalEastern = arrTz === EASTERN_TIMEZONE;
+      const iso = isArrivalEastern ? addHoursToIso(flightData.scheduledArrivalIso, EST_OFFSET_HOURS) : flightData.scheduledArrivalIso;
+      return formatTimeInTimezone(iso ?? flightData.scheduledArrivalIso, arrTz);
+    }
+    return "—";
+  }, [flightData.scheduledArrivalIso, flightData.arrivalAirportIata]);
+
+  const timeZoneLabel = useMemo(() => getTimezoneDisplayLabel(departureTz), [departureTz]);
+  const arrivalTz = useMemo(
+    () => getTimezoneForAirport(flightData.arrivalAirportIata),
+    [flightData.arrivalAirportIata]
+  );
+  const arrivalTimeZoneLabel = useMemo(() => getTimezoneDisplayLabel(arrivalTz), [arrivalTz]);
+
   const gate = gateOverride ?? flightData.gate ?? "—";
   const terminal = terminalOverride ?? flightData.terminal ?? "—";
-  const boardingTime = boardingTimeOverride ?? flightData.boardingTime ?? "—";
-  const minutesUntilBoarding = minutesUntilBoardingOverride ?? flightData.minutesUntilBoarding ?? 40;
+  // When EST demo: prefer computed boarding time so +5h is applied; otherwise use API value
+  const boardingTime =
+    boardingTimeOverride ??
+    (isEastern ? boardingTimeComputed : flightData.boardingTime) ??
+    flightData.boardingTime ??
+    boardingTimeComputed;
+  // Countdown target: use the displayed boarding time (e.g. "7:05 AM") and subtract from now.
+  // If a flight date is available, anchor the time to that date; otherwise treat it as today (or tomorrow if already passed).
+  const boardingTargetMs = useMemo(() => {
+    const label = (boardingTime ?? "").trim();
+    if (!label || label === "—") return null;
+
+    const match = label.match(/^(\d{1,2}):(\d{2})\s*(AM|PM|am|pm)?$/);
+    if (!match) return null;
+
+    let hour = Number.parseInt(match[1], 10);
+    const minute = Number.parseInt(match[2], 10);
+    const ampm = match[3]?.toLowerCase();
+    if (!Number.isFinite(hour) || !Number.isFinite(minute)) return null;
+
+    if (ampm) {
+      const isPm = ampm === "pm";
+      if (hour === 12) {
+        hour = isPm ? 12 : 0;
+      } else if (isPm) {
+        hour += 12;
+      }
+    }
+
+    const now = new Date();
+    let target = new Date(now.getTime());
+
+    if (flightData.flightDate) {
+      const [y, m, d] = flightData.flightDate.split("-").map(Number);
+      if (!y || !m || !d) return null;
+      target.setFullYear(y, m - 1, d);
+    }
+
+    target.setSeconds(0, 0);
+    target.setHours(hour, minute, 0, 0);
+
+    // If no explicit flight date and the time has already passed today, assume it's tomorrow.
+    if (!flightData.flightDate && target.getTime() <= now.getTime()) {
+      target.setDate(target.getDate() + 1);
+    }
+
+    return target.getTime();
+  }, [boardingTime, flightData.flightDate]);
+
+  const [countdownRemainingMs, setCountdownRemainingMs] = useState<number>(() => {
+    if (boardingTargetMs != null) return Math.max(0, boardingTargetMs - Date.now());
+    return 0;
+  });
+  useEffect(() => {
+    if (boardingTargetMs == null) return;
+    const tick = () => {
+      const remaining = Math.max(0, boardingTargetMs - Date.now());
+      setCountdownRemainingMs(remaining);
+    };
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [boardingTargetMs]);
+
+  // Departure time (ms) for boarding-window check
+  const departureMs = useMemo(
+    () => (flightData.scheduledDepartureIso ? new Date(flightData.scheduledDepartureIso).getTime() : null),
+    [flightData.scheduledDepartureIso]
+  );
+  const isInBoardingWindow = useMemo(() => {
+    const now = Date.now();
+    if (boardingTargetMs == null || departureMs == null) return false;
+    return now >= boardingTargetMs && now < departureMs;
+  }, [boardingTargetMs, departureMs, countdownRemainingMs]);
+
+  // Countdown: days:hrs:mins when >= 1 day, else hrs:mins (e.g. "2d 15:30" or "2:15")
+  const countdownHrMin = useMemo(() => {
+    if (boardingTargetMs == null) return "—";
+    if (countdownRemainingMs <= 0) return "0:00";
+    const totalMins = Math.floor(countdownRemainingMs / (60 * 1000));
+    const days = Math.floor(totalMins / (24 * 60));
+    const remainderMins = totalMins % (24 * 60);
+    const hours = Math.floor(remainderMins / 60);
+    const mins = remainderMins % 60;
+    if (days > 0) {
+      return `${days}d ${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
+    }
+    return `${hours}:${String(mins).padStart(2, "0")}`;
+  }, [countdownRemainingMs, boardingTargetMs]);
+
   const statusLabel =
     flightData.status === "on_time"
       ? "On Time"
@@ -79,19 +208,6 @@ export function FlightStatus() {
     setEditingBoardingTime(false);
   };
 
-  const startEditMinutes = () => {
-    setEditMinutesValue(String(minutesUntilBoarding));
-    setEditingMinutes(true);
-  };
-
-  const saveMinutes = () => {
-    const n = parseInt(editMinutesValue, 10);
-    const value = Number.isFinite(n) && n >= 0 ? n : null;
-    setMinutesUntilBoardingOverride(value);
-    setEditingMinutes(false);
-    if (value !== null) loadRecommendations(undefined, undefined, value);
-  };
-
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-4">
@@ -111,7 +227,63 @@ export function FlightStatus() {
           {statusLabel}
         </Badge>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-5">
+        {/* Route graphic: origin • ——— duration ——— • destination */}
+        <div className="rounded-lg border border-border bg-muted/30 p-4">
+          <div className="flex items-center gap-2">
+            {/* Origin */}
+            <div className="flex shrink-0 flex-col items-center gap-0.5 text-center">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground shadow-sm">
+                {flightData.departureAirportIata ?? "—"}
+              </div>
+              <p className="text-xs font-semibold text-foreground">
+                {flightData.departureAirportIata ?? "Origin"}
+              </p>
+              <p className="max-w-[72px] truncate text-[10px] text-muted-foreground" title={flightData.departureAirportName}>
+                {flightData.departureAirportName?.replace(/\s*(International|Intl|Airport).*$/i, "").trim() || "—"}
+              </p>
+              <p className="text-sm font-semibold text-primary">{departureTimeDisplay}</p>
+              <p className="text-[10px] text-muted-foreground">Departure{isEastern ? " (ET)" : ""}</p>
+            </div>
+            {/* Connecting line with flight time */}
+            <div className="relative flex flex-1 items-center px-2">
+              <div className="h-0.5 w-full rounded-full bg-gradient-to-r from-primary/30 via-primary/50 to-primary/30" />
+              <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-full border border-border bg-background px-2 py-1 shadow-sm">
+                <Plane className="h-3.5 w-3.5 shrink-0 rotate-[-45deg] text-primary" />
+                <span className="text-xs font-medium text-muted-foreground">
+                  {formatFlightDuration(flightData.flightDurationMinutes)}
+                </span>
+              </div>
+            </div>
+            {/* Destination */}
+            <div className="flex shrink-0 flex-col items-center gap-0.5 text-center">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/80 text-sm font-bold text-primary-foreground shadow-sm">
+                {flightData.arrivalAirportIata ?? "—"}
+              </div>
+              <p className="text-xs font-semibold text-foreground">
+                {flightData.arrivalAirportIata ?? "Destination"}
+              </p>
+              <p className="max-w-[72px] truncate text-[10px] text-muted-foreground" title={flightData.arrivalAirportName}>
+                {flightData.arrivalAirportName?.replace(/\s*(International|Intl|Airport).*$/i, "").trim() || "—"}
+              </p>
+              <p className="text-sm font-semibold text-primary">{arrivalTimeDisplay}</p>
+              <p className="text-[10px] text-muted-foreground">
+                Arrival{arrivalTz === EASTERN_TIMEZONE ? " (ET)" : arrivalTz !== departureTz ? ` (${arrivalTimeZoneLabel})` : ""}
+              </p>
+            </div>
+          </div>
+          <p className="mt-3 text-center text-[10px] text-muted-foreground">
+            {isEastern ? (
+              <>All times in <strong>Eastern Time (ET)</strong>. Demo focuses on Northeast flights (JFK, LGA, EWR, BOS, PHL, etc.).</>
+            ) : (
+              <>Boarding and departure in {timeZoneLabel}</>
+            )}
+            {departureTz !== Intl.DateTimeFormat().resolvedOptions().timeZone && (
+              <> · Your timezone: {Intl.DateTimeFormat().resolvedOptions().timeZone}</>
+            )}
+          </p>
+        </div>
+
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
           <div className="space-y-1.5">
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
@@ -203,6 +375,16 @@ export function FlightStatus() {
           </div>
           <div className="space-y-1.5">
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Departure time
+            </p>
+            <div className="flex items-center gap-1.5">
+              <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+              <p className="font-medium">{departureTimeDisplay}</p>
+            </div>
+            <p className="text-[10px] text-muted-foreground">{timeZoneLabel}</p>
+          </div>
+          <div className="space-y-1.5">
+            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
               Boarding time
             </p>
             <div className="flex items-center gap-2">
@@ -234,36 +416,35 @@ export function FlightStatus() {
           </div>
           <div className="space-y-1.5">
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              Min until boarding
+              Time until boarding
             </p>
             <div className="flex items-center gap-2">
-              {editingMinutes ? (
-                <div className="flex items-center gap-2">
-                  <Input
-                    type="number"
-                    min={0}
-                    value={editMinutesValue}
-                    onChange={(e) => setEditMinutesValue(e.target.value)}
-                    placeholder="Minutes"
-                    className="h-8 w-20 text-sm"
-                    autoFocus
-                  />
-                  <span className="text-xs text-muted-foreground">min</span>
-                  <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" onClick={saveMinutes}>
-                    Save
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  <p className="font-medium">{minutesUntilBoarding} min</p>
-                  <Button variant="ghost" size="sm" className="h-6 px-2 text-xs text-primary" onClick={startEditMinutes}>
-                    Edit
-                  </Button>
-                </>
+              <p className="font-semibold tabular-nums">{countdownHrMin}</p>
+              {countdownHrMin !== "—" && (
+                <span className="text-xs text-muted-foreground">
+                  {countdownRemainingMs >= 24 * 60 * 60 * 1000 ? "d hr:min" : "hr:min"}
+                </span>
               )}
             </div>
-            <p className="text-xs text-muted-foreground">Correct these if your boarding pass differs.</p>
+            <p className="text-[10px] text-muted-foreground">
+              {boardingTargetMs != null
+                ? `Countdown to ${boardingTime} ${isEastern ? "(ET)" : ""}`
+                : "Boarding time required for countdown"}
+            </p>
           </div>
+          {isInBoardingWindow && (
+            <div className="space-y-1.5">
+              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                Status
+              </p>
+              <div className="rounded-md border border-primary/50 bg-primary/10 px-3 py-2">
+                <p className="text-lg font-semibold text-primary">Boarding now</p>
+                <p className="text-[10px] text-muted-foreground">
+                  Boarding in progress until departure at {departureTimeDisplay}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
         <div className="mt-4 flex justify-end border-t border-border pt-4">
           <Button

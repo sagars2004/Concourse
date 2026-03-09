@@ -1,0 +1,20 @@
+{
+  "airport": "EWR",
+  "terminal": "Terminal C",
+  "description": "Newark Terminal C — United hub with the most dining options at EWR.",
+  "zones": [
+    { "id": "C1", "name": "Concourse C1", "walkMinutesFromB12": 6 },
+    { "id": "C2", "name": "Concourse C2", "walkMinutesFromB12": 3 },
+    { "id": "C3", "name": "Concourse C3", "walkMinutesFromB12": 8 }
+  ],
+  "vendors": [
+    { "name": "Starbucks", "cuisine": "Coffee · Pastries", "zoneId": "C2", "dietaryTags": ["vegetarian", "vegan"], "tags": ["Quick Serve", "Coffee"], "avgWaitMinutes": 4, "opinion": "Multiple locations in C. Your safest bet for coffee.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "anytime"], "cuisineCategories": ["coffee"], "shortDescription": "Coffee and pastries; multiple locations in Terminal C." },
+    { "name": "Saison", "cuisine": "American · Brasserie", "zoneId": "C2", "dietaryTags": ["vegetarian"], "tags": ["Sit Down", "American"], "avgWaitMinutes": 15, "opinion": "Full-service brasserie. Good for a real meal before a long flight.", "priceRange": "mid", "serviceType": "sit-down", "mealTypes": ["lunch", "dinner"], "cuisineCategories": ["american"], "shortDescription": "Full-service American brasserie in C2." },
+    { "name": "Qdoba", "cuisine": "Mexican", "zoneId": "C1", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Mexican"], "avgWaitMinutes": 5, "opinion": "Build-your-own burritos and bowls. Fast and filling.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["mexican"], "shortDescription": "Build-your-own Mexican burritos and bowls in C1." },
+    { "name": "Dunkin'", "cuisine": "Coffee · Donuts", "zoneId": "C2", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Coffee"], "avgWaitMinutes": 3, "opinion": "Coffee and breakfast. Some locations 24/7.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "anytime"], "cuisineCategories": ["coffee"], "shortDescription": "Coffee and donuts; some locations 24/7." },
+    { "name": "Panda Express", "cuisine": "Chinese · Asian", "zoneId": "C3", "dietaryTags": [], "tags": ["Quick Serve", "Chinese"], "avgWaitMinutes": 4, "opinion": "Familiar and fast. Orange chicken never disappoints.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["chinese", "asian"], "shortDescription": "Quick-serve Chinese in C3." },
+    { "name": "Cheeburger Cheeburger", "cuisine": "Burgers · American", "zoneId": "C2", "dietaryTags": [], "tags": ["Fast Casual", "Burgers"], "avgWaitMinutes": 8, "opinion": "Burgers and shakes. Solid when you're in the middle of C.", "priceRange": "mid", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["american"], "shortDescription": "Burgers and shakes in C2." },
+    { "name": "Lucky Chopsticks", "cuisine": "Chinese", "zoneId": "C3", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Chinese"], "avgWaitMinutes": 6, "opinion": "Noodles and rice dishes. Good alternative to Panda.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner"], "cuisineCategories": ["chinese", "asian"], "shortDescription": "Chinese noodles and rice in C3; vegetarian options." }
+  ],
+  "tips": "Terminal C has the most options at EWR. Saison for a sit-down; Starbucks and Qdoba for speed. United hub so expect crowds."
+}

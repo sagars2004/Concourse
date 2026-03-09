@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { FoodRecommendationItem } from "@/lib/types";
 import { getAirportData } from "@/data/airports";
 import type { AirportData, AirportVendor, AirportZone } from "@/data/airports";
+import type { PreferenceFilters } from "@/lib/preference-filters";
 
 const MOCK_RECOMMENDATIONS: FoodRecommendationItem[] = [
   {
@@ -91,6 +92,53 @@ function buildFromRag(
   });
 }
 
+function parsePreferenceFilters(body: unknown): PreferenceFilters {
+  const empty: PreferenceFilters = { dietary: [], cuisine: [], price: [], service: [], meal: [] };
+  if (!body || typeof body !== "object") return empty;
+  const o = body as Record<string, unknown>;
+  const pf = o.preferenceFilters;
+  if (pf && typeof pf === "object") {
+    const p = pf as Record<string, unknown>;
+    return {
+      dietary: Array.isArray(p.dietary) ? (p.dietary as string[]) : empty.dietary,
+      cuisine: Array.isArray(p.cuisine) ? (p.cuisine as string[]) : empty.cuisine,
+      price: Array.isArray(p.price) ? (p.price as string[]) : empty.price,
+      service: Array.isArray(p.service) ? (p.service as string[]) : empty.service,
+      meal: Array.isArray(p.meal) ? (p.meal as string[]) : empty.meal,
+    };
+  }
+  if (Array.isArray(o.dietaryPreferences)) {
+    return { ...empty, dietary: o.dietaryPreferences as string[] };
+  }
+  return empty;
+}
+
+function applyPreferenceFilters(
+  list: FoodRecommendationItem[],
+  filters: PreferenceFilters,
+  vendors: AirportVendor[]
+): FoodRecommendationItem[] {
+  const hasDietary =
+    filters.dietary.length > 0 && !filters.dietary.some((p) => p.toLowerCase() === "none");
+  const hasCuisine = filters.cuisine.length > 0;
+  const hasPrice = filters.price.length > 0;
+  const hasService = filters.service.length > 0;
+  const hasMeal = filters.meal.length > 0;
+  if (!hasDietary && !hasCuisine && !hasPrice && !hasService && !hasMeal) return list;
+
+  const vendorMap = new Map(vendors.map((v) => [v.name, v]));
+  return list.filter((rec) => {
+    const vendor = vendorMap.get(rec.name);
+    if (hasDietary && !filters.dietary.some((p) => rec.dietaryTags.map((t) => t.toLowerCase()).includes(p.toLowerCase())))
+      return false;
+    if (hasCuisine && vendor?.cuisineCategories?.length && !filters.cuisine.some((c) => vendor.cuisineCategories!.includes(c))) return false;
+    if (hasPrice && vendor?.priceRange && !filters.price.includes(vendor.priceRange)) return false;
+    if (hasService && vendor?.serviceType && !filters.service.includes(vendor.serviceType)) return false;
+    if (hasMeal && vendor?.mealTypes?.length && !filters.meal.some((m) => vendor.mealTypes!.includes(m))) return false;
+    return true;
+  });
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({}));
@@ -102,34 +150,25 @@ export async function POST(request: Request) {
       typeof body?.minutesUntilBoarding === "number"
         ? body.minutesUntilBoarding
         : 40;
-    const dietaryPreferences: string[] = Array.isArray(body?.dietaryPreferences)
-      ? body.dietaryPreferences
-      : [];
+    const preferenceFilters = parsePreferenceFilters(body);
 
     let list: FoodRecommendationItem[];
+    let vendors: AirportVendor[] = [];
 
     const airport = terminal
       ? getAirportData(terminal, departureAirportIata)
       : null;
     if (airport) {
+      vendors = airport.vendors;
       list = buildFromRag(airport, minutesUntilBoarding);
     } else {
       list = [...MOCK_RECOMMENDATIONS];
     }
 
-    const hasRestriction =
-      dietaryPreferences.length > 0 &&
-      !dietaryPreferences.some((p) => p.toLowerCase() === "none");
-    if (hasRestriction) {
-      list = list.filter((rec) =>
-        dietaryPreferences.some((pref) =>
-          rec.dietaryTags
-            .map((t) => t.toLowerCase())
-            .includes(pref.toLowerCase())
-        )
-      );
+    list = applyPreferenceFilters(list, preferenceFilters, vendors);
+    if (list.length === 0 && (preferenceFilters.dietary.length || preferenceFilters.cuisine.length || preferenceFilters.price.length || preferenceFilters.service.length || preferenceFilters.meal.length)) {
+      list = airport ? buildFromRag(airport, minutesUntilBoarding) : [...MOCK_RECOMMENDATIONS];
     }
-    if (list.length === 0) list = airport ? buildFromRag(airport, minutesUntilBoarding) : MOCK_RECOMMENDATIONS;
 
     return NextResponse.json({ recommendations: list });
   } catch (e) {

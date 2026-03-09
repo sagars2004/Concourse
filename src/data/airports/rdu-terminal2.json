@@ -1,0 +1,21 @@
+{
+  "airport": "RDU",
+  "terminal": "Terminal 2",
+  "description": "RDU Terminal 2 — best dining at RDU, including Crawford's and Bond Brothers.",
+  "zones": [
+    { "id": "C1", "name": "Gates C1–C8", "walkMinutesFromB12": 4 },
+    { "id": "mid", "name": "Mid-concourse", "walkMinutesFromB12": 2 },
+    { "id": "D3", "name": "Gates D1–D8", "walkMinutesFromB12": 6 }
+  ],
+  "vendors": [
+    { "name": "Crawford's Genuine", "cuisine": "Southern · American", "zoneId": "C1", "dietaryTags": ["vegetarian"], "tags": ["Sit Down", "Southern"], "avgWaitMinutes": 18, "opinion": "James Beard–nominated Chef Scott Crawford. Braised short ribs, crispy trout, salads. The best meal at RDU.", "priceRange": "splurge", "serviceType": "sit-down", "mealTypes": ["lunch", "dinner"], "cuisineCategories": ["southern", "american"], "shortDescription": "Upscale Southern by Chef Scott Crawford; best meal at RDU." },
+    { "name": "Bond Brothers Kitchen & Bar", "cuisine": "American · Brewery", "zoneId": "D3", "dietaryTags": ["vegetarian"], "tags": ["Sit Down", "Brewery"], "avgWaitMinutes": 12, "opinion": "Cary brewery at the airport. No Turbulence IPA and smoked brisket. Worth the walk to D.", "priceRange": "mid", "serviceType": "bar", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["american"], "shortDescription": "Local brewery with beer and barbecue near D gates." },
+    { "name": "Bobby's Burgers", "cuisine": "Burgers · American", "zoneId": "mid", "dietaryTags": [], "tags": ["Fast Casual", "Burgers"], "avgWaitMinutes": 8, "opinion": "Bobby Flay's Crunchburger. Consistently good.", "priceRange": "mid", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["american"], "shortDescription": "Bobby Flay's burgers in mid-concourse." },
+    { "name": "BurgerFi", "cuisine": "Burgers · American", "zoneId": "D3", "dietaryTags": ["vegetarian"], "tags": ["Fast Casual", "Burgers"], "avgWaitMinutes": 6, "opinion": "All-natural Angus and Beyond Burger option. Quick and reliable.", "priceRange": "mid", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["american"], "shortDescription": "Burgers including Beyond option near D gates." },
+    { "name": "Half Moon Empanadas", "cuisine": "Latin · Empanadas", "zoneId": "C1", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Empanadas"], "avgWaitMinutes": 5, "opinion": "Hand-made empanadas. Unique and fast.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["latin"], "shortDescription": "Hand-made empanadas near C1." },
+    { "name": "La Farm Bakery Café", "cuisine": "Bakery · Cafe", "zoneId": "mid", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Bakery"], "avgWaitMinutes": 5, "opinion": "Local bakery. Pastries and sandwiches. Great for breakfast.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "lunch", "anytime"], "cuisineCategories": ["bakery", "coffee"], "shortDescription": "Local bakery and cafe; breakfast and lunch." },
+    { "name": "Starbucks", "cuisine": "Coffee · Pastries", "zoneId": "mid", "dietaryTags": ["vegetarian", "vegan"], "tags": ["Quick Serve", "Coffee"], "avgWaitMinutes": 4, "opinion": "Coffee and a bite. You know what you're getting.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "anytime"], "cuisineCategories": ["coffee"], "shortDescription": "Coffee and pastries in mid-concourse." },
+    { "name": "Jason's Deli", "cuisine": "Deli · Sandwiches", "zoneId": "D3", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Deli"], "avgWaitMinutes": 6, "opinion": "Sandwiches and soup. Solid when you're near the D gates.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["american"], "shortDescription": "Deli sandwiches and soup near D gates." }
+  ],
+  "tips": "Terminal 2 is where to eat at RDU. Crawford's is the standout; Bond Brothers for beer and barbecue. Bobby's Burgers and Half Moon for something quicker."
+}

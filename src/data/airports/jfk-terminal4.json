@@ -16,7 +16,12 @@
       "dietaryTags": ["vegetarian"],
       "tags": ["Fast Casual", "Burgers"],
       "avgWaitMinutes": 5,
-      "opinion": "Best burger in T4, hands down. The ShackBurger is worth every second of that walk."
+      "opinion": "Best burger in T4, hands down. The ShackBurger is worth every second of that walk.",
+      "priceRange": "mid",
+      "serviceType": "quick-serve",
+      "mealTypes": ["lunch", "dinner", "anytime"],
+      "cuisineCategories": ["american"],
+      "shortDescription": "Fast-casual burgers and shakes near Gate B14; vegetarian options."
     },
     {
       "name": "Panda Express",
@@ -25,7 +30,12 @@
       "dietaryTags": [],
       "tags": ["Quick Serve", "Chinese"],
       "avgWaitMinutes": 3,
-      "opinion": "Solid and reliable. The orange chicken hits different when you're in a rush."
+      "opinion": "Solid and reliable. The orange chicken hits different when you're in a rush.",
+      "priceRange": "budget",
+      "serviceType": "quick-serve",
+      "mealTypes": ["lunch", "dinner", "anytime"],
+      "cuisineCategories": ["chinese", "asian"],
+      "shortDescription": "Quick-serve Chinese in the food court; fast and filling."
     },
     {
       "name": "Blue Ribbon Sushi",
@@ -34,7 +44,12 @@
       "dietaryTags": ["vegetarian", "gluten-free"],
       "tags": ["Sit Down", "Japanese", "Sushi"],
       "avgWaitMinutes": 12,
-      "opinion": "Excellent sushi for an airport, but you'll need to eat fast. Worth it if you're craving it."
+      "opinion": "Excellent sushi for an airport, but you'll need to eat fast. Worth it if you're craving it.",
+      "priceRange": "mid",
+      "serviceType": "sit-down",
+      "mealTypes": ["lunch", "dinner"],
+      "cuisineCategories": ["japanese", "asian"],
+      "shortDescription": "Sit-down sushi near B22; vegetarian and gluten-free options."
     },
     {
       "name": "Tigin Irish Pub",
@@ -43,7 +58,12 @@
       "dietaryTags": ["vegetarian"],
       "tags": ["Sit Down", "Pub Food"],
       "avgWaitMinutes": 15,
-      "opinion": "Great fish and chips, but it's a hike. With only 40 min, I'd skip it this time."
+      "opinion": "Great fish and chips, but it's a hike. With only 40 min, I'd skip it this time.",
+      "priceRange": "mid",
+      "serviceType": "sit-down",
+      "mealTypes": ["lunch", "dinner", "anytime"],
+      "cuisineCategories": ["american"],
+      "shortDescription": "Irish pub with fish and chips and full bar; longer walk to B36."
     }
   ],
   "tips": "Skip the pizza at B14 — walk the extra two minutes to Shake Shack. Terminal 4 has the best food options at JFK."

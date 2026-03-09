@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useConcourse } from "@/context/concourse-context";
 
 export function FlightInput() {
-  const [value, setValue] = useState("AA 203");
+  const [value, setValue] = useState("");
   const [date, setDate] = useState("");
   const [airport, setAirport] = useState("");
   const { lookupFlight, step } = useConcourse();
@@ -39,7 +39,7 @@ export function FlightInput() {
             <div className="relative flex-1">
               <Plane className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Flight number (e.g. AA 203)"
+                placeholder="Please enter your flight number"
                 className="h-12 pl-10 text-base"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}

@@ -15,6 +15,8 @@ import type {
   ChatMessage,
 } from "@/lib/types";
 import { getOrCreateSessionId } from "@/lib/session";
+import type { PreferenceFilters } from "@/lib/preference-filters";
+import { DEFAULT_PREFERENCE_FILTERS } from "@/lib/preference-filters";
 
 type Step = "idle" | "loading" | "results";
 
@@ -29,7 +31,8 @@ interface ConcourseState {
   step: Step;
   flightData: FlightData | null;
   recommendations: FoodRecommendationItem[];
-  dietaryPreferences: string[];
+  /** Full preference filters (dietary, cuisine, price, service, meal). Persisted to Supabase and sent to RAG/agents. */
+  preferenceFilters: PreferenceFilters;
   messages: ChatMessage[];
   error: string | null;
   sessionId: string;
@@ -47,9 +50,9 @@ interface ConcourseContextValue extends ConcourseState {
   setTerminalOverride: (terminal: string | null) => void;
   setBoardingTimeOverride: (time: string | null) => void;
   setMinutesUntilBoardingOverride: (minutes: number | null) => void;
-  setDietaryPreferences: (prefs: string[]) => void;
-  savePreferences: (prefs: string[]) => Promise<void>;
-  loadRecommendations: (dietaryPrefsOverride?: string[], terminalOverride?: string | null, minutesUntilBoardingOverride?: number | null) => Promise<void>;
+  setPreferenceFilters: (filters: PreferenceFilters | ((prev: PreferenceFilters) => PreferenceFilters)) => void;
+  savePreferences: (filters: PreferenceFilters) => Promise<void>;
+  loadRecommendations: (filtersOverride?: Partial<PreferenceFilters>, terminalOverride?: string | null, minutesUntilBoardingOverride?: number | null) => Promise<void>;
   sendChatMessage: (content: string) => Promise<void>;
   setInitialMessages: (messages: ChatMessage[]) => void;
   clearResults: () => void;
@@ -61,7 +64,7 @@ const defaultState: ConcourseState = {
   step: "idle",
   flightData: null,
   recommendations: [],
-  dietaryPreferences: ["none"],
+  preferenceFilters: DEFAULT_PREFERENCE_FILTERS,
   messages: [],
   error: null,
   sessionId: "",
@@ -116,7 +119,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
           terminal: data.terminal,
           departureAirportIata: data.departureAirportIata ?? undefined,
           gate: data.gate,
-          dietaryPreferences: state.dietaryPreferences,
+          preferenceFilters: state.preferenceFilters,
           minutesUntilBoarding: data.minutesUntilBoarding ?? 40,
         }),
       });
@@ -142,7 +145,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
         error: e instanceof Error ? e.message : "Something went wrong",
       }));
     }
-  }, [state.dietaryPreferences]);
+  }, [state.preferenceFilters]);
 
   const setGateOverride = useCallback((gate: string | null) => {
     setState((s) => ({ ...s, gateOverride: gate }));
@@ -160,39 +163,41 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
     setState((s) => ({ ...s, minutesUntilBoardingOverride: minutes }));
   }, []);
 
-  const setDietaryPreferences = useCallback((prefs: string[]) => {
-    setState((s) => ({ ...s, dietaryPreferences: prefs }));
+  const setPreferenceFilters = useCallback((filters: PreferenceFilters | ((prev: PreferenceFilters) => PreferenceFilters)) => {
+    setState((s) => ({
+      ...s,
+      preferenceFilters: typeof filters === "function" ? filters(s.preferenceFilters) : filters,
+    }));
   }, []);
 
-  const savePreferences = useCallback(
-    async (prefs: string[]) => {
-      const sessionId = getOrCreateSessionId();
-      setState((s) => ({ ...s, dietaryPreferences: prefs }));
-      try {
-        await fetch("/api/preferences", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-session-id": sessionId,
-          },
-          body: JSON.stringify({ dietaryPreferences: prefs }),
-        });
-      } catch {
-        // Non-blocking; in-memory state already updated
-      }
-    },
-    []
-  );
+  const savePreferences = useCallback(async (filters: PreferenceFilters) => {
+    const sessionId = getOrCreateSessionId();
+    setState((s) => ({ ...s, preferenceFilters: filters }));
+    try {
+      await fetch("/api/preferences", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-session-id": sessionId,
+        },
+        body: JSON.stringify({ preferenceFilters: filters }),
+      });
+    } catch {
+      // Non-blocking; in-memory state already updated
+    }
+  }, []);
 
   const loadRecommendations = useCallback(
     async (
-      dietaryPrefsOverride?: string[],
+      filtersOverride?: Partial<PreferenceFilters>,
       terminalOverrideArg?: string | null,
       minutesUntilBoardingOverrideArg?: number | null
     ) => {
       const s = state;
       if (!s.flightData) return;
-      const prefs = dietaryPrefsOverride ?? s.dietaryPreferences;
+      const filters: PreferenceFilters = filtersOverride
+        ? { ...s.preferenceFilters, ...filtersOverride }
+        : s.preferenceFilters;
       const terminal = terminalOverrideArg !== undefined ? terminalOverrideArg : (s.terminalOverride ?? s.flightData.terminal);
       const minutes = minutesUntilBoardingOverrideArg !== undefined ? minutesUntilBoardingOverrideArg : (s.minutesUntilBoardingOverride ?? s.flightData.minutesUntilBoarding ?? 40);
       try {
@@ -203,7 +208,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
             terminal: terminal ?? s.flightData.terminal,
             departureAirportIata: s.flightData.departureAirportIata ?? undefined,
             gate: s.gateOverride ?? s.flightData.gate,
-            dietaryPreferences: prefs,
+            preferenceFilters: filters,
             minutesUntilBoarding: minutes ?? 40,
           }),
         });
@@ -215,7 +220,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
         // Keep existing recommendations
       }
     },
-    [state.flightData, state.dietaryPreferences, state.gateOverride, state.terminalOverride, state.minutesUntilBoardingOverride]
+    [state.flightData, state.preferenceFilters, state.gateOverride, state.terminalOverride, state.minutesUntilBoardingOverride]
   );
 
   const sendChatMessage = useCallback(
@@ -234,6 +239,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
           body: JSON.stringify({
             message: content.trim(),
             messages: state.messages,
+            preferenceFilters: state.preferenceFilters,
           }),
         });
         const data = await res.json();
@@ -271,6 +277,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
       step: "idle",
       flightData: null,
       recommendations: [],
+      preferenceFilters: DEFAULT_PREFERENCE_FILTERS,
       messages: [],
       gateOverride: null,
       terminalOverride: null,
@@ -362,7 +369,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
       setTerminalOverride,
       setBoardingTimeOverride,
       setMinutesUntilBoardingOverride,
-      setDietaryPreferences,
+      setPreferenceFilters,
       savePreferences,
       loadRecommendations,
       sendChatMessage,
@@ -379,7 +386,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
       setTerminalOverride,
       setBoardingTimeOverride,
       setMinutesUntilBoardingOverride,
-      setDietaryPreferences,
+      setPreferenceFilters,
       savePreferences,
       loadRecommendations,
       sendChatMessage,

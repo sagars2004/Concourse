@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { concourseChat } from "@/lib/gradient";
 import { CONCOURSE_SYSTEM_PROMPT } from "@/lib/concourse-persona";
 import { getGradientClient } from "@/lib/gradient";
+import { preferenceFiltersForAgent } from "@/lib/preference-filters";
 
 const STUB_RESPONSES: string[] = [
   "Shake Shack at Gate B14 — it's a 4-minute walk from your gate. Grab the ShackBurger, you'll be back in your seat in under 15 minutes with zero regrets. Pro tip: order on their app while you walk to skip the line.",
@@ -14,6 +15,9 @@ export async function POST(request: Request) {
     const body = await request.json().catch(() => ({}));
     const messages = Array.isArray(body?.messages) ? body.messages : [];
     const userMessage = typeof body?.message === "string" ? body.message : "";
+    const preferenceFilters = body?.preferenceFilters && typeof body.preferenceFilters === "object"
+      ? body.preferenceFilters as { dietary?: string[]; cuisine?: string[]; price?: string[]; service?: string[]; meal?: string[] }
+      : undefined;
 
     if (!userMessage.trim()) {
       return NextResponse.json(
@@ -31,9 +35,11 @@ export async function POST(request: Request) {
         })),
         { role: "user", content: userMessage.trim() },
       ];
+      const prefContext = preferenceFilters ? preferenceFiltersForAgent(preferenceFilters as Parameters<typeof preferenceFiltersForAgent>[0]) : "";
       const content = await concourseChat(
         fullMessages,
-        CONCOURSE_SYSTEM_PROMPT
+        CONCOURSE_SYSTEM_PROMPT,
+        prefContext ? `Current user preferences: ${prefContext}` : undefined
       );
       return NextResponse.json({ message: content || "I'm not sure what to say — try again?" });
     }

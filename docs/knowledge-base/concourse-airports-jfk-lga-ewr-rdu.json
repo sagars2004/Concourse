@@ -1,0 +1,3185 @@
+{
+  "title": "Concourse Airport Food & Dining — JFK, LGA, EWR, RDU",
+  "description": "Full list of food and restaurant options at JFK, LGA, EWR, and RDU. Each vendor includes: name, cuisine, zoneId, dietaryTags, tags, avgWaitMinutes, opinion, priceRange (budget|mid|splurge), serviceType (quick-serve|sit-down|bar|food-hall), mealTypes (breakfast|lunch|dinner|anytime), cuisineCategories (american, italian, mexican, asian, coffee, bakery, etc.), shortDescription. Use for RAG and filtering by user preferences.",
+  "airports": [
+    {
+      "iata": "JFK",
+      "name": "John F. Kennedy International Airport",
+      "city": "New York",
+      "terminals": [
+        {
+          "terminal": "Terminal 4",
+          "description": "JFK Terminal 4 is the main international hub with the widest dining range at JFK.",
+          "referenceGate": "B12",
+          "zones": [
+            {
+              "id": "B14",
+              "name": "Gate B14 area",
+              "walkMinutesFromRef": 4
+            },
+            {
+              "id": "food_court",
+              "name": "Central Food Court",
+              "walkMinutesFromRef": 6
+            },
+            {
+              "id": "B22",
+              "name": "Gate B22 area",
+              "walkMinutesFromRef": 9
+            },
+            {
+              "id": "B32",
+              "name": "Gate B32 area",
+              "walkMinutesFromRef": 10
+            },
+            {
+              "id": "B36",
+              "name": "Gate B36 area",
+              "walkMinutesFromRef": 13
+            }
+          ],
+          "vendors": [
+            {
+              "name": "Shake Shack",
+              "cuisine": "Burgers · American",
+              "zoneId": "B14",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Fast Casual",
+                "Burgers"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Best burger in T4. The ShackBurger is worth every second of that walk.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Fast-casual burgers and shakes near Gate B14; vegetarian options."
+            },
+            {
+              "name": "Panda Express",
+              "cuisine": "Chinese · Asian",
+              "zoneId": "food_court",
+              "dietaryTags": [],
+              "tags": [
+                "Quick Serve",
+                "Chinese"
+              ],
+              "avgWaitMinutes": 3,
+              "opinion": "Solid and reliable. Orange chicken hits different when you're in a rush.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "chinese",
+                "asian"
+              ],
+              "shortDescription": "Quick-serve Chinese in the food court; fast and filling."
+            },
+            {
+              "name": "Starbucks",
+              "cuisine": "Coffee · Pastries",
+              "zoneId": "food_court",
+              "dietaryTags": [
+                "vegetarian",
+                "vegan"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Predictable and fast. Skip if the line is out the door — try Peet's or Flatiron instead.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee and pastries; vegetarian and vegan options."
+            },
+            {
+              "name": "Blue Ribbon Sushi",
+              "cuisine": "Japanese · Sushi",
+              "zoneId": "B22",
+              "dietaryTags": [
+                "vegetarian",
+                "gluten-free"
+              ],
+              "tags": [
+                "Sit Down",
+                "Japanese",
+                "Sushi"
+              ],
+              "avgWaitMinutes": 12,
+              "opinion": "Excellent sushi for an airport. Worth it if you have 25+ minutes.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "japanese",
+                "asian"
+              ],
+              "shortDescription": "Sit-down sushi near B22; vegetarian and gluten-free options."
+            },
+            {
+              "name": "Five Borough Food Hall",
+              "cuisine": "American · Variety",
+              "zoneId": "food_court",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Food Hall",
+                "Multiple"
+              ],
+              "avgWaitMinutes": 10,
+              "opinion": "Food-truck style variety. Good when you can't agree on one cuisine.",
+              "priceRange": "mid",
+              "serviceType": "food-hall",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Food hall with multiple vendors; good for groups."
+            },
+            {
+              "name": "Pizza Vino",
+              "cuisine": "Italian · Pizza",
+              "zoneId": "B22",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Pizza"
+              ],
+              "avgWaitMinutes": 8,
+              "opinion": "Neapolitan-style pizza. Skip the generic slices elsewhere — this is the one.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Neapolitan pizza and Italian near B22."
+            },
+            {
+              "name": "McDonald's",
+              "cuisine": "American · Fast Food",
+              "zoneId": "B32",
+              "dietaryTags": [],
+              "tags": [
+                "Quick Serve",
+                "Fast Food"
+              ],
+              "avgWaitMinutes": 3,
+              "opinion": "Open late. When nothing else is open or you need something fast and familiar.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Fast food; open late near B32."
+            },
+            {
+              "name": "Dunkin'",
+              "cuisine": "Coffee · Donuts",
+              "zoneId": "B32",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 3,
+              "opinion": "24 hours at B32. Coffee and a sandwich in a pinch.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "24-hour coffee and donuts at B32."
+            },
+            {
+              "name": "Tigin Irish Pub",
+              "cuisine": "Irish · American",
+              "zoneId": "B36",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Pub Food"
+              ],
+              "avgWaitMinutes": 15,
+              "opinion": "Great fish and chips. It's a hike — only if you have 40+ minutes.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Irish pub with fish and chips and full bar; longer walk to B36."
+            },
+            {
+              "name": "The Palm Bar & Grille",
+              "cuisine": "Steakhouse · American",
+              "zoneId": "B36",
+              "dietaryTags": [],
+              "tags": [
+                "Sit Down",
+                "Steakhouse"
+              ],
+              "avgWaitMinutes": 25,
+              "opinion": "Splurge spot. Save it for a long layover.",
+              "priceRange": "splurge",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Upscale steakhouse; save for long layovers."
+            }
+          ],
+          "tips": "Terminal 4 has the best food at JFK. Skip the pizza at B14 — walk to Shake Shack. Five Borough Food Hall is great for groups with different tastes."
+        }
+      ]
+    },
+    {
+      "iata": "LGA",
+      "name": "LaGuardia Airport",
+      "city": "New York",
+      "terminals": [
+        {
+          "terminal": "Terminal B",
+          "description": "LaGuardia Terminal B has the most dining options after the rebuild, including Capital One Landing.",
+          "referenceGate": "B40",
+          "zones": [
+            {
+              "id": "B20",
+              "name": "Gates B20–B29",
+              "walkMinutesFromRef": 5
+            },
+            {
+              "id": "central",
+              "name": "Central concourse",
+              "walkMinutesFromRef": 2
+            },
+            {
+              "id": "B50",
+              "name": "Gates B50–B59",
+              "walkMinutesFromRef": 8
+            }
+          ],
+          "vendors": [
+            {
+              "name": "Shake Shack",
+              "cuisine": "Burgers · American",
+              "zoneId": "central",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Fast Casual",
+                "Burgers"
+              ],
+              "avgWaitMinutes": 6,
+              "opinion": "Same reliable Shack experience. Always a safe bet.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Fast-casual burgers and shakes in central concourse."
+            },
+            {
+              "name": "Capital One Landing",
+              "cuisine": "Spanish · Tapas",
+              "zoneId": "central",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Tapas",
+                "Premium"
+              ],
+              "avgWaitMinutes": 20,
+              "opinion": "José Andrés spot — Spanish tapas and cocktails. Worth it for a longer wait; same-day boarding pass required.",
+              "priceRange": "splurge",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "spanish"
+              ],
+              "shortDescription": "Premium Spanish tapas and cocktails; same-day boarding pass required."
+            },
+            {
+              "name": "Mulberry Street",
+              "cuisine": "Italian",
+              "zoneId": "B20",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Italian"
+              ],
+              "avgWaitMinutes": 12,
+              "opinion": "Solid Italian. Pasta and wine when you have time.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Sit-down Italian pasta and wine near B20."
+            },
+            {
+              "name": "Zaro's Family Bakery",
+              "cuisine": "Bakery · Sandwiches",
+              "zoneId": "central",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Bakery"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "24 hours. Bagels, pastries, and sandwiches. My go-to for early flights.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "bakery"
+              ],
+              "shortDescription": "24-hour bakery; bagels, pastries, sandwiches."
+            },
+            {
+              "name": "Five Guys",
+              "cuisine": "Burgers · American",
+              "zoneId": "B20",
+              "dietaryTags": [],
+              "tags": [
+                "Fast Casual",
+                "Burgers"
+              ],
+              "avgWaitMinutes": 7,
+              "opinion": "Custom burgers and fries. Consistently good.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Build-your-own burgers and fries near B20."
+            },
+            {
+              "name": "Taim",
+              "cuisine": "Middle Eastern · Falafel",
+              "zoneId": "B20",
+              "dietaryTags": [
+                "vegetarian",
+                "vegan"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Falafel"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Best falafel at LGA. Quick and fresh.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "middle-eastern"
+              ],
+              "shortDescription": "Falafel and Middle Eastern; vegetarian and vegan options."
+            },
+            {
+              "name": "Au Bon Pain",
+              "cuisine": "Cafe · Sandwiches",
+              "zoneId": "B50",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Cafe"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Soups, sandwiches, and coffee. Reliable when you're near the B50s.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Cafe with soups, sandwiches, and coffee near B50."
+            },
+            {
+              "name": "Dunkin'",
+              "cuisine": "Coffee · Donuts",
+              "zoneId": "central",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 3,
+              "opinion": "Coffee and a quick bite. Everywhere for a reason.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee, donuts, and breakfast sandwiches."
+            }
+          ],
+          "tips": "Terminal B is where the food is. Zaro's is open 24/7. Capital One Landing is the splurge; Shake Shack and Taim are the reliable quick wins."
+        },
+        {
+          "terminal": "Terminal C",
+          "description": "LaGuardia Terminal C has a smaller but solid set of options, including Artichoke Pizza.",
+          "referenceGate": "C20",
+          "zones": [
+            {
+              "id": "C10",
+              "name": "Gates C10–C18",
+              "walkMinutesFromRef": 6
+            },
+            {
+              "id": "central",
+              "name": "Central",
+              "walkMinutesFromRef": 2
+            }
+          ],
+          "vendors": [
+            {
+              "name": "Artichoke Basille's Pizza",
+              "cuisine": "Pizza · American",
+              "zoneId": "central",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Pizza"
+              ],
+              "avgWaitMinutes": 6,
+              "opinion": "NYC institution. The artichoke slice is legendary — get it.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american",
+                "italian"
+              ],
+              "shortDescription": "NYC institution; artichoke slice and pizza."
+            },
+            {
+              "name": "Cotto",
+              "cuisine": "Italian · Trattoria",
+              "zoneId": "central",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Italian"
+              ],
+              "avgWaitMinutes": 12,
+              "opinion": "Italian trattoria with a wine bar. Good for a sit-down before a flight.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Italian trattoria with wine bar in Terminal C."
+            },
+            {
+              "name": "Irving Farm Coffee Roasters",
+              "cuisine": "Coffee",
+              "zoneId": "C10",
+              "dietaryTags": [
+                "vegetarian",
+                "vegan"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Serious coffee. Skip the chain if you're a coffee person.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Specialty coffee near C10."
+            },
+            {
+              "name": "Jamba",
+              "cuisine": "Smoothies · Juices",
+              "zoneId": "central",
+              "dietaryTags": [
+                "vegetarian",
+                "vegan"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Smoothies"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Smoothies and bowls. Healthy option when you want something light.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Smoothies and bowls; vegetarian and vegan."
+            }
+          ],
+          "tips": "Terminal C is compact. Artichoke Pizza is the must-try. Cotto if you have time for a proper meal."
+        }
+      ]
+    },
+    {
+      "iata": "EWR",
+      "name": "Newark Liberty International Airport",
+      "city": "Newark",
+      "terminals": [
+        {
+          "terminal": "Terminal A",
+          "description": "Newark Terminal A has a wide mix of quick-serve and sit-down options including Shake Shack, Guy Fieri's Flavortown, and Ess-A-Bagel.",
+          "referenceGate": "A15",
+          "zones": [
+            {
+              "id": "central_plaza",
+              "name": "Central Plaza",
+              "walkMinutesFromRef": 2
+            },
+            {
+              "id": "south_pier",
+              "name": "South Pier",
+              "walkMinutesFromRef": 4
+            },
+            {
+              "id": "north_pier",
+              "name": "North Pier",
+              "walkMinutesFromRef": 5
+            },
+            {
+              "id": "east_pier",
+              "name": "East Pier",
+              "walkMinutesFromRef": 6
+            },
+            {
+              "id": "hammerhead",
+              "name": "Hammerhead",
+              "walkMinutesFromRef": 3
+            },
+            {
+              "id": "food_court",
+              "name": "Central Plaza Food Court",
+              "walkMinutesFromRef": 3
+            }
+          ],
+          "vendors": [
+            {
+              "name": "Bang Cookies",
+              "cuisine": "Bakery · Sweets",
+              "zoneId": "central_plaza",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Bakery"
+              ],
+              "avgWaitMinutes": 3,
+              "opinion": "Giant cookies from a Jersey City sweets shop. Perfect for a quick treat.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "bakery"
+              ],
+              "shortDescription": "Giant cookies from a Jersey City sweets shop. Central Plaza."
+            },
+            {
+              "name": "Bluestone Lane Coffee",
+              "cuisine": "Coffee · Tea",
+              "zoneId": "south_pier",
+              "dietaryTags": [
+                "vegetarian",
+                "vegan"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Australian chain. Solid coffee and tea near Gates 5 and 6.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee and tea from an Australian chain. South Pier, Gates 5 and 6."
+            },
+            {
+              "name": "Burger Fi",
+              "cuisine": "Burgers · American",
+              "zoneId": "central_plaza",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Fast Casual",
+                "Burgers"
+              ],
+              "avgWaitMinutes": 6,
+              "opinion": "Florida-based chain with burgers, hot dogs, chicken, fries, and onion rings. Reliable and fast.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Burgers, hot dogs, chicken, fries. Central Plaza East."
+            },
+            {
+              "name": "Carlito's Barbecue Taqueria",
+              "cuisine": "Mexican · BBQ",
+              "zoneId": "hammerhead",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Mexican"
+              ],
+              "avgWaitMinutes": 6,
+              "opinion": "Tacos, sides, plates, and churros. Good combo near Gate 15.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "mexican"
+              ],
+              "shortDescription": "Tacos, sides, plates, and churros. Hammerhead near Gate 15."
+            },
+            {
+              "name": "City Rub",
+              "cuisine": "BBQ · American",
+              "zoneId": "east_pier",
+              "dietaryTags": [],
+              "tags": [
+                "Quick Serve",
+                "BBQ"
+              ],
+              "avgWaitMinutes": 6,
+              "opinion": "Off-shoot of a Newark sports bar. Known for brisket and pulled pork tacos.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Brisket and pulled pork tacos from a Newark sports bar. East Pier."
+            },
+            {
+              "name": "D'Taco Joint",
+              "cuisine": "Mexican",
+              "zoneId": "food_court",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Mexican"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Tacos, breakfast burritos, and bowls. Fast option in the food court.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "mexican"
+              ],
+              "shortDescription": "Tacos, breakfast burritos, and bowls. Central Plaza Food Court."
+            },
+            {
+              "name": "Dunkin'",
+              "cuisine": "Coffee · Donuts",
+              "zoneId": "east_pier",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 3,
+              "opinion": "Coffee and doughnuts. East Pier near Gate 23.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee and doughnuts. East Pier, Gate 23."
+            },
+            {
+              "name": "Ess-A-Bagel",
+              "cuisine": "Bagels · Sandwiches",
+              "zoneId": "hammerhead",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Bakery"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "New York-based chain. Bagels, spreads, and sandwiches. Worth the stop.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "bakery"
+              ],
+              "shortDescription": "Bagels, spreads, and sandwiches. Hammerhead, Gate 15."
+            },
+            {
+              "name": "Felina Cucina",
+              "cuisine": "Italian",
+              "zoneId": "central_plaza",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Italian"
+              ],
+              "avgWaitMinutes": 20,
+              "opinion": "Sit-down Italian with cocktails and pizza. Good for a real meal near Gates 7 and 8.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Sit-down Italian with cocktails and pizza. Central Plaza, Gates 7 and 8."
+            },
+            {
+              "name": "Guy Fieri's Flavortown Kitchen and Bar",
+              "cuisine": "American · Bar",
+              "zoneId": "north_pier",
+              "dietaryTags": [],
+              "tags": [
+                "Sit Down",
+                "American"
+              ],
+              "avgWaitMinutes": 15,
+              "opinion": "The Mayor of Flavortown. Wings, pulled pork sandwiches, and trash can nachos. Fun spot.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Guy Fieri's spot with wings, pulled pork, trash can nachos. North Pier."
+            },
+            {
+              "name": "Jersey & Co. Gelato",
+              "cuisine": "Gelato · Dessert",
+              "zoneId": "central_plaza",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Dessert"
+              ],
+              "avgWaitMinutes": 3,
+              "opinion": "Off-shoot of a Jersey City gelato shop. Sweet finish before your flight.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "bakery"
+              ],
+              "shortDescription": "Gelato from a Jersey City shop. Central Plaza."
+            },
+            {
+              "name": "Jersey Mike's",
+              "cuisine": "Sandwiches · American",
+              "zoneId": "central_plaza",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Sandwiches"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Subs and sandwiches. Reliable and quick.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Sandwiches. Central Plaza."
+            },
+            {
+              "name": "Kitchen Step",
+              "cuisine": "American",
+              "zoneId": "hammerhead",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "American"
+              ],
+              "avgWaitMinutes": 18,
+              "opinion": "Offshoot of a popular Jersey City restaurant from chef Ryan DePersio. Hammerhead Central.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Jersey City chef Ryan DePersio's spot. Hammerhead Central."
+            },
+            {
+              "name": "Mediterranean Grill",
+              "cuisine": "Mediterranean",
+              "zoneId": "food_court",
+              "dietaryTags": [
+                "vegetarian",
+                "vegan"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Mediterranean"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Affordable falafel and chicken shawarma. Vegan options available.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "mediterranean"
+              ],
+              "shortDescription": "Falafel and chicken shawarma with vegan options. Central Plaza Food Court."
+            },
+            {
+              "name": "Playa Bowls",
+              "cuisine": "Smoothies · Juices",
+              "zoneId": "food_court",
+              "dietaryTags": [
+                "vegetarian",
+                "vegan"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Smoothies"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "New Jersey-based chain. Smoothies and juices. Healthy and quick.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Smoothies and juices from a NJ chain. Central Plaza Food Court."
+            },
+            {
+              "name": "Shake Shack",
+              "cuisine": "Burgers · American",
+              "zoneId": "south_pier",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Fast Casual",
+                "Burgers"
+              ],
+              "avgWaitMinutes": 6,
+              "opinion": "Danny Meyer's burger chain. Consistently good. South Pier.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Burgers and shakes. South Pier."
+            },
+            {
+              "name": "Smokehouse BBQ",
+              "cuisine": "BBQ · American",
+              "zoneId": "central_plaza",
+              "dietaryTags": [],
+              "tags": [
+                "Quick Serve",
+                "BBQ"
+              ],
+              "avgWaitMinutes": 8,
+              "opinion": "Burgers, brisket, and sides. Note: caught mixed reviews. Central Plaza near Gates 26 and 27.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Burgers, brisket, and sides. Central Plaza, Gates 26 and 27."
+            },
+            {
+              "name": "Sora Japanese Cuisine & Sushi Bar",
+              "cuisine": "Japanese · Sushi",
+              "zoneId": "food_court",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Japanese"
+              ],
+              "avgWaitMinutes": 10,
+              "opinion": "Casual sushi counter with rolls, ramen, and burgers. Food court option.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "japanese",
+                "asian"
+              ],
+              "shortDescription": "Sushi, ramen, and burgers. Central Plaza Food Court."
+            },
+            {
+              "name": "Starbucks",
+              "cuisine": "Coffee · Pastries",
+              "zoneId": "central_plaza",
+              "dietaryTags": [
+                "vegetarian",
+                "vegan"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "One location in Terminal A. Central Plaza North.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee and pastries. Central Plaza North."
+            },
+            {
+              "name": "The Office Tavern Grill",
+              "cuisine": "American · Tavern",
+              "zoneId": "central_plaza",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Bar"
+              ],
+              "avgWaitMinutes": 15,
+              "opinion": "Sit-down tavern with several NJ locations. Buffalo wings and burgers. Central Plaza South.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Tavern with wings and burgers. Central Plaza South."
+            },
+            {
+              "name": "Tonnie's Minis",
+              "cuisine": "Bakery · Dessert",
+              "zoneId": "central_plaza",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Bakery"
+              ],
+              "avgWaitMinutes": 3,
+              "opinion": "Offshoot of a Newark bakery. Cupcakes in a cup. Sweet and quick.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "bakery"
+              ],
+              "shortDescription": "Cupcakes in a cup from a Newark bakery. Central Plaza."
+            },
+            {
+              "name": "Town Bar + Kitchen",
+              "cuisine": "American · Bar",
+              "zoneId": "south_pier",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Bar"
+              ],
+              "avgWaitMinutes": 12,
+              "opinion": "Bar with shrimp cocktail, Caesar salad, Margherita pizza, and short rib mac and cheese. South Pier.",
+              "priceRange": "mid",
+              "serviceType": "bar",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Bar with pizza, salads, and short rib mac. South Pier."
+            },
+            {
+              "name": "W.B. Law Coffee",
+              "cuisine": "Coffee · Pastries",
+              "zoneId": "south_pier",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Newark-based coffee company. Coffee and pastries. South Pier.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee and pastries from a Newark company. South Pier."
+            },
+            {
+              "name": "Zaro's Bakery",
+              "cuisine": "Bakery · Sandwiches",
+              "zoneId": "central_plaza",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Bakery"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Off-shoot of Zaro's Family Bakery, a New York-based chain. Central Plaza East.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "bakery"
+              ],
+              "shortDescription": "Zaro's Family Bakery. Central Plaza East."
+            }
+          ],
+          "tips": "Terminal A has a strong mix: Shake Shack and Bluestone Lane on South Pier, Guy Fieri's on North Pier, Ess-A-Bagel and Carlito's in Hammerhead. Central Plaza Food Court has D'Taco Joint, Mediterranean Grill, Playa Bowls, and Sora."
+        },
+        {
+          "terminal": "Terminal B",
+          "description": "Newark Terminal B has coffee, sandwiches, pizza, Mexican, Japanese, and wine bars across B1, B2, B3 and food courts.",
+          "referenceGate": "B2",
+          "zones": [
+            {
+              "id": "B1",
+              "name": "B1",
+              "walkMinutesFromRef": 3
+            },
+            {
+              "id": "B2",
+              "name": "B2 Rotunda",
+              "walkMinutesFromRef": 2
+            },
+            {
+              "id": "B3",
+              "name": "B3",
+              "walkMinutesFromRef": 5
+            },
+            {
+              "id": "food_court",
+              "name": "Food court",
+              "walkMinutesFromRef": 4
+            },
+            {
+              "id": "headhouse",
+              "name": "Headhouse",
+              "walkMinutesFromRef": 6
+            }
+          ],
+          "vendors": [
+            {
+              "name": "Belgian Beer Cafe",
+              "cuisine": "Bar · American",
+              "zoneId": "B2",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Bar"
+              ],
+              "avgWaitMinutes": 10,
+              "opinion": "Bottled and draft beer with burgers, beef stew, and bar foods. B2 Rotunda, pre-security.",
+              "priceRange": "mid",
+              "serviceType": "bar",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Beer, burgers, beef stew. B2 Rotunda, pre-security."
+            },
+            {
+              "name": "Budweiser Brewhouse",
+              "cuisine": "Bar",
+              "zoneId": "B1",
+              "dietaryTags": [],
+              "tags": [
+                "Bar"
+              ],
+              "avgWaitMinutes": 8,
+              "opinion": "Bar for Budweiser fans. B1, pre-security.",
+              "priceRange": "mid",
+              "serviceType": "bar",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Budweiser bar. B1, pre-security."
+            },
+            {
+              "name": "Dunkin'",
+              "cuisine": "Coffee · Donuts",
+              "zoneId": "food_court",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 3,
+              "opinion": "Three locations in Terminal B: baggage claim, international arrivals, NEC station.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee and donuts; three locations in Terminal B."
+            },
+            {
+              "name": "Firehouse Subs",
+              "cuisine": "Sandwiches · American",
+              "zoneId": "B1",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Sandwiches"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Florida-based sandwich chain. B1 connector, post-security.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Subs. B1 connector, post-security."
+            },
+            {
+              "name": "Illy Coffee",
+              "cuisine": "Coffee · Tea",
+              "zoneId": "B1",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Coffee, tea, water. B1 connector, B2 satellite.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee and tea. B1 connector, B2 satellite."
+            },
+            {
+              "name": "Jersey Reserve",
+              "cuisine": "Coffee · Tea",
+              "zoneId": "B2",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Coffee, tea, water. B level 2, international arrivals.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee and tea. B level 2, international arrivals."
+            },
+            {
+              "name": "Liberty Eatery",
+              "cuisine": "American · Mexican",
+              "zoneId": "headhouse",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 6,
+              "opinion": "Breakfast and Mexican options. Headhouse north.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "american",
+                "mexican"
+              ],
+              "shortDescription": "Breakfast and Mexican. Headhouse north."
+            },
+            {
+              "name": "Little Tony's Pizza",
+              "cuisine": "Pizza · Italian",
+              "zoneId": "B1",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Pizza"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Slices, calzones, and salads. B1 connector, pre-security.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Pizza, calzones, salads. B1 connector, pre-security."
+            },
+            {
+              "name": "Malone's Fish Market",
+              "cuisine": "Seafood · American",
+              "zoneId": "B1",
+              "dietaryTags": [],
+              "tags": [
+                "Sit Down",
+                "Seafood"
+              ],
+              "avgWaitMinutes": 15,
+              "opinion": "Lobster rolls, fish and chips, beer, and cocktails. B1 concourse, post-security.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Lobster rolls, fish and chips. B1 concourse, post-security."
+            },
+            {
+              "name": "Panda Express",
+              "cuisine": "Chinese · Asian",
+              "zoneId": "food_court",
+              "dietaryTags": [],
+              "tags": [
+                "Quick Serve",
+                "Chinese"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Orange chicken and more. Food hall, pre-security.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "chinese",
+                "asian"
+              ],
+              "shortDescription": "Chinese chain. Food hall, pre-security."
+            },
+            {
+              "name": "Piattino's",
+              "cuisine": "Italian",
+              "zoneId": "B3",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Italian"
+              ],
+              "avgWaitMinutes": 15,
+              "opinion": "Chicken Parmesan and red-sauce dishes. B3.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Italian with chicken Parm and red-sauce. B3."
+            },
+            {
+              "name": "Salsarita's Mexican Grill",
+              "cuisine": "Mexican",
+              "zoneId": "food_court",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Mexican"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Quesadillas, burritos, and more. B Food court.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "mexican"
+              ],
+              "shortDescription": "Mexican chain. B Food court."
+            },
+            {
+              "name": "Smashburger",
+              "cuisine": "Burgers · American",
+              "zoneId": "food_court",
+              "dietaryTags": [],
+              "tags": [
+                "Fast Casual",
+                "Burgers"
+              ],
+              "avgWaitMinutes": 6,
+              "opinion": "Smashed patties. B Food Court.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Burger chain. B Food Court."
+            },
+            {
+              "name": "Sora Japanese Cuisine & Sushi Bar",
+              "cuisine": "Japanese · Sushi",
+              "zoneId": "B1",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Japanese"
+              ],
+              "avgWaitMinutes": 15,
+              "opinion": "Full-service Japanese with sushi, tempura, and more. B1 rotunda, post-security.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "japanese",
+                "asian"
+              ],
+              "shortDescription": "Full-service Japanese. B1 rotunda, post-security."
+            },
+            {
+              "name": "Starbucks",
+              "cuisine": "Coffee · Pastries",
+              "zoneId": "food_court",
+              "dietaryTags": [
+                "vegetarian",
+                "vegan"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Two locations in Terminal B: food court pre-security and B1 connector.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee; two locations in Terminal B."
+            },
+            {
+              "name": "StrEAT",
+              "cuisine": "Grab-and-go · Coffee",
+              "zoneId": "B3",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 3,
+              "opinion": "Grab-and-go foods plus coffee and tea. B3 rotunda, post-security.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Grab-and-go and coffee. B3 rotunda, post-security."
+            },
+            {
+              "name": "The Unusual Times",
+              "cuisine": "Bar · American",
+              "zoneId": "B2",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Bar"
+              ],
+              "avgWaitMinutes": 12,
+              "opinion": "Roast beef dip sandwiches and pub foods. B2 rotunda, post-security.",
+              "priceRange": "mid",
+              "serviceType": "bar",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Bar with roast beef dip and pub food. B2 rotunda."
+            },
+            {
+              "name": "Tony and Benny's",
+              "cuisine": "Pizza · American",
+              "zoneId": "food_court",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Pizza"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Walk-up pizza counter rated by Dave Portnoy. Food court, pre-security.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Pizza counter. Food court, pre-security."
+            },
+            {
+              "name": "Vino Volo",
+              "cuisine": "Wine · Small Plates",
+              "zoneId": "B3",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Wine Bar"
+              ],
+              "avgWaitMinutes": 10,
+              "opinion": "Wine bar with small plates. B3 Rotunda, post-security.",
+              "priceRange": "mid",
+              "serviceType": "bar",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Wine bar and small plates. B3 Rotunda, post-security."
+            },
+            {
+              "name": "Zaro's Bakeshop",
+              "cuisine": "Bakery · Sandwiches",
+              "zoneId": "food_court",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Bakery"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Zaro's Family Bakery. Food court, pre-security.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "bakery"
+              ],
+              "shortDescription": "Zaro's bakery. Food court, pre-security."
+            }
+          ],
+          "tips": "Terminal B: Vino Volo and Piattino's for sit-down; Tony and Benny's and Smashburger in the food court. Sora for Japanese. Dunkin' and Starbucks for coffee."
+        },
+        {
+          "terminal": "Terminal C",
+          "description": "Newark Terminal C is the United hub with the most dining at EWR: Abruzzo steakhouse, Saison, Kaedama, Tsukiji Fishroom, and many more across Gates C70–99, C101–115, and C120–139.",
+          "referenceGate": "C70",
+          "zones": [
+            {
+              "id": "C70_99",
+              "name": "Gates C70 to 99",
+              "walkMinutesFromRef": 2
+            },
+            {
+              "id": "C101_115",
+              "name": "Gates C101 to 115",
+              "walkMinutesFromRef": 6
+            },
+            {
+              "id": "C120_139",
+              "name": "Gates C120 to 139",
+              "walkMinutesFromRef": 10
+            },
+            {
+              "id": "food_hall",
+              "name": "Concourse C1 Food Hall",
+              "walkMinutesFromRef": 5
+            },
+            {
+              "id": "baggage",
+              "name": "Baggage claim",
+              "walkMinutesFromRef": 12
+            }
+          ],
+          "vendors": [
+            {
+              "name": "Abruzzo Italian Steakhouse",
+              "cuisine": "Italian · Steakhouse",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Italian"
+              ],
+              "avgWaitMinutes": 25,
+              "opinion": "Mario Carbone (Major Food Group) helped open. Chicken Parm, veal chops, steaks. Gates C70–99.",
+              "priceRange": "splurge",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Italian steakhouse by Major Food Group. Gates C70–99."
+            },
+            {
+              "name": "Bar Left",
+              "cuisine": "Bar · Small Plates",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Bar"
+              ],
+              "avgWaitMinutes": 10,
+              "opinion": "Cocktail bar with small plates and tablet ordering. Gates C70–99.",
+              "priceRange": "mid",
+              "serviceType": "bar",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Cocktail bar with tablet ordering. Gates C70–99."
+            },
+            {
+              "name": "Bar Right",
+              "cuisine": "Bar · Small Plates",
+              "zoneId": "C101_115",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Bar"
+              ],
+              "avgWaitMinutes": 10,
+              "opinion": "Cocktail bar with small plates and tablet ordering. Gates C101–115.",
+              "priceRange": "mid",
+              "serviceType": "bar",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Cocktail bar. Gates C101–115."
+            },
+            {
+              "name": "Breakfast Boli",
+              "cuisine": "Breakfast · American",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Egg-filled breakfast stromboli. Gates C70–99 and C120–139.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Breakfast stromboli. Gates C70–99 and C120–139."
+            },
+            {
+              "name": "Caps Beer Garden",
+              "cuisine": "Bar",
+              "zoneId": "C120_139",
+              "dietaryTags": [],
+              "tags": [
+                "Bar"
+              ],
+              "avgWaitMinutes": 8,
+              "opinion": "High-top tables with tablets for ordering beer. Gates C120–139.",
+              "priceRange": "mid",
+              "serviceType": "bar",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Beer garden with tablet ordering. Gates C120–139."
+            },
+            {
+              "name": "Casciano's",
+              "cuisine": "Italian · Sandwiches",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Italian"
+              ],
+              "avgWaitMinutes": 6,
+              "opinion": "Italian sandwiches from owners of the Grill and Carbone in Manhattan. Gates C70–99.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Italian sandwiches. Gates C70–99."
+            },
+            {
+              "name": "CIBO Express Gourmet Market",
+              "cuisine": "Kosher · Grab-and-go",
+              "zoneId": "C120_139",
+              "dietaryTags": [
+                "vegetarian",
+                "kosher"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 3,
+              "opinion": "Kosher sandwiches, wraps, grab-and-go. Gate 125 and multiple locations.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Kosher grab-and-go. Gate 125, multiple locations."
+            },
+            {
+              "name": "Creperie Juliette",
+              "cuisine": "Crepes · French",
+              "zoneId": "food_hall",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 6,
+              "opinion": "Savory and sweet crepes. Concourse C1, food hall west.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "french"
+              ],
+              "shortDescription": "Crepes. Concourse C1, food hall west."
+            },
+            {
+              "name": "Custom Burger",
+              "cuisine": "Burgers · American",
+              "zoneId": "C70_99",
+              "dietaryTags": [],
+              "tags": [
+                "Fast Casual",
+                "Burgers"
+              ],
+              "avgWaitMinutes": 8,
+              "opinion": "Fast-casual burgers with help from Pat LaFrieda. Gates C70–99 and C120–139.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Burgers by Pat LaFrieda. Gates C70–99 and C120–139."
+            },
+            {
+              "name": "Daily",
+              "cuisine": "American · Variety",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down"
+              ],
+              "avgWaitMinutes": 15,
+              "opinion": "Shawarma, scallops, pasta, and more in an open kitchen. Gate C73.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Open kitchen: shawarma, scallops, pasta. Gate C73."
+            },
+            {
+              "name": "Dunkin'",
+              "cuisine": "Coffee · Donuts",
+              "zoneId": "C101_115",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 3,
+              "opinion": "Two locations: baggage claim pre-security and Gates C101–115 post-security.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee and donuts; two locations in Terminal C."
+            },
+            {
+              "name": "Eggy Weggy",
+              "cuisine": "Breakfast · American",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Breakfast sandwiches and omelets. Gates C70–99 and C120–139.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Breakfast sandwiches and omelets. Gates C70–99 and C120–139."
+            },
+            {
+              "name": "Flip Flop Pancakes",
+              "cuisine": "Breakfast · American",
+              "zoneId": "C120_139",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Pancakes to-go with different flavors. Gates C120–139 and C70–99.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Pancakes to-go. Gates C120–139 and C70–99."
+            },
+            {
+              "name": "Flora Cafe",
+              "cuisine": "Mediterranean",
+              "zoneId": "C120_139",
+              "dietaryTags": [
+                "vegetarian",
+                "vegan"
+              ],
+              "tags": [
+                "Sit Down"
+              ],
+              "avgWaitMinutes": 12,
+              "opinion": "Falafel, hummus, baba ghanoush from tablets. Gates C120–139.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "mediterranean"
+              ],
+              "shortDescription": "Mediterranean; tablet ordering. Gates C120–139."
+            },
+            {
+              "name": "Forno Magico",
+              "cuisine": "Italian · Pizza",
+              "zoneId": "C120_139",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Pizza"
+              ],
+              "avgWaitMinutes": 15,
+              "opinion": "Sit-down restaurant with pizza. Gates C120–139.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Sit-down pizza. Gates C120–139."
+            },
+            {
+              "name": "Garden State Diner",
+              "cuisine": "American · Diner",
+              "zoneId": "C101_115",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down"
+              ],
+              "avgWaitMinutes": 18,
+              "opinion": "Breakfast all day, soups, salads, sandwiches, full bar. Gates C101–115.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Diner with breakfast all day and full bar. Gates C101–115."
+            },
+            {
+              "name": "Happy Clam Oases",
+              "cuisine": "Italian · American",
+              "zoneId": "C101_115",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Italian"
+              ],
+              "avgWaitMinutes": 15,
+              "opinion": "Chicken Parm sandwiches, clam linguini, red sauce. Gates C101–115.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Chicken Parm, clam linguini. Gates C101–115."
+            },
+            {
+              "name": "Kaedama",
+              "cuisine": "Japanese · Ramen",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Japanese"
+              ],
+              "avgWaitMinutes": 12,
+              "opinion": "Ramen, dumplings, sushi. Gates C70–99.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "japanese",
+                "asian"
+              ],
+              "shortDescription": "Ramen, dumplings, sushi. Gates C70–99."
+            },
+            {
+              "name": "Little Purse",
+              "cuisine": "Dumplings · Asian",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 8,
+              "opinion": "Dumpling restaurant from Top Chef star Dale Talde. Gates C70–99 and C101–115.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "asian"
+              ],
+              "shortDescription": "Dumplings by Dale Talde. Gates C70–99 and C101–115."
+            },
+            {
+              "name": "Mélange Cafe and Mélange Bakery Chocolatier",
+              "cuisine": "Bakery · Dessert",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Bakery"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Jacques Torres chocolates, cookies, alfajores, crepes. Gates C70–99.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "bakery"
+              ],
+              "shortDescription": "Jacques Torres chocolates and bakery. Gates C70–99."
+            },
+            {
+              "name": "Notorious PIG",
+              "cuisine": "Mexican · American",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 6,
+              "opinion": "Tacos and more for breakfast, lunch, dinner. Gates C70–99.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "mexican"
+              ],
+              "shortDescription": "Tacos and more. Gates C70–99."
+            },
+            {
+              "name": "Novella",
+              "cuisine": "Italian · American",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down"
+              ],
+              "avgWaitMinutes": 12,
+              "opinion": "Pizza, pasta, burgers from tablets. Gates C70–99.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Pizza, pasta, burgers; tablet ordering. Gates C70–99."
+            },
+            {
+              "name": "Oeno Wine Bar",
+              "cuisine": "Wine · Bar",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Bar"
+              ],
+              "avgWaitMinutes": 10,
+              "opinion": "Over 60 wines by the glass and bottle, plus panini. Gates C70–99.",
+              "priceRange": "mid",
+              "serviceType": "bar",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Wine bar with panini. Gates C70–99."
+            },
+            {
+              "name": "Philly Cheesesteaks",
+              "cuisine": "American · Sandwiches",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Airport Philly cheesesteaks with different toppings. Gates C70–99 and C120–139.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Philly cheesesteaks. Gates C70–99 and C120–139."
+            },
+            {
+              "name": "Poppy's Bagels",
+              "cuisine": "Bagels · Sandwiches",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Bakery"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Bagel sandwiches. Baggage claim and Gate C75, C104.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "bakery"
+              ],
+              "shortDescription": "Bagel sandwiches. Baggage claim and C75, C104."
+            },
+            {
+              "name": "Proof Whiskey Bar",
+              "cuisine": "Bar",
+              "zoneId": "C101_115",
+              "dietaryTags": [],
+              "tags": [
+                "Bar"
+              ],
+              "avgWaitMinutes": 8,
+              "opinion": "Bar with lots of whiskeys. Gates C101–115.",
+              "priceRange": "mid",
+              "serviceType": "bar",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Whiskey bar. Gates C101–115."
+            },
+            {
+              "name": "Red Mango",
+              "cuisine": "Frozen Yogurt · Dessert",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 3,
+              "opinion": "Frozen yogurt with toppings. Gates C70–99.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Frozen yogurt. Gates C70–99."
+            },
+            {
+              "name": "Riviera",
+              "cuisine": "American · French",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down"
+              ],
+              "avgWaitMinutes": 12,
+              "opinion": "Burgers, fries, croque madame from tablets. Gates C70–99.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Burgers, fries, croque madame. Gates C70–99."
+            },
+            {
+              "name": "Saison",
+              "cuisine": "French · Fine Dining",
+              "zoneId": "C120_139",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "French"
+              ],
+              "avgWaitMinutes": 25,
+              "opinion": "Sit-down French by Alain Ducasse. Gates C120–139. Splurge.",
+              "priceRange": "splurge",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "french"
+              ],
+              "shortDescription": "Alain Ducasse French. Gates C120–139."
+            },
+            {
+              "name": "Starbucks Coffee",
+              "cuisine": "Coffee · Pastries",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian",
+                "vegan"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Several locations: baggage claim and Gates C84, C94, C120–139.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee; several locations in Terminal C."
+            },
+            {
+              "name": "Supreme Bowl",
+              "cuisine": "American · Bowls",
+              "zoneId": "food_hall",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Bowls. Concourse C1, food hall west.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Bowls. Concourse C1, food hall west."
+            },
+            {
+              "name": "Surf Bar",
+              "cuisine": "Seafood · Sushi",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Seafood"
+              ],
+              "avgWaitMinutes": 15,
+              "opinion": "Oysters, sushi, and other seafood. Gate C81.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Oysters, sushi, seafood. Gate C81."
+            },
+            {
+              "name": "Tagliare",
+              "cuisine": "Pizza · Italian",
+              "zoneId": "C120_139",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Pizza"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Reheated pizza slices. Gates C120–139.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Pizza slices. Gates C120–139."
+            },
+            {
+              "name": "The Deli",
+              "cuisine": "Sandwiches · American",
+              "zoneId": "C120_139",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Sandwiches. Gates C120–139 food hall.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Sandwiches. Gates C120–139 food hall."
+            },
+            {
+              "name": "The Panini Shop",
+              "cuisine": "Sandwiches · Italian",
+              "zoneId": "food_hall",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Sandwiches. Concourse C1 near Gate C75.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Panini and sandwiches. Concourse C1 near C75."
+            },
+            {
+              "name": "Tsukiji Fishroom",
+              "cuisine": "Japanese · Sushi",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Sushi"
+              ],
+              "avgWaitMinutes": 15,
+              "opinion": "Sushi purportedly flown in from Japan's Tsukiji Market. Gates C70–99.",
+              "priceRange": "splurge",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "japanese",
+                "asian"
+              ],
+              "shortDescription": "Sushi from Tsukiji. Gates C70–99."
+            },
+            {
+              "name": "Uptop Pizza",
+              "cuisine": "Pizza · American",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Pizza"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Personal pizzas rated by Dave Portnoy. Baggage claim and Gates C70–99.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "italian"
+              ],
+              "shortDescription": "Personal pizzas. Baggage claim and C70–99."
+            },
+            {
+              "name": "Vanguard Kitchen",
+              "cuisine": "American · International",
+              "zoneId": "C101_115",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down"
+              ],
+              "avgWaitMinutes": 18,
+              "opinion": "Sit-down with marbled tabletops and international food. Gates C101–115.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "International food. Gates C101–115."
+            },
+            {
+              "name": "Vesper Tavern",
+              "cuisine": "American · Bar",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Bar"
+              ],
+              "avgWaitMinutes": 15,
+              "opinion": "American restaurant with full bar for watching sports. Gates C70–99.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "American with full bar. Gates C70–99."
+            },
+            {
+              "name": "Wabi Sabi",
+              "cuisine": "Japanese",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Japanese"
+              ],
+              "avgWaitMinutes": 12,
+              "opinion": "Dumplings, fried crab claws, gyoza. Gates C70–99 and C120–139.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "japanese",
+                "asian"
+              ],
+              "shortDescription": "Dumplings and gyoza. Gates C70–99 and C120–139."
+            },
+            {
+              "name": "Wanderlust Burger Bar",
+              "cuisine": "Burgers · American",
+              "zoneId": "C70_99",
+              "dietaryTags": [],
+              "tags": [
+                "Sit Down",
+                "Bar"
+              ],
+              "avgWaitMinutes": 12,
+              "opinion": "Burger and beer bar from Burger Bash winner Josh Capon. Gates C70–99.",
+              "priceRange": "mid",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Burgers and beer by Josh Capon. Gates C70–99."
+            },
+            {
+              "name": "Wendy's",
+              "cuisine": "American · Fast Food",
+              "zoneId": "C101_115",
+              "dietaryTags": [],
+              "tags": [
+                "Quick Serve",
+                "Fast Food"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Square burgers, nuggets, fries. Gates C101–115.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Fast food. Gates C101–115."
+            },
+            {
+              "name": "World Bean Coffee",
+              "cuisine": "Coffee · Bakery",
+              "zoneId": "C70_99",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Coffee chain with baked goods. Baggage claim and Gates C70–99, C120–139.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee and baked goods. Baggage claim and C70–99, C120–139."
+            }
+          ],
+          "tips": "Terminal C is the United hub with the most options at EWR. Abruzzo and Saison for splurge; Kaedama, Tsukiji Fishroom, and Little Purse for quality. Custom Burger, Wendy's, and Starbucks for speed. Re-upload this file to your DigitalOcean knowledge base after editing."
+        }
+      ]
+    },
+    {
+      "iata": "RDU",
+      "name": "Raleigh-Durham International Airport",
+      "city": "Raleigh-Durham",
+      "terminals": [
+        {
+          "terminal": "Terminal 2",
+          "description": "RDU Terminal 2 has the best dining, including local brands like Crawford's and Bond Brothers.",
+          "referenceGate": "C10",
+          "zones": [
+            {
+              "id": "C1",
+              "name": "Gates C1–C8",
+              "walkMinutesFromRef": 4
+            },
+            {
+              "id": "mid",
+              "name": "Mid-concourse",
+              "walkMinutesFromRef": 2
+            },
+            {
+              "id": "D3",
+              "name": "Gates D1–D8",
+              "walkMinutesFromRef": 6
+            }
+          ],
+          "vendors": [
+            {
+              "name": "Crawford's Genuine",
+              "cuisine": "Southern · American",
+              "zoneId": "C1",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Southern"
+              ],
+              "avgWaitMinutes": 18,
+              "opinion": "James Beard–nominated Chef Scott Crawford. Braised short ribs, crispy trout, salads. The best meal at RDU — plan for it.",
+              "priceRange": "splurge",
+              "serviceType": "sit-down",
+              "mealTypes": [
+                "lunch",
+                "dinner"
+              ],
+              "cuisineCategories": [
+                "southern",
+                "american"
+              ],
+              "shortDescription": "Upscale Southern by Chef Scott Crawford; best meal at RDU."
+            },
+            {
+              "name": "Bond Brothers Kitchen & Bar",
+              "cuisine": "American · Brewery",
+              "zoneId": "D3",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Sit Down",
+                "Brewery"
+              ],
+              "avgWaitMinutes": 12,
+              "opinion": "Cary brewery at the airport. No Turbulence IPA and smoked brisket. Worth the walk to D.",
+              "priceRange": "mid",
+              "serviceType": "bar",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Local brewery with beer and barbecue near D gates."
+            },
+            {
+              "name": "Bobby's Burgers",
+              "cuisine": "Burgers · American",
+              "zoneId": "mid",
+              "dietaryTags": [],
+              "tags": [
+                "Fast Casual",
+                "Burgers"
+              ],
+              "avgWaitMinutes": 8,
+              "opinion": "Bobby Flay's Crunchburger. Consistently good.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Bobby Flay's burgers in mid-concourse."
+            },
+            {
+              "name": "BurgerFi",
+              "cuisine": "Burgers · American",
+              "zoneId": "D3",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Fast Casual",
+                "Burgers"
+              ],
+              "avgWaitMinutes": 6,
+              "opinion": "All-natural Angus and Beyond Burger option. Quick and reliable.",
+              "priceRange": "mid",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Burgers including Beyond option near D gates."
+            },
+            {
+              "name": "Half Moon Empanadas",
+              "cuisine": "Latin · Empanadas",
+              "zoneId": "C1",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Empanadas"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Hand-made empanadas. Unique and fast.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "latin"
+              ],
+              "shortDescription": "Hand-made empanadas near C1."
+            },
+            {
+              "name": "La Farm Bakery Café",
+              "cuisine": "Bakery · Cafe",
+              "zoneId": "mid",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Bakery"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Local bakery. Pastries and sandwiches. Great for breakfast.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "lunch",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "bakery",
+                "coffee"
+              ],
+              "shortDescription": "Local bakery and cafe; breakfast and lunch."
+            },
+            {
+              "name": "Starbucks",
+              "cuisine": "Coffee · Pastries",
+              "zoneId": "mid",
+              "dietaryTags": [
+                "vegetarian",
+                "vegan"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Coffee and a bite. You know what you're getting.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee and pastries in mid-concourse."
+            },
+            {
+              "name": "Jason's Deli",
+              "cuisine": "Deli · Sandwiches",
+              "zoneId": "D3",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Deli"
+              ],
+              "avgWaitMinutes": 6,
+              "opinion": "Sandwiches and soup. Solid when you're near the D gates.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Deli sandwiches and soup near D gates."
+            }
+          ],
+          "tips": "Terminal 2 is where to eat at RDU. Crawford's is the standout; Bond Brothers for beer and barbecue. Bobby's Burgers and Half Moon for something quicker."
+        },
+        {
+          "terminal": "Terminal 1",
+          "description": "RDU Terminal 1 has a smaller set of options, mostly quick-serve.",
+          "referenceGate": "T1-10",
+          "zones": [
+            {
+              "id": "central",
+              "name": "Central",
+              "walkMinutesFromRef": 2
+            }
+          ],
+          "vendors": [
+            {
+              "name": "Char-Grill",
+              "cuisine": "Burgers · American",
+              "zoneId": "central",
+              "dietaryTags": [],
+              "tags": [
+                "Quick Serve",
+                "Burgers"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Local burger chain. Quick and classic.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "american"
+              ],
+              "shortDescription": "Local burger chain in RDU T1."
+            },
+            {
+              "name": "Salsarita's Fresh Cantina",
+              "cuisine": "Mexican",
+              "zoneId": "central",
+              "dietaryTags": [
+                "vegetarian"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Mexican"
+              ],
+              "avgWaitMinutes": 5,
+              "opinion": "Burritos and tacos. Fast and filling.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "lunch",
+                "dinner",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "mexican"
+              ],
+              "shortDescription": "Burritos and tacos in T1."
+            },
+            {
+              "name": "Starbucks",
+              "cuisine": "Coffee · Pastries",
+              "zoneId": "central",
+              "dietaryTags": [
+                "vegetarian",
+                "vegan"
+              ],
+              "tags": [
+                "Quick Serve",
+                "Coffee"
+              ],
+              "avgWaitMinutes": 4,
+              "opinion": "Coffee and breakfast. Standard option in T1.",
+              "priceRange": "budget",
+              "serviceType": "quick-serve",
+              "mealTypes": [
+                "breakfast",
+                "anytime"
+              ],
+              "cuisineCategories": [
+                "coffee"
+              ],
+              "shortDescription": "Coffee and breakfast in T1."
+            }
+          ],
+          "tips": "Terminal 1 is smaller. Char-Grill and Salsarita's are your best bets for a real meal."
+        }
+      ]
+    }
+  ]
+}

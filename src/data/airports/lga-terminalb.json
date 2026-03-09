@@ -1,0 +1,21 @@
+{
+  "airport": "LGA",
+  "terminal": "Terminal B",
+  "description": "LaGuardia Terminal B — most dining options after the rebuild, including Capital One Landing.",
+  "zones": [
+    { "id": "B20", "name": "Gates B20–B29", "walkMinutesFromB12": 5 },
+    { "id": "central", "name": "Central concourse", "walkMinutesFromB12": 2 },
+    { "id": "B50", "name": "Gates B50–B59", "walkMinutesFromB12": 8 }
+  ],
+  "vendors": [
+    { "name": "Shake Shack", "cuisine": "Burgers · American", "zoneId": "central", "dietaryTags": ["vegetarian"], "tags": ["Fast Casual", "Burgers"], "avgWaitMinutes": 6, "opinion": "Same reliable Shack experience. Always a safe bet.", "priceRange": "mid", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["american"], "shortDescription": "Fast-casual burgers and shakes in central concourse." },
+    { "name": "Capital One Landing", "cuisine": "Spanish · Tapas", "zoneId": "central", "dietaryTags": ["vegetarian"], "tags": ["Sit Down", "Tapas", "Premium"], "avgWaitMinutes": 20, "opinion": "José Andrés spot — Spanish tapas and cocktails. Worth it for a longer wait.", "priceRange": "splurge", "serviceType": "sit-down", "mealTypes": ["lunch", "dinner"], "cuisineCategories": ["spanish"], "shortDescription": "Premium Spanish tapas and cocktails; same-day boarding pass required." },
+    { "name": "Mulberry Street", "cuisine": "Italian", "zoneId": "B20", "dietaryTags": ["vegetarian"], "tags": ["Sit Down", "Italian"], "avgWaitMinutes": 12, "opinion": "Solid Italian. Pasta and wine when you have time.", "priceRange": "mid", "serviceType": "sit-down", "mealTypes": ["lunch", "dinner"], "cuisineCategories": ["italian"], "shortDescription": "Sit-down Italian pasta and wine near B20." },
+    { "name": "Zaro's Family Bakery", "cuisine": "Bakery · Sandwiches", "zoneId": "central", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Bakery"], "avgWaitMinutes": 4, "opinion": "24 hours. Bagels, pastries, and sandwiches. My go-to for early flights.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "lunch", "anytime"], "cuisineCategories": ["bakery"], "shortDescription": "24-hour bakery; bagels, pastries, sandwiches." },
+    { "name": "Five Guys", "cuisine": "Burgers · American", "zoneId": "B20", "dietaryTags": [], "tags": ["Fast Casual", "Burgers"], "avgWaitMinutes": 7, "opinion": "Custom burgers and fries. Consistently good.", "priceRange": "mid", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["american"], "shortDescription": "Build-your-own burgers and fries near B20." },
+    { "name": "Taim", "cuisine": "Middle Eastern · Falafel", "zoneId": "B20", "dietaryTags": ["vegetarian", "vegan"], "tags": ["Quick Serve", "Falafel"], "avgWaitMinutes": 5, "opinion": "Best falafel at LGA. Quick and fresh.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["middle-eastern"], "shortDescription": "Falafel and Middle Eastern; vegetarian and vegan options." },
+    { "name": "Au Bon Pain", "cuisine": "Cafe · Sandwiches", "zoneId": "B50", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Cafe"], "avgWaitMinutes": 4, "opinion": "Soups, sandwiches, and coffee. Reliable when you're near the B50s.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "lunch", "anytime"], "cuisineCategories": ["coffee"], "shortDescription": "Cafe with soups, sandwiches, and coffee near B50." },
+    { "name": "Dunkin'", "cuisine": "Coffee · Donuts", "zoneId": "central", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Coffee"], "avgWaitMinutes": 3, "opinion": "Coffee and a quick bite. Everywhere for a reason.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "anytime"], "cuisineCategories": ["coffee"], "shortDescription": "Coffee, donuts, and breakfast sandwiches." }
+  ],
+  "tips": "Terminal B is where the food is. Zaro's is open 24/7. Capital One Landing is the splurge; Shake Shack and Taim are the reliable quick wins."
+}
