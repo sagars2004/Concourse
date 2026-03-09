@@ -22,7 +22,7 @@ export function ChatInterface() {
   if (step !== "results") return null;
 
   return (
-    <section className="space-y-4">
+    <section id="concourse-chat" className="space-y-4">
       <div className="flex items-center gap-2">
         <MessageCircle className="h-5 w-5 text-primary" />
         <h2 className="text-xl font-semibold">Chat with Concourse</h2>
