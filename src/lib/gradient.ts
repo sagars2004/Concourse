@@ -4,6 +4,9 @@ const apiKey =
   process.env.DO_GRADIENT_API_KEY ?? process.env.GRADIENT_MODEL_ACCESS_KEY;
 const agentEndpoint = process.env.GRADIENT_AGENT_ENDPOINT?.replace(/\/$/, "");
 const agentAccessKey = process.env.GRADIENT_AGENT_ACCESS_KEY;
+const tripPlannerAgentEndpoint =
+  process.env.GRADIENT_TRIP_PLANNER_ENDPOINT?.replace(/\/$/, "");
+const tripPlannerAgentAccessKey = process.env.GRADIENT_TRIP_PLANNER_ACCESS_KEY;
 
 export function getGradientClient(): Gradient | null {
   if (!apiKey) return null;
@@ -32,7 +35,7 @@ export async function concourseChat(
   extraContext?: string
 ): Promise<string> {
   if (agentEndpoint && agentAccessKey) {
-    return concourseChatViaAgent(messages, systemPrompt, extraContext);
+    return chatViaAgent(agentEndpoint, agentAccessKey, messages, systemPrompt, extraContext);
   }
 
   const client = getGradientClient();
@@ -55,13 +58,15 @@ export async function concourseChat(
   return typeof content === "string" ? content : "";
 }
 
-/** Call the DigitalOcean Gradient agent endpoint (supports RAG, subagents, orchestration). */
-async function concourseChatViaAgent(
+/** Call a DigitalOcean Gradient agent endpoint (supports RAG, subagents, orchestration). */
+async function chatViaAgent(
+  endpoint: string,
+  accessKey: string,
   messages: { role: string; content: string }[],
   systemPrompt?: string,
   extraContext?: string
 ): Promise<string> {
-  const url = `${agentEndpoint}/api/v1/chat/completions`;
+  const url = `${endpoint}/api/v1/chat/completions`;
   const system = [systemPrompt, extraContext].filter(Boolean).join("\n\n");
   const fullMessages = system
     ? [{ role: "system", content: system }, ...messages]
@@ -71,7 +76,7 @@ async function concourseChatViaAgent(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${agentAccessKey}`,
+      Authorization: `Bearer ${accessKey}`,
     },
     body: JSON.stringify({
       messages: fullMessages,
@@ -91,4 +96,25 @@ async function concourseChatViaAgent(
   };
   const content = data.choices?.[0]?.message?.content;
   return typeof content === "string" ? content : "";
+}
+
+/**
+ * Send chat to the Trip Planner Gradient agent (if configured).
+ * Falls back to the default Concourse agent/serverless inference when not configured.
+ */
+export async function tripPlannerChat(
+  messages: { role: string; content: string }[],
+  systemPrompt?: string,
+  extraContext?: string
+): Promise<string> {
+  if (tripPlannerAgentEndpoint && tripPlannerAgentAccessKey) {
+    return chatViaAgent(
+      tripPlannerAgentEndpoint,
+      tripPlannerAgentAccessKey,
+      messages,
+      systemPrompt,
+      extraContext
+    );
+  }
+  return concourseChat(messages, systemPrompt, extraContext);
 }

@@ -13,6 +13,7 @@ import { PreferenceFiltersSection } from "@/components/preference-filters";
 import { FoodRecommendations } from "@/components/food-recommendations";
 import { TerminalMap } from "@/components/terminal-map";
 import { ChatInterface } from "@/components/chat-interface";
+import { TripPlanner } from "@/components/trip-planner";
 import { Footer } from "@/components/footer";
 import { useConcourse } from "@/context/concourse-context";
 
@@ -66,6 +67,7 @@ export default function ResultsPage() {
           <div className="space-y-6">
             <FlightStatus />
             <PreferenceFiltersSection />
+            <TripPlanner />
           </div>
           <FoodRecommendations />
           <TerminalMap />
