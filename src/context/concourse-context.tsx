@@ -103,6 +103,15 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "Lookup failed");
 
+      // Compute actual minutes until boarding from scheduled departure (boarding = dep - 35 min)
+      let minutesUntilBoarding = data.minutesUntilBoarding ?? 40;
+      if (data.scheduledDepartureIso) {
+        const dep = new Date(data.scheduledDepartureIso);
+        const boardingMs = dep.getTime() - 35 * 60 * 1000;
+        const computed = Math.max(0, Math.round((boardingMs - Date.now()) / 60000));
+        if (Number.isFinite(computed)) minutesUntilBoarding = computed;
+      }
+
       setState((s) => ({
         ...s,
         step: "results",
@@ -120,7 +129,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
           departureAirportIata: data.departureAirportIata ?? undefined,
           gate: data.gate,
           preferenceFilters: state.preferenceFilters,
-          minutesUntilBoarding: data.minutesUntilBoarding ?? 40,
+          minutesUntilBoarding,
         }),
       });
       const recData = await recRes.json();
@@ -128,13 +137,13 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
         setState((s) => ({ ...s, recommendations: recData.recommendations }));
       }
 
-      // Set initial assistant message
+      // Set initial assistant message (use computed countdown, not fixed 40)
       setState((s) => ({
         ...s,
         messages: [
           {
             role: "assistant",
-            content: `Hey there! I see you're flying ${data.flightNumber} out of ${data.departureAirportName ?? data.departureAirportIata ?? "the airport"}${data.terminal !== "—" ? `, ${data.terminal}` : ""}, Gate ${data.gate ?? "TBD"}. You've got about ${data.minutesUntilBoarding} minutes — that's basically luxury time in airport land. I've found some great food options near your gate. Want me to tell you more about any of them?`,
+            content: `Wassup! I see you're flying ${data.flightNumber} out of ${data.departureAirportName ?? data.departureAirportIata ?? "the airport"}${data.terminal !== "—" ? `, ${data.terminal}` : ""}, Gate ${data.gate ?? "TBD"}. I've found some great food options near your gate, but feel free to ask me about anything flight or food related! My DigitalOcean agents are working hard to provide you with the best recommendations possible.`,
           },
         ],
       }));

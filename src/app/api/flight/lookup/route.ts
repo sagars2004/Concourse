@@ -212,21 +212,50 @@ export async function POST(request: Request) {
       }
     }
 
-    // Stub when no key or no API result
+    // Stub when no key or no API result.
+    // For demos, respect user-provided departure airport/date so the local airport datasets (e.g. EWR Terminal C)
+    // can drive recommendations and the map.
+    const demoAirportIata = departureAirportIata || "JFK";
+    const demoAirportNames: Record<string, string> = {
+      EWR: "Newark Liberty International Airport",
+      JFK: "John F Kennedy International Airport",
+      LGA: "LaGuardia Airport",
+      LAX: "Los Angeles International Airport",
+      ORD: "Chicago O'Hare International Airport",
+      RDU: "Raleigh-Durham International Airport",
+    };
+    const demoTerminalByAirport: Record<string, string> = {
+      EWR: "Terminal C",
+      JFK: "Terminal 4",
+      LGA: "Terminal B",
+      LAX: "Terminal B",
+      ORD: "Terminal 3",
+      RDU: "Terminal 2",
+    };
+
+    const demoTerminal = demoTerminalByAirport[demoAirportIata] ?? "Terminal 1";
+    const terminalLetter = demoTerminal.replace(/^Terminal\s*/i, "").trim().toUpperCase();
+    const numeric = (normalized.match(/\d+/g) ?? []).join("");
+    const gateNumber = numeric ? ((Number.parseInt(numeric.slice(-2), 10) % 40) + 1) : 12;
+    const demoGate = `${terminalLetter}${gateNumber}`;
+
     const stub: FlightData = {
       flightNumber: normalized,
-      airline: "American Airlines",
-      departureAirportIata: "JFK",
-      departureAirportName: "John F Kennedy International Airport",
-      terminal: "Terminal 4",
-      gate: "B12",
+      airline: demoAirportIata === "EWR" ? "United Airlines" : "American Airlines",
+      departureAirportIata: demoAirportIata,
+      departureAirportName: demoAirportNames[demoAirportIata] ?? `${demoAirportIata} Airport`,
+      terminal: demoTerminal,
+      gate: demoGate,
       boardingTime: "2:45 PM",
       minutesUntilBoarding: 40,
       status: "on_time",
       scheduledDepartureIso: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
       scheduledArrivalIso: new Date(Date.now() + 5 * 60 * 60 * 1000).toISOString(),
-      arrivalAirportIata: "LAX",
-      arrivalAirportName: "Los Angeles International Airport",
+      arrivalAirportIata: demoAirportIata === "EWR" ? "MIA" : "LAX",
+      arrivalAirportName:
+        demoAirportIata === "EWR"
+          ? "Miami International Airport"
+          : "Los Angeles International Airport",
       flightDurationMinutes: 180,
       flightDate: flightDate || effectiveFlightDate,
     };

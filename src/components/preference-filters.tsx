@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { UtensilsCrossed } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useConcourse } from "@/context/concourse-context";
 import type { PreferenceFilters } from "@/lib/preference-filters";
 import {
@@ -24,7 +25,7 @@ function FilterChips<T extends string>({
   multi?: boolean;
 }) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-1.5">
       {options.map((opt) => {
         const isSelected = selected.includes(opt.id);
         return (
@@ -32,16 +33,36 @@ function FilterChips<T extends string>({
             key={opt.id}
             type="button"
             onClick={() => onToggle(opt.id)}
-            className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
-              isSelected
-                ? "border-primary bg-primary/10 text-primary"
-                : "border-border bg-transparent text-muted-foreground hover:border-primary/40 hover:text-foreground"
-            }`}
+            className={`
+              rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200
+              focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-background
+              ${isSelected
+                ? "border-primary/60 bg-primary/15 text-primary shadow-sm"
+                : "border-border/80 bg-muted/20 text-muted-foreground hover:border-primary/30 hover:bg-muted/40 hover:text-foreground"
+              }
+            `}
           >
             {opt.label}
           </button>
         );
       })}
+    </div>
+  );
+}
+
+function FilterGroup({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="space-y-2">
+      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        {label}
+      </p>
+      {children}
     </div>
   );
 }
@@ -127,60 +148,56 @@ export function PreferenceFiltersSection() {
   if (step !== "results") return null;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-2">
-        <UtensilsCrossed className="h-4 w-4 text-muted-foreground" />
-        <h3 className="text-sm font-medium text-muted-foreground">
-          Filter recommendations
-        </h3>
-      </div>
-
-      <div className="space-y-4">
-        <div>
-          <p className="mb-1.5 text-xs font-medium text-muted-foreground">Dietary</p>
-          <FilterChips
-            options={DIETARY_OPTIONS}
-            selected={preferenceFilters.dietary}
-            onToggle={toggleDietary}
-            multi={false}
-          />
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <SlidersHorizontal className="h-5 w-5 text-primary" />
+          Your preferences
+        </CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Refine what shows up in your recommendations
+        </p>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <FilterGroup label="Dietary">
+            <FilterChips
+              options={DIETARY_OPTIONS}
+              selected={preferenceFilters.dietary}
+              onToggle={toggleDietary}
+              multi={false}
+            />
+          </FilterGroup>
+          <FilterGroup label="Cuisine">
+            <FilterChips
+              options={CUISINE_OPTIONS}
+              selected={preferenceFilters.cuisine}
+              onToggle={toggleCuisine}
+            />
+          </FilterGroup>
+          <FilterGroup label="Price">
+            <FilterChips
+              options={PRICE_OPTIONS}
+              selected={preferenceFilters.price}
+              onToggle={togglePrice}
+            />
+          </FilterGroup>
+          <FilterGroup label="Service">
+            <FilterChips
+              options={SERVICE_OPTIONS}
+              selected={preferenceFilters.service}
+              onToggle={toggleService}
+            />
+          </FilterGroup>
+          <FilterGroup label="Meal">
+            <FilterChips
+              options={MEAL_OPTIONS}
+              selected={preferenceFilters.meal}
+              onToggle={toggleMeal}
+            />
+          </FilterGroup>
         </div>
-        <div>
-          <p className="mb-1.5 text-xs font-medium text-muted-foreground">Cuisine</p>
-          <FilterChips
-            options={CUISINE_OPTIONS}
-            selected={preferenceFilters.cuisine}
-            onToggle={toggleCuisine}
-          />
-        </div>
-        <div>
-          <p className="mb-1.5 text-xs font-medium text-muted-foreground">Price</p>
-          <FilterChips
-            options={PRICE_OPTIONS}
-            selected={preferenceFilters.price}
-            onToggle={togglePrice}
-          />
-        </div>
-        <div>
-          <p className="mb-1.5 text-xs font-medium text-muted-foreground">Service</p>
-          <FilterChips
-            options={SERVICE_OPTIONS}
-            selected={preferenceFilters.service}
-            onToggle={toggleService}
-          />
-        </div>
-        <div>
-          <p className="mb-1.5 text-xs font-medium text-muted-foreground">Meal</p>
-          <FilterChips
-            options={MEAL_OPTIONS}
-            selected={preferenceFilters.meal}
-            onToggle={toggleMeal}
-          />
-        </div>
-      </div>
-      <p className="text-xs text-muted-foreground">
-        Saved to your session and used by recommendations and the assistant (Supabase + DigitalOcean RAG).
-      </p>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

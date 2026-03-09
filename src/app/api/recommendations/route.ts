@@ -73,12 +73,14 @@ function buildFromRag(
     airport.zones.map((z) => [z.id, z])
   );
 
-  return airport.vendors.map((v: AirportVendor) => {
-    const zone = zoneMap.get(v.zoneId);
-    const walkTime = zone?.walkMinutesFromB12 ?? 5;
-    const roundTrip = walkTime * 2;
-    const level = levelFromWalkAndBoarding(roundTrip, minutesUntilBoarding);
-    return {
+  return airport.vendors
+    .map((v: AirportVendor) => {
+      const zone = zoneMap.get(v.zoneId);
+      const walkTime = zone?.walkMinutesFromB12 ?? 5;
+      const roundTrip = walkTime * 2;
+      const wait = typeof v.avgWaitMinutes === "number" ? v.avgWaitMinutes : 7;
+      const level = levelFromWalkAndBoarding(roundTrip + wait, minutesUntilBoarding);
+      return {
       name: v.name,
       cuisine: v.cuisine,
       walkTime,
@@ -88,8 +90,16 @@ function buildFromRag(
       opinion: v.opinion,
       tags: v.tags,
       dietaryTags: v.dietaryTags,
-    };
-  });
+      };
+    })
+    .sort((a, b) => {
+      const rank = (lvl: FoodRecommendationItem["level"]) =>
+        lvl === "green" ? 0 : lvl === "yellow" ? 1 : 2;
+      const r = rank(a.level) - rank(b.level);
+      if (r !== 0) return r;
+      if (a.walkTime !== b.walkTime) return a.walkTime - b.walkTime;
+      return a.name.localeCompare(b.name);
+    });
 }
 
 function parsePreferenceFilters(body: unknown): PreferenceFilters {

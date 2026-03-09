@@ -1,5 +1,13 @@
-import { ConcourseApp } from "@/components/concourse-app";
+import { Header } from "@/components/header";
+import { HomeHero } from "@/components/home-hero";
+import { Footer } from "@/components/footer";
 
 export default function Home() {
-  return <ConcourseApp />;
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <HomeHero />
+      <Footer />
+    </div>
+  );
 }

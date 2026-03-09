@@ -1,0 +1,79 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { Header } from "@/components/header";
+import { GateAlert } from "@/components/gate-alert";
+import { ErrorBanner } from "@/components/error-banner";
+import { Button } from "@/components/ui/button";
+import { FlightStatus } from "@/components/flight-status";
+import { PreferenceFiltersSection } from "@/components/preference-filters";
+import { FoodRecommendations } from "@/components/food-recommendations";
+import { TerminalMap } from "@/components/terminal-map";
+import { ChatInterface } from "@/components/chat-interface";
+import { Footer } from "@/components/footer";
+import { useConcourse } from "@/context/concourse-context";
+
+export default function ResultsPage() {
+  const router = useRouter();
+  const { step, flightData, error, setError, clearResults } = useConcourse();
+
+  // Redirect to home if no flight data
+  useEffect(() => {
+    if (step !== "loading" && !flightData) {
+      router.replace("/");
+    }
+  }, [step, flightData, router]);
+
+  const handleNewSearch = () => {
+    clearResults();
+    router.push("/");
+  };
+
+  if (!flightData && step !== "loading") {
+    return null; // Will redirect
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      {error && (
+        <ErrorBanner message={error} onDismiss={() => setError(null)} />
+      )}
+      <GateAlert />
+
+      <main className="flex-1">
+        <div className="mx-auto max-w-5xl space-y-10 px-4 pb-12 sm:px-6">
+          <div className="flex items-center justify-between pt-4">
+            <Link href="/">
+              <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
+                <ArrowLeft className="h-4 w-4" />
+                Back to search
+              </Button>
+            </Link>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleNewSearch}
+              className="gap-2"
+            >
+              New search
+            </Button>
+          </div>
+
+          <div className="space-y-6">
+            <FlightStatus />
+            <PreferenceFiltersSection />
+          </div>
+          <FoodRecommendations />
+          <TerminalMap />
+          <ChatInterface />
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}

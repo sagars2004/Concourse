@@ -140,7 +140,24 @@ export function getTerminalMapData(
   const base = center;
   const mapCenter = terminalCenter(base);
 
-  const allPoints: MapPoint[] = [
+  const vendorOffsets: Array<[number, number]> = [
+    [2, 1],
+    [-1, 2],
+    [3, -1],
+    [-2, -1],
+  ];
+
+  const vendorLevels: Array<"green" | "yellow" | "red"> = [
+    "green",
+    "green",
+    "yellow",
+    "red",
+  ];
+
+  const vendorsToPlot =
+    vendorNames && vendorNames.length > 0 ? vendorNames.slice(0, 4) : ["Shake Shack", "Panda Express", "Blue Ribbon Sushi"];
+
+  const points: MapPoint[] = [
     {
       id: "gate",
       lng: mapCenter[0],
@@ -148,39 +165,19 @@ export function getTerminalMapData(
       label: `Gate ${gateId}`,
       type: "gate" as const,
     },
-    {
-      id: "v1",
-      lng: offset(mapCenter, 2, 1)[0],
-      lat: offset(mapCenter, 2, 1)[1],
-      label: "Shake Shack",
-      type: "vendor" as const,
-      level: "green" as const,
-    },
-    {
-      id: "v2",
-      lng: offset(mapCenter, -1, 2)[0],
-      lat: offset(mapCenter, -1, 2)[1],
-      label: "Panda Express",
-      type: "vendor" as const,
-      level: "green" as const,
-    },
-    {
-      id: "v3",
-      lng: offset(mapCenter, 3, -1)[0],
-      lat: offset(mapCenter, 3, -1)[1],
-      label: "Blue Ribbon Sushi",
-      type: "vendor" as const,
-      level: "yellow" as const,
-    },
+    ...vendorsToPlot.map((name, idx) => {
+      const [dx, dy] = vendorOffsets[idx] ?? vendorOffsets[0];
+      const [lng, lat] = offset(mapCenter, dx, dy);
+      return {
+        id: `v${idx + 1}`,
+        lng,
+        lat,
+        label: name,
+        type: "vendor" as const,
+        level: vendorLevels[idx] ?? "yellow",
+      };
+    }),
   ];
-
-  const points = allPoints.filter(
-    (p) =>
-      p.type === "gate" ||
-      !vendorNames ||
-      vendorNames.length === 0 ||
-      vendorNames.some((v) => p.label?.toLowerCase().includes(v.toLowerCase()))
-  );
 
   const route: [number, number][] = points.map((p) => [p.lng, p.lat]);
 

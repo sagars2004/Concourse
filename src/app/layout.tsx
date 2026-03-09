@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ConcourseProvider } from "@/context/concourse-context";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 const inter = Inter({
   variable: "--font-geist-sans",
@@ -37,7 +39,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} min-h-screen bg-background font-sans text-foreground antialiased`}
       >
-        {children}
+        <ErrorBoundary>
+          <ConcourseProvider>{children}</ConcourseProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );
