@@ -100,30 +100,7 @@ export function TerminalMap() {
           });
         });
 
-        if (mapData.route.length >= 2) {
-          map!.addSource("route", {
-            type: "geojson",
-            data: {
-              type: "Feature",
-              properties: {},
-              geometry: {
-                type: "LineString",
-                coordinates: mapData.route,
-              },
-            },
-          });
-          map!.addLayer({
-            id: "route-line",
-            type: "line",
-            source: "route",
-            layout: { "line-join": "round", "line-cap": "round" },
-            paint: {
-              "line-color": "#38bdf8",
-              "line-width": 3,
-              "line-dasharray": [2, 1],
-            },
-          });
-        }
+        // Intentionally no path/route line between nodes (markers only).
 
         mapRef.current = map;
         setReady(true);

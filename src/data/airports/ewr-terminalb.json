@@ -1,0 +1,24 @@
+{
+  "airport": "EWR",
+  "terminal": "Terminal B",
+  "description": "Newark Terminal B — coffee, sandwiches, pizza, Mexican, Japanese, and wine bars across B1, B2, B3 and food courts.",
+  "zones": [
+    { "id": "B1", "name": "B1", "walkMinutesFromB12": 3 },
+    { "id": "B2", "name": "B2 Rotunda", "walkMinutesFromB12": 2 },
+    { "id": "B3", "name": "B3", "walkMinutesFromB12": 5 },
+    { "id": "food_court", "name": "Food court", "walkMinutesFromB12": 4 },
+    { "id": "headhouse", "name": "Headhouse", "walkMinutesFromB12": 6 }
+  ],
+  "vendors": [
+    { "name": "Belgian Beer Cafe", "cuisine": "Bar · American", "zoneId": "B2", "dietaryTags": ["vegetarian"], "tags": ["Sit Down", "Bar"], "avgWaitMinutes": 10, "opinion": "Beer with burgers, beef stew, bar foods. B2 Rotunda, pre-security.", "priceRange": "mid", "serviceType": "bar", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["american"], "shortDescription": "Beer and bar food. B2 Rotunda." },
+    { "name": "Dunkin'", "cuisine": "Coffee · Donuts", "zoneId": "food_court", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Coffee"], "avgWaitMinutes": 3, "opinion": "Three locations in Terminal B.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "anytime"], "cuisineCategories": ["coffee"], "shortDescription": "Coffee and donuts; three locations." },
+    { "name": "Firehouse Subs", "cuisine": "Sandwiches · American", "zoneId": "B1", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Sandwiches"], "avgWaitMinutes": 5, "opinion": "Florida-based sandwich chain. B1 connector, post-security.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["american"], "shortDescription": "Subs. B1 connector." },
+    { "name": "Panda Express", "cuisine": "Chinese · Asian", "zoneId": "food_court", "dietaryTags": [], "tags": ["Quick Serve", "Chinese"], "avgWaitMinutes": 4, "opinion": "Orange chicken and more. Food hall, pre-security.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["chinese", "asian"], "shortDescription": "Chinese. Food hall." },
+    { "name": "Sora Japanese Cuisine & Sushi Bar", "cuisine": "Japanese · Sushi", "zoneId": "B1", "dietaryTags": ["vegetarian"], "tags": ["Sit Down", "Japanese"], "avgWaitMinutes": 15, "opinion": "Full-service Japanese with sushi, tempura. B1 rotunda, post-security.", "priceRange": "mid", "serviceType": "sit-down", "mealTypes": ["lunch", "dinner"], "cuisineCategories": ["japanese", "asian"], "shortDescription": "Full-service Japanese. B1 rotunda." },
+    { "name": "Starbucks", "cuisine": "Coffee · Pastries", "zoneId": "food_court", "dietaryTags": ["vegetarian", "vegan"], "tags": ["Quick Serve", "Coffee"], "avgWaitMinutes": 4, "opinion": "Two locations in Terminal B.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "anytime"], "cuisineCategories": ["coffee"], "shortDescription": "Coffee; two locations." },
+    { "name": "Tony and Benny's", "cuisine": "Pizza · American", "zoneId": "food_court", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Pizza"], "avgWaitMinutes": 5, "opinion": "Pizza counter rated by Dave Portnoy. Food court.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["italian"], "shortDescription": "Pizza. Food court." },
+    { "name": "Vino Volo", "cuisine": "Wine · Small Plates", "zoneId": "B3", "dietaryTags": ["vegetarian"], "tags": ["Sit Down", "Wine Bar"], "avgWaitMinutes": 10, "opinion": "Wine bar with small plates. B3 Rotunda, post-security.", "priceRange": "mid", "serviceType": "bar", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["american"], "shortDescription": "Wine bar. B3 Rotunda." },
+    { "name": "Zaro's Bakeshop", "cuisine": "Bakery · Sandwiches", "zoneId": "food_court", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Bakery"], "avgWaitMinutes": 4, "opinion": "Zaro's Family Bakery. Food court.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "lunch", "anytime"], "cuisineCategories": ["bakery"], "shortDescription": "Bakery. Food court." }
+  ],
+  "tips": "Terminal B: Vino Volo and Sora for sit-down; Tony and Benny's and Panda in the food court. Dunkin' and Starbucks for coffee."
+}

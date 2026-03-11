@@ -151,19 +151,21 @@ export function FlightStatus() {
     return now >= boardingTargetMs && now < departureMs;
   }, [boardingTargetMs, departureMs, countdownRemainingMs]);
 
-  // Countdown: days:hrs:mins when >= 1 day, else hrs:mins (e.g. "2d 15:30" or "2:15")
+  // Countdown display: "12d : 15h: 38m : 30s" or "15h: 38m : 30s"
   const countdownHrMin = useMemo(() => {
     if (boardingTargetMs == null) return "—";
-    if (countdownRemainingMs <= 0) return "0:00";
-    const totalMins = Math.floor(countdownRemainingMs / (60 * 1000));
-    const days = Math.floor(totalMins / (24 * 60));
-    const remainderMins = totalMins % (24 * 60);
-    const hours = Math.floor(remainderMins / 60);
-    const mins = remainderMins % 60;
+    if (countdownRemainingMs <= 0) return "00h: 00m : 00s";
+    const totalSeconds = Math.floor(countdownRemainingMs / 1000);
+    const days = Math.floor(totalSeconds / (24 * 60 * 60));
+    const remainderSeconds = totalSeconds % (24 * 60 * 60);
+    const hours = Math.floor(remainderSeconds / (60 * 60));
+    const remainderMinutes = remainderSeconds % (60 * 60);
+    const mins = Math.floor(remainderMinutes / 60);
+    const secs = remainderMinutes % 60;
     if (days > 0) {
-      return `${days}d ${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
+      return `${days}d : ${String(hours).padStart(2, "0")}h: ${String(mins).padStart(2, "0")}m : ${String(secs).padStart(2, "0")}s`;
     }
-    return `${hours}:${String(mins).padStart(2, "0")}`;
+    return `${String(hours).padStart(2, "0")}h: ${String(mins).padStart(2, "0")}m : ${String(secs).padStart(2, "0")}s`;
   }, [countdownRemainingMs, boardingTargetMs]);
 
   const statusLabel =
@@ -420,17 +422,12 @@ export function FlightStatus() {
             </p>
             <div className="flex items-center gap-2">
               <p className="font-semibold tabular-nums">{countdownHrMin}</p>
-              {countdownHrMin !== "—" && (
-                <span className="text-xs text-muted-foreground">
-                  {countdownRemainingMs >= 24 * 60 * 60 * 1000 ? "d hr:min" : "hr:min"}
-                </span>
-              )}
             </div>
-            <p className="text-[10px] text-muted-foreground">
-              {boardingTargetMs != null
-                ? `Countdown to ${boardingTime} ${isEastern ? "(ET)" : ""}`
-                : "Boarding time required for countdown"}
-            </p>
+            {boardingTargetMs == null && (
+              <p className="text-[10px] text-muted-foreground">
+                Boarding time required for countdown
+              </p>
+            )}
           </div>
           {isInBoardingWindow && (
             <div className="space-y-1.5">

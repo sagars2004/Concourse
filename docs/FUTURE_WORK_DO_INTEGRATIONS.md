@@ -336,4 +336,8 @@ This is a rough implementation order, starting with changes that are easiest and
     - Give it tools for flight info and food recommendations.
     - Ingest a layover-focused knowledge base and refine prompts for realistic multi-airport journeys.
 
+11. **Experiment with a GPU Droplet for on-droplet inference**
+    - Spin up a DigitalOcean GPU Droplet and deploy a small inference server (e.g. a compact LLM or reranker).
+    - Integrate it as an additional tool or scoring step for recommendations or trip plans (e.g. re-ranking options or generating richer explanations).
+    - Compare latency/cost tradeoffs vs using only Gradient-hosted models and document when a GPU Droplet is beneficial.
 

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { FoodRecommendationItem } from "@/lib/types";
-import { getAirportData } from "@/data/airports";
+import { getAirportDataAsync } from "@/lib/airport-data";
 import type { AirportData, AirportVendor, AirportZone } from "@/data/airports";
 import type { PreferenceFilters } from "@/lib/preference-filters";
 
@@ -166,7 +166,7 @@ export async function POST(request: Request) {
     let vendors: AirportVendor[] = [];
 
     const airport = terminal
-      ? getAirportData(terminal, departureAirportIata)
+      ? await getAirportDataAsync(terminal, departureAirportIata)
       : null;
     if (airport) {
       vendors = airport.vendors;

@@ -91,9 +91,13 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
   const lookupFlight = useCallback(async (flightNumber: string, flightDate?: string, departureAirportIata?: string) => {
     setState((s) => ({ ...s, step: "loading", error: null }));
     try {
+      const sessionId = getOrCreateSessionId();
       const res = await fetch("/api/flight/lookup", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-session-id": sessionId,
+        },
         body: JSON.stringify({
           flightNumber: flightNumber.replace(/\s+/g, " ").trim(),
           flightDate: flightDate || undefined,

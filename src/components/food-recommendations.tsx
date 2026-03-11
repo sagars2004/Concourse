@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Sparkles } from "lucide-react";
 import { useConcourse } from "@/context/concourse-context";
 import { FoodRecommendationCard } from "@/components/food-recommendation-card";
 import { RecommendationsSkeleton } from "@/components/loading-skeleton";
+import { getOrCreateSessionId } from "@/lib/session";
 import type { FoodRecommendationItem } from "@/lib/types";
 
 function toCardProps(rec: FoodRecommendationItem) {
@@ -20,7 +22,47 @@ function toCardProps(rec: FoodRecommendationItem) {
 }
 
 export function FoodRecommendations() {
-  const { recommendations, step, sendChatMessage } = useConcourse();
+  const { recommendations, step, sendChatMessage, flightData } = useConcourse();
+  const shownSentRef = useRef(false);
+
+  useEffect(() => {
+    if (
+      step !== "results" ||
+      recommendations.length === 0 ||
+      shownSentRef.current
+    )
+      return;
+    shownSentRef.current = true;
+    const sessionId = getOrCreateSessionId();
+    fetch("/api/analytics/recommendation-events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-session-id": sessionId,
+      },
+      body: JSON.stringify({
+        action: "shown",
+        vendors: recommendations.map((r) => ({
+          name: r.name,
+          terminal: flightData?.terminal ?? undefined,
+          gate: flightData?.gate ?? undefined,
+          level: r.level,
+        })),
+      }),
+    }).catch(() => {});
+  }, [step, recommendations, flightData?.terminal, flightData?.gate]);
+
+  const handleVendorClick = (vendorName: string) => {
+    const sessionId = getOrCreateSessionId();
+    fetch("/api/analytics/recommendation-events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-session-id": sessionId,
+      },
+      body: JSON.stringify({ action: "clicked", vendorName }),
+    }).catch(() => {});
+  };
 
   const handleFeelingLucky = () => {
     if (!recommendations.length) return;
@@ -66,7 +108,21 @@ export function FoodRecommendations() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         {recommendations.map((rec) => (
-          <FoodRecommendationCard key={rec.name} {...toCardProps(rec)} />
+          <div
+            key={rec.name}
+            role="button"
+            tabIndex={0}
+            onClick={() => handleVendorClick(rec.name)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleVendorClick(rec.name);
+              }
+            }}
+            className="cursor-pointer"
+          >
+            <FoodRecommendationCard {...toCardProps(rec)} />
+          </div>
         ))}
       </div>
     </section>

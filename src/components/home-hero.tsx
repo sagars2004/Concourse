@@ -25,16 +25,48 @@ export function HomeHero() {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const flightInput = form.querySelector<HTMLInputElement>('[name="flightNumber"]');
-    const dateInput = form.querySelector<HTMLInputElement>('[name="flightDate"]');
+    const mmInput = form.querySelector<HTMLInputElement>('[name="flightDateMM"]');
+    const ddInput = form.querySelector<HTMLInputElement>('[name="flightDateDD"]');
+    const yyyyInput = form.querySelector<HTMLInputElement>('[name="flightDateYYYY"]');
     const airportInput = form.querySelector<HTMLInputElement>('[name="departureAirport"]');
     const flightNumber = flightInput?.value?.trim() ?? "";
-    const date = dateInput?.value ?? "";
+    const mmRaw = mmInput?.value?.trim() ?? "";
+    const ddRaw = ddInput?.value?.trim() ?? "";
+    const yyyyRaw = yyyyInput?.value?.trim() ?? "";
     const airport = airportInput?.value?.trim().toUpperCase() ?? "";
 
-    if (!flightNumber || !date || !airport) {
+    if (!flightNumber || !mmRaw || !ddRaw || !yyyyRaw || !airport) {
       setError("Please enter your flight number, departure airport, and flight date.");
       return;
     }
+
+    const mm = Number.parseInt(mmRaw, 10);
+    const dd = Number.parseInt(ddRaw, 10);
+    const yyyy = Number.parseInt(yyyyRaw, 10);
+    if (
+      !Number.isFinite(mm) ||
+      !Number.isFinite(dd) ||
+      !Number.isFinite(yyyy) ||
+      mm < 1 ||
+      mm > 12 ||
+      dd < 1 ||
+      dd > 31 ||
+      yyyy < 1900 ||
+      yyyy > 2100
+    ) {
+      setError("Please enter a valid flight date (MM/DD/YYYY).");
+      return;
+    }
+    const candidate = new Date(Date.UTC(yyyy, mm - 1, dd));
+    if (
+      candidate.getUTCFullYear() !== yyyy ||
+      candidate.getUTCMonth() !== mm - 1 ||
+      candidate.getUTCDate() !== dd
+    ) {
+      setError("Please enter a valid flight date (MM/DD/YYYY).");
+      return;
+    }
+    const date = `${String(yyyy).padStart(4, "0")}-${String(mm).padStart(2, "0")}-${String(dd).padStart(2, "0")}`;
 
     setError(null);
     lookupFlight(flightNumber, date, airport);
@@ -119,13 +151,42 @@ export function HomeHero() {
               <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 Flight date
               </label>
-              <Input
-                name="flightDate"
-                type="date"
-                className="h-11 text-sm"
-                disabled={isLoading}
-                required
-              />
+              <div
+                className={`flex h-11 items-center rounded-lg border border-input bg-background px-3 text-sm text-foreground focus-within:ring-2 focus-within:ring-ring ${isLoading ? "cursor-not-allowed opacity-50" : ""}`}
+              >
+                <input
+                  name="flightDateMM"
+                  inputMode="numeric"
+                  placeholder="MM"
+                  maxLength={2}
+                  required
+                  disabled={isLoading}
+                  className="w-10 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                  aria-label="Flight date month"
+                />
+                <span className="px-1 text-foreground">/</span>
+                <input
+                  name="flightDateDD"
+                  inputMode="numeric"
+                  placeholder="DD"
+                  maxLength={2}
+                  required
+                  disabled={isLoading}
+                  className="w-10 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                  aria-label="Flight date day"
+                />
+                <span className="px-1 text-foreground">/</span>
+                <input
+                  name="flightDateYYYY"
+                  inputMode="numeric"
+                  placeholder="YYYY"
+                  maxLength={4}
+                  required
+                  disabled={isLoading}
+                  className="w-14 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                  aria-label="Flight date year"
+                />
+              </div>
             </div>
           </div>
 

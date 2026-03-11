@@ -1,0 +1,26 @@
+{
+  "airport": "EWR",
+  "terminal": "Terminal A",
+  "description": "Newark Terminal A — mix of quick-serve and sit-down: Shake Shack, Guy Fieri's Flavortown, Ess-A-Bagel, and more.",
+  "zones": [
+    { "id": "central_plaza", "name": "Central Plaza", "walkMinutesFromB12": 2 },
+    { "id": "south_pier", "name": "South Pier", "walkMinutesFromB12": 4 },
+    { "id": "north_pier", "name": "North Pier", "walkMinutesFromB12": 5 },
+    { "id": "east_pier", "name": "East Pier", "walkMinutesFromB12": 6 },
+    { "id": "hammerhead", "name": "Hammerhead", "walkMinutesFromB12": 3 },
+    { "id": "food_court", "name": "Central Plaza Food Court", "walkMinutesFromB12": 3 }
+  ],
+  "vendors": [
+    { "name": "Bang Cookies", "cuisine": "Bakery · Sweets", "zoneId": "central_plaza", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Bakery"], "avgWaitMinutes": 3, "opinion": "Giant cookies from a Jersey City sweets shop. Perfect for a quick treat.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "lunch", "dinner", "anytime"], "cuisineCategories": ["bakery"], "shortDescription": "Giant cookies. Central Plaza." },
+    { "name": "Bluestone Lane Coffee", "cuisine": "Coffee · Tea", "zoneId": "south_pier", "dietaryTags": ["vegetarian", "vegan"], "tags": ["Quick Serve", "Coffee"], "avgWaitMinutes": 4, "opinion": "Australian chain. Solid coffee and tea near Gates 5 and 6.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "anytime"], "cuisineCategories": ["coffee"], "shortDescription": "Coffee and tea. South Pier." },
+    { "name": "Burger Fi", "cuisine": "Burgers · American", "zoneId": "central_plaza", "dietaryTags": ["vegetarian"], "tags": ["Fast Casual", "Burgers"], "avgWaitMinutes": 6, "opinion": "Burgers, hot dogs, chicken, fries. Reliable and fast.", "priceRange": "mid", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["american"], "shortDescription": "Burgers and more. Central Plaza East." },
+    { "name": "Shake Shack", "cuisine": "Burgers · American", "zoneId": "south_pier", "dietaryTags": ["vegetarian"], "tags": ["Fast Casual", "Burgers"], "avgWaitMinutes": 6, "opinion": "Danny Meyer's burger chain. Consistently good. South Pier.", "priceRange": "mid", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["american"], "shortDescription": "Burgers and shakes. South Pier." },
+    { "name": "Ess-A-Bagel", "cuisine": "Bagels · Sandwiches", "zoneId": "hammerhead", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Bakery"], "avgWaitMinutes": 5, "opinion": "New York-based. Bagels, spreads, and sandwiches. Worth the stop.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "lunch", "anytime"], "cuisineCategories": ["bakery"], "shortDescription": "Bagels and sandwiches. Hammerhead, Gate 15." },
+    { "name": "Guy Fieri's Flavortown Kitchen and Bar", "cuisine": "American · Bar", "zoneId": "north_pier", "dietaryTags": [], "tags": ["Sit Down", "American"], "avgWaitMinutes": 15, "opinion": "Wings, pulled pork, trash can nachos. Fun spot.", "priceRange": "mid", "serviceType": "sit-down", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["american"], "shortDescription": "Guy Fieri's spot. North Pier." },
+    { "name": "Dunkin'", "cuisine": "Coffee · Donuts", "zoneId": "east_pier", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Coffee"], "avgWaitMinutes": 3, "opinion": "Coffee and doughnuts. East Pier near Gate 23.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "anytime"], "cuisineCategories": ["coffee"], "shortDescription": "Coffee and donuts. East Pier." },
+    { "name": "Starbucks", "cuisine": "Coffee · Pastries", "zoneId": "central_plaza", "dietaryTags": ["vegetarian", "vegan"], "tags": ["Quick Serve", "Coffee"], "avgWaitMinutes": 4, "opinion": "One location in Terminal A. Central Plaza North.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "anytime"], "cuisineCategories": ["coffee"], "shortDescription": "Coffee and pastries. Central Plaza North." },
+    { "name": "Mediterranean Grill", "cuisine": "Mediterranean", "zoneId": "food_court", "dietaryTags": ["vegetarian", "vegan"], "tags": ["Quick Serve", "Mediterranean"], "avgWaitMinutes": 5, "opinion": "Falafel and chicken shawarma. Vegan options.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["lunch", "dinner", "anytime"], "cuisineCategories": ["mediterranean"], "shortDescription": "Falafel and shawarma. Central Plaza Food Court." },
+    { "name": "Zaro's Bakery", "cuisine": "Bakery · Sandwiches", "zoneId": "central_plaza", "dietaryTags": ["vegetarian"], "tags": ["Quick Serve", "Bakery"], "avgWaitMinutes": 4, "opinion": "Zaro's Family Bakery. Central Plaza East.", "priceRange": "budget", "serviceType": "quick-serve", "mealTypes": ["breakfast", "lunch", "anytime"], "cuisineCategories": ["bakery"], "shortDescription": "Bakery. Central Plaza East." }
+  ],
+  "tips": "Terminal A: Shake Shack and Bluestone Lane on South Pier, Guy Fieri's on North Pier, Ess-A-Bagel in Hammerhead. Food court has Mediterranean Grill and more."
+}

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { FlightData } from "@/lib/types";
+import { insertSearch } from "@/lib/db";
 
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 const cache = new Map<
@@ -145,8 +146,17 @@ export async function POST(request: Request) {
     if (departureAirportIata) cacheKeyParts.push(departureAirportIata);
     if (flightDate) cacheKeyParts.push(flightDate);
     const cacheKey = cacheKeyParts.join(":");
-    const cached = cache.get(cacheKey);
+      const cached = cache.get(cacheKey);
     if (cached && cached.expiresAt > Date.now()) {
+      const sessionId = request.headers.get("x-session-id") ?? "";
+      if (sessionId) {
+        insertSearch(sessionId, {
+          flightNumber: cached.data.flightNumber ?? normalized,
+          departureAirportIata: cached.data.departureAirportIata,
+          arrivalAirportIata: cached.data.arrivalAirportIata,
+          flightDate: flightDate || effectiveFlightDate,
+        }).catch(() => {});
+      }
       return NextResponse.json({ ...cached.data, flightDate: flightDate || effectiveFlightDate });
     }
 
@@ -186,6 +196,15 @@ export async function POST(request: Request) {
           data: mapped,
           expiresAt: Date.now() + CACHE_TTL_MS,
         });
+        const sessionId = request.headers.get("x-session-id") ?? "";
+        if (sessionId) {
+          insertSearch(sessionId, {
+            flightNumber: mapped.flightNumber,
+            departureAirportIata: mapped.departureAirportIata,
+            arrivalAirportIata: mapped.arrivalAirportIata,
+            flightDate: flightDate || effectiveFlightDate,
+          }).catch(() => {});
+        }
         return NextResponse.json({ ...mapped, flightDate: flightDate || effectiveFlightDate });
       }
 
@@ -238,6 +257,16 @@ export async function POST(request: Request) {
     const numeric = (normalized.match(/\d+/g) ?? []).join("");
     const gateNumber = numeric ? ((Number.parseInt(numeric.slice(-2), 10) % 40) + 1) : 12;
     const demoGate = `${terminalLetter}${gateNumber}`;
+
+    const sessionId = request.headers.get("x-session-id") ?? "";
+    if (sessionId) {
+      insertSearch(sessionId, {
+        flightNumber: normalized,
+        departureAirportIata: demoAirportIata,
+        arrivalAirportIata: demoAirportIata === "EWR" ? "MIA" : "LAX",
+        flightDate: flightDate || effectiveFlightDate,
+      }).catch(() => {});
+    }
 
     const stub: FlightData = {
       flightNumber: normalized,
