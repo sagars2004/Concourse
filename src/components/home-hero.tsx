@@ -1,17 +1,30 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, Plane, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useConcourse } from "@/context/concourse-context";
+import { DotGlobeHero } from "@/components/ui/globe-hero";
 
 export function HomeHero() {
   const router = useRouter();
   const { lookupFlight, step, error, setError } = useConcourse();
 
   const prevStepRef = useRef<string | null>(null);
+  const [headline, setHeadline] = useState("");
+  const [subheadline, setSubheadline] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({
+    flight: false,
+    airport: false,
+    mm: false,
+    dd: false,
+    yyyy: false,
+  });
+
+  const fullHeadline = "Never miss your flight";
+  const fullSubheadline = "chasing food again.";
 
   // Navigate to results only when we transition from loading → results (not when returning from results page)
   useEffect(() => {
@@ -20,6 +33,29 @@ export function HomeHero() {
     }
     prevStepRef.current = step;
   }, [step, router]);
+
+  useEffect(() => {
+    let frame: number;
+    const start = performance.now();
+    const total = fullHeadline.length + fullSubheadline.length;
+
+    const animate = (now: number) => {
+      const elapsed = now - start;
+      const chars = Math.min(total, Math.floor(elapsed / 40));
+      const headCount = Math.min(fullHeadline.length, chars);
+      const subCount = Math.max(0, chars - fullHeadline.length);
+
+      setHeadline(fullHeadline.slice(0, headCount));
+      setSubheadline(fullSubheadline.slice(0, subCount));
+
+      if (chars < total) {
+        frame = requestAnimationFrame(animate);
+      }
+    };
+
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +71,16 @@ export function HomeHero() {
     const yyyyRaw = yyyyInput?.value?.trim() ?? "";
     const airport = airportInput?.value?.trim().toUpperCase() ?? "";
 
-    if (!flightNumber || !mmRaw || !ddRaw || !yyyyRaw || !airport) {
+    const nextErrors = {
+      flight: !flightNumber,
+      airport: !airport,
+      mm: !mmRaw,
+      dd: !ddRaw,
+      yyyy: !yyyyRaw,
+    };
+    setFieldErrors(nextErrors);
+
+    if (nextErrors.flight || nextErrors.airport || nextErrors.mm || nextErrors.dd || nextErrors.yyyy) {
       setError("Please enter your flight number, departure airport, and flight date.");
       return;
     }
@@ -75,47 +120,49 @@ export function HomeHero() {
   const isLoading = step === "loading";
 
   return (
-    <div className="relative flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 sm:px-6">
-      {/* Subtle grid background */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "linear-gradient(var(--color-foreground) 1px, transparent 1px), linear-gradient(90deg, var(--color-foreground) 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
-        }}
-      />
-
-      <div className="relative mx-auto w-full max-w-2xl">
+    <DotGlobeHero
+      rotationSpeed={0.0035}
+      globeRadius={1.7}
+      className="bg-gradient-to-br from-background via-background/95 to-muted/10"
+    >
+      <div className="relative w-full max-w-2xl px-4 text-center sm:px-0 lg:text-left">
         {/* Hero content */}
-        <div className="mb-16 text-center">
-          <div className="mb-8 inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-primary/20 bg-primary/5">
+        <div className="mb-8 lg:mb-10">
+          <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10">
             <Plane className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            Never miss your flight
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-[3.4rem]">
+            {headline}
             <br />
             <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              chasing food again.
+              {subheadline}
             </span>
           </h1>
-          <p className="mx-auto mt-6 max-w-lg text-lg text-muted-foreground sm:text-xl">
+          <p className="mx-auto mt-4 max-w-lg text-base text-muted-foreground sm:text-lg lg:mx-0">
             Your AI-powered airport food concierge. Enter your flight number and
             we&apos;ll find the best eats near your gate.
           </p>
         </div>
 
         {/* Search form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          autoComplete="off"
+          noValidate
+          className="space-y-5 rounded-[1.75rem] border border-border/60 bg-background/65 p-5 shadow-[0_0_50px_rgba(3,7,18,0.45)] backdrop-blur-md sm:p-6"
+        >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
             <div className="relative flex-1">
               <Plane className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
               <Input
                 name="flightNumber"
                 placeholder="e.g. AA 1234, UA 567"
-                className="h-14 pl-12 text-lg"
+                className={`h-14 bg-background/70 pl-12 text-lg placeholder:text-muted-foreground border ${
+                  fieldErrors.flight ? "border-destructive ring-1 ring-destructive/60" : "border-border/70"
+                }`}
                 disabled={isLoading}
                 autoFocus
+                autoComplete="off"
               />
             </div>
             <Button
@@ -135,16 +182,18 @@ export function HomeHero() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              <label className="text-xs font-medium uppercase tracking-wider text-slate-400">
                 Departure airport
               </label>
               <Input
                 name="departureAirport"
                 placeholder="e.g. DFW, JFK"
-                className="h-11 text-sm uppercase"
+                className={`h-11 bg-background/70 text-sm uppercase placeholder:text-muted-foreground border ${
+                  fieldErrors.airport ? "border-destructive ring-1 ring-destructive/60" : "border-border/70"
+                }`}
                 disabled={isLoading}
                 maxLength={3}
-                required
+                autoComplete="off"
               />
             </div>
             <div className="space-y-1.5">
@@ -152,39 +201,45 @@ export function HomeHero() {
                 Flight date
               </label>
               <div
-                className={`flex h-11 items-center rounded-lg border border-input bg-background px-3 text-sm text-foreground focus-within:ring-2 focus-within:ring-ring ${isLoading ? "cursor-not-allowed opacity-50" : ""}`}
+                className={`flex h-11 items-center rounded-lg border bg-background/70 px-3 text-sm focus-within:ring-2 focus-within:ring-ring ${
+                  isLoading ? "cursor-not-allowed opacity-50" : ""
+                } ${
+                  fieldErrors.mm || fieldErrors.dd || fieldErrors.yyyy
+                    ? "border-destructive ring-1 ring-destructive/60"
+                    : "border-border/70"
+                }`}
               >
                 <input
                   name="flightDateMM"
                   inputMode="numeric"
                   placeholder="MM"
                   maxLength={2}
-                  required
                   disabled={isLoading}
                   className="w-10 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                   aria-label="Flight date month"
+                  autoComplete="off"
                 />
-                <span className="px-1 text-foreground">/</span>
+                <span className="px-1">/</span>
                 <input
                   name="flightDateDD"
                   inputMode="numeric"
                   placeholder="DD"
                   maxLength={2}
-                  required
                   disabled={isLoading}
                   className="w-10 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                   aria-label="Flight date day"
+                  autoComplete="off"
                 />
-                <span className="px-1 text-foreground">/</span>
+                <span className="px-1">/</span>
                 <input
                   name="flightDateYYYY"
                   inputMode="numeric"
                   placeholder="YYYY"
                   maxLength={4}
-                  required
                   disabled={isLoading}
                   className="w-14 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                   aria-label="Flight date year"
+                  autoComplete="off"
                 />
               </div>
             </div>
@@ -206,12 +261,12 @@ export function HomeHero() {
 
         {/* Loading overlay */}
         {isLoading && (
-          <div className="mt-8 flex items-center justify-center gap-3 text-muted-foreground">
+          <div className="mt-6 flex items-center justify-center gap-3 text-muted-foreground lg:justify-start">
             <Loader2 className="h-5 w-5 animate-spin" />
             <span className="text-sm">Finding your flight and nearby food…</span>
           </div>
         )}
       </div>
-    </div>
+    </DotGlobeHero>
   );
 }

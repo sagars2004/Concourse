@@ -11,9 +11,15 @@ export function FlightInput() {
   const [date, setDate] = useState("");
   const [airport, setAirport] = useState("");
   const { lookupFlight, step } = useConcourse();
+  const [flightError, setFlightError] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!value.trim()) {
+      setFlightError(true);
+      return;
+    }
+    setFlightError(false);
     lookupFlight(value, date || undefined, airport ? airport.trim().toUpperCase() : undefined);
   };
 
@@ -33,6 +39,8 @@ export function FlightInput() {
         </div>
         <form
           onSubmit={handleSubmit}
+          autoComplete="off"
+          noValidate
           className="mx-auto flex max-w-md flex-col gap-3"
         >
           <div className="flex items-center gap-3">
@@ -40,10 +48,13 @@ export function FlightInput() {
               <Plane className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Please enter your flight number"
-                className="h-12 pl-10 text-base"
+                className={`h-12 pl-10 text-base border ${
+                  flightError ? "border-destructive ring-1 ring-destructive/60" : "border-border"
+                }`}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 disabled={step === "loading"}
+                autoComplete="off"
               />
             </div>
             <Button
@@ -68,6 +79,7 @@ export function FlightInput() {
                 onChange={(e) => setAirport(e.target.value.toUpperCase().slice(0, 3))}
                 disabled={step === "loading"}
                 maxLength={3}
+                autoComplete="off"
               />
               <p className="text-xs">
                 Helps when the same flight number operates from multiple airports.
@@ -83,6 +95,7 @@ export function FlightInput() {
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 disabled={step === "loading"}
+                autoComplete="off"
               />
               <p className="text-xs">
                 When you&apos;re flying. Helps pick the right trip when there are multiple.
