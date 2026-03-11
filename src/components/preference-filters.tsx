@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { SlidersHorizontal } from "lucide-react";
+import { Check, RotateCcw, SlidersHorizontal, X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useConcourse } from "@/context/concourse-context";
 import type { PreferenceFilters } from "@/lib/preference-filters";
 import {
+  DEFAULT_PREFERENCE_FILTERS,
   DIETARY_OPTIONS,
   CUISINE_OPTIONS,
   PRICE_OPTIONS,
@@ -25,7 +26,7 @@ function FilterChips<T extends string>({
   multi?: boolean;
 }) {
   return (
-    <div className="flex flex-wrap gap-1.5">
+    <div className="flex flex-wrap gap-2">
       {options.map((opt) => {
         const isSelected = selected.includes(opt.id);
         return (
@@ -33,15 +34,24 @@ function FilterChips<T extends string>({
             key={opt.id}
             type="button"
             onClick={() => onToggle(opt.id)}
+            aria-pressed={isSelected}
             className={`
-              rounded-lg border px-3 py-2 text-sm font-medium transition-all duration-200
+              inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-sm font-medium transition-all duration-200
               focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-background
               ${isSelected
-                ? "border-primary/60 bg-primary/15 text-primary shadow-sm"
-                : "border-border/80 bg-muted/20 text-muted-foreground hover:border-primary/30 hover:bg-muted/40 hover:text-foreground"
+                ? "border-primary/70 bg-primary/15 text-primary shadow-sm"
+                : "border-border/80 bg-background/70 text-muted-foreground hover:border-primary/40 hover:bg-muted/40 hover:text-foreground"
               }
             `}
           >
+            <span
+              className={`
+                inline-flex h-4 w-4 items-center justify-center rounded-full border transition-colors
+                ${isSelected ? "border-primary/60 bg-primary/20" : "border-border/70 bg-transparent"}
+              `}
+            >
+              {isSelected ? <Check className="h-3 w-3" /> : null}
+            </span>
             {opt.label}
           </button>
         );
@@ -52,16 +62,23 @@ function FilterChips<T extends string>({
 
 function FilterGroup({
   label,
+  selectedCount,
   children,
 }: {
   label: string;
+  selectedCount: number;
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-2">
-      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-        {label}
-      </p>
+    <div className="space-y-3 rounded-xl border border-border/70 bg-muted/20 p-3">
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          {label}
+        </p>
+        <span className="rounded-full border border-border/70 bg-background/70 px-2 py-0.5 text-[10px] text-muted-foreground">
+          {selectedCount} selected
+        </span>
+      </div>
       {children}
     </div>
   );
@@ -99,6 +116,20 @@ export function PreferenceFiltersSection() {
   const updateAndSave = (next: PreferenceFilters) => {
     setPreferenceFilters(next);
     savePreferences(next).then(() => loadRecommendations(next));
+  };
+
+  const clearAll = () => {
+    updateAndSave({
+      dietary: ["none"],
+      cuisine: [],
+      price: [],
+      service: [],
+      meal: [],
+    });
+  };
+
+  const resetDefaults = () => {
+    updateAndSave(DEFAULT_PREFERENCE_FILTERS);
   };
 
   const toggleDietary = (id: string) => {
@@ -158,9 +189,33 @@ export function PreferenceFiltersSection() {
           Refine what shows up in your recommendations
         </p>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <FilterGroup label="Dietary">
+      <CardContent className="space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border/70 bg-muted/20 p-3">
+          <p className="text-xs text-muted-foreground">
+            Adjust filters quickly to refine recommendations in real-time.
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={clearAll}
+              className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border/70 bg-background/60 px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <X className="h-3.5 w-3.5" />
+              Clear all
+            </button>
+            <button
+              type="button"
+              onClick={resetDefaults}
+              className="inline-flex h-8 items-center gap-1.5 rounded-md border border-primary/40 bg-primary/10 px-2.5 text-xs font-medium text-primary transition-colors hover:bg-primary/15"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+              Reset defaults
+            </button>
+          </div>
+        </div>
+
+        <div className="grid gap-3 xl:grid-cols-2">
+          <FilterGroup label="Dietary" selectedCount={preferenceFilters.dietary.length}>
             <FilterChips
               options={DIETARY_OPTIONS}
               selected={preferenceFilters.dietary}
@@ -168,28 +223,28 @@ export function PreferenceFiltersSection() {
               multi={false}
             />
           </FilterGroup>
-          <FilterGroup label="Cuisine">
+          <FilterGroup label="Cuisine" selectedCount={preferenceFilters.cuisine.length}>
             <FilterChips
               options={CUISINE_OPTIONS}
               selected={preferenceFilters.cuisine}
               onToggle={toggleCuisine}
             />
           </FilterGroup>
-          <FilterGroup label="Price">
+          <FilterGroup label="Price" selectedCount={preferenceFilters.price.length}>
             <FilterChips
               options={PRICE_OPTIONS}
               selected={preferenceFilters.price}
               onToggle={togglePrice}
             />
           </FilterGroup>
-          <FilterGroup label="Service">
+          <FilterGroup label="Service" selectedCount={preferenceFilters.service.length}>
             <FilterChips
               options={SERVICE_OPTIONS}
               selected={preferenceFilters.service}
               onToggle={toggleService}
             />
           </FilterGroup>
-          <FilterGroup label="Meal">
+          <FilterGroup label="Meal" selectedCount={preferenceFilters.meal.length}>
             <FilterChips
               options={MEAL_OPTIONS}
               selected={preferenceFilters.meal}

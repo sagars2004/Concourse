@@ -8,11 +8,24 @@ import { Input } from "@/components/ui/input";
 import { useConcourse } from "@/context/concourse-context";
 import { DotGlobeHero } from "@/components/ui/globe-hero";
 
+function normalizeFlightNumber(raw: string): string {
+  const cleaned = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const lettersMatch = cleaned.match(/^[A-Z]+/);
+  const letters = lettersMatch ? lettersMatch[0].slice(0, 3) : "";
+  const digits = cleaned.slice(letters.length).replace(/[^0-9]/g, "");
+  if (!letters && !digits) return "";
+  if (!digits) return letters;
+  return `${letters} ${digits}`;
+}
+
 export function HomeHero() {
   const router = useRouter();
   const { lookupFlight, step, error, setError } = useConcourse();
 
   const prevStepRef = useRef<string | null>(null);
+  const mmRef = useRef<HTMLInputElement | null>(null);
+  const ddRef = useRef<HTMLInputElement | null>(null);
+  const yyyyRef = useRef<HTMLInputElement | null>(null);
   const [headline, setHeadline] = useState("");
   const [subheadline, setSubheadline] = useState("");
   const [fieldErrors, setFieldErrors] = useState({
@@ -119,6 +132,40 @@ export function HomeHero() {
 
   const isLoading = step === "loading";
 
+  const handleSegmentedDateChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    maxLen: number,
+    field: "mm" | "dd" | "yyyy"
+  ) => {
+    const input = e.target;
+    let value = input.value.replace(/[^0-9]/g, "").slice(0, maxLen);
+
+    let isValid = false;
+    if (field === "mm" && value.length === 2) {
+      const num = Number.parseInt(value, 10);
+      isValid = num >= 1 && num <= 12;
+    } else if (field === "dd" && value.length === 2) {
+      const num = Number.parseInt(value, 10);
+      isValid = num >= 1 && num <= 31;
+    } else if (field === "yyyy" && value.length === 4) {
+      const num = Number.parseInt(value, 10);
+      isValid = num >= 1900 && num <= 2100;
+    }
+
+    input.value = value;
+    setFieldErrors((prev) => ({ ...prev, [field]: !value }));
+
+    if (value.length === maxLen && isValid) {
+      if (field === "mm") {
+        ddRef.current?.focus();
+        ddRef.current?.select();
+      } else if (field === "dd") {
+        yyyyRef.current?.focus();
+        yyyyRef.current?.select();
+      }
+    }
+  };
+
   return (
     <DotGlobeHero
       rotationSpeed={0.0035}
@@ -156,27 +203,28 @@ export function HomeHero() {
               <Plane className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
               <Input
                 name="flightNumber"
-                placeholder="e.g. AA 1234, UA 567"
+                placeholder="Please enter your flight number"
                 className={`h-14 bg-background/70 pl-12 text-lg placeholder:text-muted-foreground border ${
                   fieldErrors.flight ? "border-destructive ring-1 ring-destructive/60" : "border-border/70"
                 }`}
                 disabled={isLoading}
                 autoFocus
                 autoComplete="off"
+                onChange={(e) => {
+                  const formatted = normalizeFlightNumber(e.target.value);
+                  e.target.value = formatted;
+                  if (formatted) {
+                    setFieldErrors((prev) => ({ ...prev, flight: false }));
+                  }
+                }}
               />
             </div>
             <Button
               type="submit"
-              size="lg"
-              className="h-14 gap-2 px-8 text-base"
               disabled={isLoading}
+              className="relative h-14 w-40 cursor-pointer overflow-hidden rounded-lg bg-primary text-base font-semibold text-primary-foreground shadow-lg shadow-primary/40 hover:bg-primary/80 before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.7)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:transition-[background-position_0s_ease] before:duration-1000 hover:before:bg-[position:-100%_0,0_0] dark:before:bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.5)_50%,transparent_75%,transparent_100%)]"
             >
-              {isLoading ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
-              ) : (
-                <Search className="h-5 w-5" />
-              )}
-              <span>Search</span>
+              {isLoading ? "Searching..." : "Search"}
             </Button>
           </div>
 
@@ -194,6 +242,10 @@ export function HomeHero() {
                 disabled={isLoading}
                 maxLength={3}
                 autoComplete="off"
+                onChange={(e) => {
+                  e.target.value = e.target.value.toUpperCase().slice(0, 3);
+                  setFieldErrors((prev) => ({ ...prev, airport: !e.target.value.trim() }));
+                }}
               />
             </div>
             <div className="space-y-1.5">
@@ -218,6 +270,8 @@ export function HomeHero() {
                   className="w-10 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                   aria-label="Flight date month"
                   autoComplete="off"
+                  ref={mmRef}
+                  onChange={(e) => handleSegmentedDateChange(e, 2, "mm")}
                 />
                 <span className="px-1">/</span>
                 <input
@@ -229,6 +283,8 @@ export function HomeHero() {
                   className="w-10 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                   aria-label="Flight date day"
                   autoComplete="off"
+                  ref={ddRef}
+                  onChange={(e) => handleSegmentedDateChange(e, 2, "dd")}
                 />
                 <span className="px-1">/</span>
                 <input
@@ -240,6 +296,8 @@ export function HomeHero() {
                   className="w-14 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                   aria-label="Flight date year"
                   autoComplete="off"
+                  ref={yyyyRef}
+                  onChange={(e) => handleSegmentedDateChange(e, 4, "yyyy")}
                 />
               </div>
             </div>

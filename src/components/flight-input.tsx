@@ -6,6 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useConcourse } from "@/context/concourse-context";
 
+function normalizeFlightNumber(raw: string): string {
+  const cleaned = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const lettersMatch = cleaned.match(/^[A-Z]+/);
+  const letters = lettersMatch ? lettersMatch[0].slice(0, 3) : "";
+  const digits = cleaned.slice(letters.length).replace(/[^0-9]/g, "");
+  if (!letters && !digits) return "";
+  if (!digits) return letters;
+  return `${letters} ${digits}`;
+}
+
 export function FlightInput() {
   const [value, setValue] = useState("");
   const [date, setDate] = useState("");
@@ -52,7 +62,13 @@ export function FlightInput() {
                   flightError ? "border-destructive ring-1 ring-destructive/60" : "border-border"
                 }`}
                 value={value}
-                onChange={(e) => setValue(e.target.value)}
+                onChange={(e) => {
+                  const formatted = normalizeFlightNumber(e.target.value);
+                  setValue(formatted);
+                  if (formatted) {
+                    setFlightError(false);
+                  }
+                }}
                 disabled={step === "loading"}
                 autoComplete="off"
               />

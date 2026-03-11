@@ -1,9 +1,7 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
-import React, { useMemo, useRef } from "react";
-import * as THREE from "three";
+import React, { useEffect, useRef } from "react";
+import createGlobe from "cobe";
 import { cn } from "@/lib/utils";
 
 interface DotGlobeHeroProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -13,97 +11,99 @@ interface DotGlobeHeroProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
 }
 
-const DOT_COUNT = 64;
+const CobeGlobe = ({
+  className,
+  rotationSpeed = 0.01,
+}: {
+  className?: string;
+  rotationSpeed?: number;
+}) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-function DotPoint({ position }: { position: THREE.Vector3 }) {
+  useEffect(() => {
+    if (!canvasRef.current) return;
+
+    let phi = 0;
+
+    const globe = createGlobe(canvasRef.current, {
+      devicePixelRatio: 2,
+      // Use a square canvas so the sphere can be fully drawn
+      width: 950,
+      height: 950,
+      phi: 0,
+      theta: 0,
+      // Larger globe, still fully visible inside the square container
+      scale: 1.0,
+      offset: [0, 0],
+      dark: 1,
+      diffuse: 1.2,
+      mapSamples: 16000,
+      mapBrightness: 6,
+      baseColor: [0.02, 0.5, 0.9],
+      markerColor: [0.1, 0.8, 1],
+      glowColor: [1, 1, 1],
+      markers: [
+        // North America
+        { location: [37.7749, -122.4194], size: 0.06 }, // San Francisco
+        { location: [34.0522, -118.2437], size: 0.05 }, // Los Angeles
+        { location: [40.7128, -74.006], size: 0.07 }, // New York
+        { location: [41.8781, -87.6298], size: 0.04 }, // Chicago
+        { location: [49.2827, -123.1207], size: 0.035 }, // Vancouver
+        // Europe
+        { location: [51.5074, -0.1278], size: 0.06 }, // London
+        { location: [48.8566, 2.3522], size: 0.05 }, // Paris
+        { location: [52.52, 13.405], size: 0.045 }, // Berlin
+        { location: [41.9028, 12.4964], size: 0.04 }, // Rome
+        { location: [40.4168, -3.7038], size: 0.04 }, // Madrid
+        // Asia
+        { location: [35.6762, 139.6503], size: 0.06 }, // Tokyo
+        { location: [37.5665, 126.978], size: 0.05 }, // Seoul
+        { location: [1.3521, 103.8198], size: 0.045 }, // Singapore
+        { location: [28.6139, 77.209], size: 0.045 }, // Delhi
+        { location: [13.7563, 100.5018], size: 0.04 }, // Bangkok
+        // South America
+        { location: [-23.5505, -46.6333], size: 0.05 }, // São Paulo
+        { location: [-34.6037, -58.3816], size: 0.045 }, // Buenos Aires
+        { location: [-12.0464, -77.0428], size: 0.04 }, // Lima
+        // Oceania
+        { location: [-33.8688, 151.2093], size: 0.05 }, // Sydney
+        { location: [-37.8136, 144.9631], size: 0.045 }, // Melbourne
+        // Africa & Middle East
+        { location: [-1.2921, 36.8219], size: 0.04 }, // Nairobi
+        { location: [30.0444, 31.2357], size: 0.045 }, // Cairo
+        { location: [25.2048, 55.2708], size: 0.05 }, // Dubai
+      ],
+      onRender: (state) => {
+        state.phi = phi;
+        phi += rotationSpeed;
+      },
+    });
+
+    return () => {
+      globe.destroy();
+    };
+  }, [rotationSpeed]);
+
   return (
-    <mesh position={position}>
-      <sphereGeometry args={[0.02, 12, 12]} />
-      <meshBasicMaterial color="#38bdf8" transparent opacity={0.9} />
-    </mesh>
-  );
-}
-
-const Globe: React.FC<{
-  rotationSpeed: number;
-  radius: number;
-}> = ({ rotationSpeed, radius }) => {
-  const groupRef = useRef<THREE.Group>(null!);
-
-  const dots = useMemo(
-    () => {
-      const positions: THREE.Vector3[] = [];
-      let seed = 42;
-      const rand = () => {
-        seed = (seed * 1664525 + 1013904223) % 4294967296;
-        return seed / 4294967296;
-      };
-
-      for (let i = 0; i < DOT_COUNT; i++) {
-        const u = rand();
-        const v = rand();
-        const theta = 2 * Math.PI * u;
-        const phi = Math.acos(2 * v - 1);
-        const r = radius + 0.02;
-        const x = r * Math.sin(phi) * Math.cos(theta);
-        const y = r * Math.cos(phi);
-        const z = r * Math.sin(phi) * Math.sin(theta);
-        positions.push(new THREE.Vector3(x, y, z));
-      }
-
-      return positions;
-    },
-    [radius]
-  );
-
-  useFrame((state) => {
-    if (groupRef.current) {
-      const t = state.clock.getElapsedTime();
-      const targetY = t * rotationSpeed;
-      const targetX = Math.sin(t * 0.25) * rotationSpeed * 120;
-      const targetZ = Math.cos(t * 0.18) * rotationSpeed * 80;
-
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(
-        groupRef.current.rotation.y,
-        targetY,
-        0.04
-      );
-      groupRef.current.rotation.x = THREE.MathUtils.lerp(
-        groupRef.current.rotation.x,
-        targetX,
-        0.04
-      );
-      groupRef.current.rotation.z = THREE.MathUtils.lerp(
-        groupRef.current.rotation.z,
-        targetZ,
-        0.04
-      );
-    }
-  });
-
-  return (
-    <group ref={groupRef}>
-      <mesh>
-        <sphereGeometry args={[radius, 64, 64]} />
-        <meshBasicMaterial
-          color="#38bdf8"
-          transparent
-          opacity={0.2}
-          wireframe
-        />
-      </mesh>
-      {dots.map((position, idx) => (
-        <DotPoint key={idx} position={position} />
-      ))}
-    </group>
+    <canvas
+      ref={canvasRef}
+      style={{
+        width: "100%",
+        height: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
+        aspectRatio: 1,
+      }}
+      className={className}
+    />
   );
 };
 
 const DotGlobeHero = React.forwardRef<HTMLDivElement, DotGlobeHeroProps>(
   (
     {
-      rotationSpeed = 0.003,
-      globeRadius = 1.4,
+      rotationSpeed = 0.0035,
+      globeRadius = 1.7, // kept for API compatibility, not used directly
       className,
       children,
       ...props
@@ -127,16 +127,12 @@ const DotGlobeHero = React.forwardRef<HTMLDivElement, DotGlobeHeroProps>(
               {children}
             </div>
 
-            <div className="order-1 relative h-[280px] w-full max-w-[560px] justify-self-center overflow-visible sm:h-[340px] lg:order-2 lg:h-[420px]">
-              <div className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.25),transparent_68%)] blur-3xl" />
-              <div className="pointer-events-none absolute -inset-10">
-                <Canvas>
-                  <PerspectiveCamera makeDefault position={[0, 0, 3]} fov={75} />
-                  <ambientLight intensity={0.7} />
-                  <pointLight position={[6, 8, 6]} intensity={1.2} />
-
-                  <Globe rotationSpeed={rotationSpeed} radius={globeRadius} />
-                </Canvas>
+            <div className="order-1 relative flex w-full max-w-[560px] justify-self-center lg:order-2">
+              <div className="relative w-full max-w-[460px] aspect-square overflow-hidden rounded-3xl">
+                <CobeGlobe
+                  rotationSpeed={rotationSpeed}
+                  className="h-full w-full"
+                />
               </div>
             </div>
           </div>

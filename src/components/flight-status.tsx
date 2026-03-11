@@ -163,9 +163,9 @@ export function FlightStatus() {
     const mins = Math.floor(remainderMinutes / 60);
     const secs = remainderMinutes % 60;
     if (days > 0) {
-      return `${days}d : ${String(hours).padStart(2, "0")}h: ${String(mins).padStart(2, "0")}m : ${String(secs).padStart(2, "0")}s`;
+      return `${days}d : ${String(hours).padStart(2, "0")}h : ${String(mins).padStart(2, "0")}m : ${String(secs).padStart(2, "0")}s`;
     }
-    return `${String(hours).padStart(2, "0")}h: ${String(mins).padStart(2, "0")}m : ${String(secs).padStart(2, "0")}s`;
+    return `${String(hours).padStart(2, "0")}h : ${String(mins).padStart(2, "0")}m : ${String(secs).padStart(2, "0")}s`;
   }, [countdownRemainingMs, boardingTargetMs]);
 
   const statusLabel =

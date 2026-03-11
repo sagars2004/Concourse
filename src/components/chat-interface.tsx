@@ -1,22 +1,38 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { Send, Plane, User, MessageCircle } from "lucide-react";
+import { useState } from "react";
+import { ArrowUp, MessageCircle, Plane, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { useConcourse } from "@/context/concourse-context";
+import {
+  ChatBubble,
+  ChatBubbleAvatar,
+  ChatBubbleMessage,
+} from "@/components/ui/chat-bubble";
+import { ChatMessageList } from "@/components/ui/chat-message-list";
+import {
+  PromptInput,
+  PromptInputAction,
+  PromptInputActions,
+  PromptInputTextarea,
+} from "@/components/ui/prompt-input";
 
 export function ChatInterface() {
   const [inputValue, setInputValue] = useState("");
-  const bottomRef = useRef<HTMLDivElement>(null);
   const { messages, sendChatMessage, step } = useConcourse();
+  const [isSending, setIsSending] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim()) return;
-    sendChatMessage(inputValue.trim());
+  const handleSubmit = async () => {
+    const trimmed = inputValue.trim();
+    if (!trimmed) return;
+    setIsSending(true);
     setInputValue("");
+    try {
+      await sendChatMessage(trimmed);
+    } finally {
+      setIsSending(false);
+    }
   };
 
   if (step !== "results") return null;
@@ -28,62 +44,79 @@ export function ChatInterface() {
         <h2 className="text-xl font-semibold">Chat with Concourse</h2>
       </div>
       <Card>
-        <CardContent className="space-y-4 p-5">
-          <div className="max-h-80 space-y-4 overflow-y-auto pr-1">
+        <CardContent className="flex h-[420px] flex-col gap-4 p-5">
+          <div className="flex-1 overflow-hidden">
             {messages.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
+              <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
                 Say something to get started.
-              </p>
+              </div>
             ) : (
-              messages.map((msg, i) => (
-                <div
-                  key={i}
-                  className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
-                >
-                  <div
-                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
-                      msg.role === "assistant"
-                        ? "bg-primary/10 text-primary"
-                        : "bg-secondary text-secondary-foreground"
-                    }`}
+              <ChatMessageList className="pr-1" smooth>
+                {messages.map((msg, i) => (
+                  <ChatBubble
+                    key={i}
+                    variant={msg.role === "user" ? "sent" : "received"}
                   >
-                    {msg.role === "assistant" ? (
-                      <Plane className="h-4 w-4" />
-                    ) : (
-                      <User className="h-4 w-4" />
-                    )}
-                  </div>
-                  <div
-                    className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                      msg.role === "assistant"
-                        ? "bg-secondary text-secondary-foreground"
-                        : "bg-primary text-primary-foreground"
-                    }`}
-                  >
-                    {msg.content}
-                  </div>
-                </div>
-              ))
+                    <ChatBubbleAvatar
+                      className="h-8 w-8 shrink-0"
+                      icon={
+                        msg.role === "user" ? (
+                          <User className="h-4 w-4" />
+                        ) : (
+                          <Plane className="h-4 w-4 text-primary" />
+                        )
+                      }
+                      fallback={msg.role === "user" ? "U" : "C"}
+                    />
+                    <ChatBubbleMessage
+                      variant={msg.role === "user" ? "sent" : "received"}
+                    >
+                      {msg.content}
+                    </ChatBubbleMessage>
+                  </ChatBubble>
+                ))}
+
+                {isSending && (
+                  <ChatBubble variant="received">
+                    <ChatBubbleAvatar
+                      className="h-8 w-8 shrink-0"
+                      icon={<Plane className="h-4 w-4 text-primary" />}
+                      fallback="C"
+                    />
+                    <ChatBubbleMessage isLoading />
+                  </ChatBubble>
+                )}
+              </ChatMessageList>
             )}
-            <div ref={bottomRef} />
           </div>
 
-          <form
+          <PromptInput
+            value={inputValue}
+            onValueChange={setInputValue}
+            isLoading={isSending}
             onSubmit={handleSubmit}
-            className="flex items-center gap-2 border-t border-border pt-4"
+            className="border-border/70 bg-background/80"
           >
-            <Input
-              placeholder="Ask Concourse anything..."
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              className="flex-1"
-            />
-            <Button type="submit" size="icon" className="shrink-0">
-              <Send className="h-4 w-4" />
-            </Button>
-          </form>
+            <PromptInputTextarea placeholder="Ask Concourse anything..." />
+            <div className="flex items-center justify-end pt-2">
+              <PromptInputActions>
+                <PromptInputAction tooltip="Send message">
+                  <Button
+                    type="button"
+                    size="icon"
+                    className="h-8 w-8 rounded-full"
+                    onClick={() => void handleSubmit()}
+                    disabled={isSending || !inputValue.trim()}
+                  >
+                    <ArrowUp className="h-4 w-4" />
+                  </Button>
+                </PromptInputAction>
+              </PromptInputActions>
+            </div>
+          </PromptInput>
         </CardContent>
       </Card>
     </section>
   );
 }
+

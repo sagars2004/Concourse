@@ -1,0 +1,129 @@
+"use client";
+
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { MessageLoading } from "@/components/ui/message-loading";
+
+interface ChatBubbleProps {
+  variant?: "sent" | "received";
+  layout?: "default" | "ai";
+  className?: string;
+  children: React.ReactNode;
+}
+
+export function ChatBubble({
+  variant = "received",
+  layout = "default",
+  className,
+  children,
+}: ChatBubbleProps) {
+  return (
+    <div
+      className={cn(
+        "mb-4 flex items-start gap-2",
+        variant === "sent" && "flex-row-reverse",
+        layout === "ai" && "items-start",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+interface ChatBubbleMessageProps {
+  variant?: "sent" | "received";
+  isLoading?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+}
+
+export function ChatBubbleMessage({
+  variant = "received",
+  isLoading,
+  className,
+  children,
+}: ChatBubbleMessageProps) {
+  return (
+    <div
+      className={cn(
+        "rounded-2xl px-4 py-3 text-sm leading-relaxed",
+        variant === "sent"
+          ? "bg-primary text-primary-foreground"
+          : "bg-secondary text-secondary-foreground",
+        className
+      )}
+    >
+      {isLoading ? (
+        <div className="flex items-center space-x-2">
+          <MessageLoading />
+        </div>
+      ) : (
+        children
+      )}
+    </div>
+  );
+}
+
+interface ChatBubbleAvatarProps {
+  src?: string;
+  fallback?: string;
+  icon?: React.ReactNode;
+  className?: string;
+}
+
+export function ChatBubbleAvatar({
+  src,
+  fallback = "AI",
+  icon,
+  className,
+}: ChatBubbleAvatarProps) {
+  return (
+    <Avatar className={cn("h-8 w-8", className)}>
+      {src ? <AvatarImage src={src} /> : null}
+      <AvatarFallback>
+        {icon ? <span className="inline-flex">{icon}</span> : fallback}
+      </AvatarFallback>
+    </Avatar>
+  );
+}
+
+interface ChatBubbleActionProps {
+  icon?: React.ReactNode;
+  onClick?: () => void;
+  className?: string;
+}
+
+export function ChatBubbleAction({
+  icon,
+  onClick,
+  className,
+}: ChatBubbleActionProps) {
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className={cn("h-6 w-6", className)}
+      onClick={onClick}
+    >
+      {icon}
+    </Button>
+  );
+}
+
+export function ChatBubbleActionWrapper({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={cn("mt-2 flex items-center gap-1", className)}>
+      {children}
+    </div>
+  );
+}
+
