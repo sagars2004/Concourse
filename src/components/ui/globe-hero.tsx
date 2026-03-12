@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import createGlobe from "cobe";
+import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 
 interface DotGlobeHeroProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -19,11 +20,14 @@ const CobeGlobe = ({
   rotationSpeed?: number;
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     if (!canvasRef.current) return;
 
     let phi = 0;
+
+    const isLight = resolvedTheme === "light";
 
     const globe = createGlobe(canvasRef.current, {
       devicePixelRatio: 2,
@@ -35,13 +39,18 @@ const CobeGlobe = ({
       // Larger globe, still fully visible inside the square container
       scale: 1.0,
       offset: [0, 0],
-      dark: 1,
-      diffuse: 1.2,
+      dark: isLight ? 0 : 1,
+      diffuse: isLight ? 1.0 : 1.2,
       mapSamples: 16000,
-      mapBrightness: 6,
-      baseColor: [0.02, 0.5, 0.9],
+      mapBrightness: isLight ? 4 : 6,
+      // In light mode, use a light gray base so oceans feel pale,
+      // while landmark dots stay cyan via markerColor.
+      // In dark mode, keep the richer blue base.
+      baseColor: isLight ? [0.92, 0.95, 0.98] : [0.02, 0.5, 0.9],
+      // Landmark dots stay consistently cyan in both modes.
       markerColor: [0.1, 0.8, 1],
-      glowColor: [1, 1, 1],
+      // Bright white rim in dark mode, subtle light-gray rim in light mode
+      glowColor: isLight ? [0.82, 0.86, 0.9] : [1, 1, 1],
       markers: [
         // North America
         { location: [37.7749, -122.4194], size: 0.06 }, // San Francisco
@@ -82,7 +91,7 @@ const CobeGlobe = ({
     return () => {
       globe.destroy();
     };
-  }, [rotationSpeed]);
+  }, [rotationSpeed, resolvedTheme]);
 
   return (
     <canvas
@@ -119,15 +128,13 @@ const DotGlobeHero = React.forwardRef<HTMLDivElement, DotGlobeHeroProps>(
         )}
         {...props}
       >
-        <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-br from-background via-background/95 to-muted/20" />
-
-        <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
+        <div className="relative mx-auto flex h-full w-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
           <div className="grid w-full items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="order-2 flex flex-col items-center text-center lg:order-1 lg:items-start lg:text-left">
               {children}
             </div>
 
-            <div className="order-1 relative flex w-full max-w-[560px] justify-self-center lg:order-2">
+            <div className="order-1 relative flex w-full max-w-[560px] justify-end lg:order-2">
               <div className="relative w-full max-w-[460px] aspect-square overflow-hidden rounded-3xl">
                 <CobeGlobe
                   rotationSpeed={rotationSpeed}

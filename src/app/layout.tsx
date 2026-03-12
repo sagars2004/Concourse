@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ConcourseProvider } from "@/context/concourse-context";
 import { ErrorBoundary } from "@/components/error-boundary";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({
   variable: "--font-geist-sans",
@@ -35,13 +36,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.variable} min-h-screen bg-background font-sans text-foreground antialiased`}
       >
-        <ErrorBoundary>
-          <ConcourseProvider>{children}</ConcourseProvider>
-        </ErrorBoundary>
+        <ThemeProvider>
+          <ErrorBoundary>
+            <ConcourseProvider>{children}</ConcourseProvider>
+          </ErrorBoundary>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -58,19 +58,23 @@ export default function ResultsPage() {
       <GateAlert />
 
       <main className="flex-1">
-        <div className="mx-auto max-w-5xl space-y-10 px-4 pb-12 sm:px-6">
+        <div className="mx-auto max-w-6xl space-y-10 px-3 pb-12 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between pt-4">
             <Link href="/">
-              <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="results-header-button results-back-button gap-2 text-muted-foreground hover:text-foreground"
+              >
                 <ArrowLeft className="h-4 w-4" />
-                Back to search
+                Return to home page
               </Button>
             </Link>
             <Button
               variant="outline"
               size="sm"
               onClick={handleNewSearch}
-              className="gap-2"
+              className="results-header-button gap-2"
             >
               New search
             </Button>
@@ -78,7 +82,7 @@ export default function ResultsPage() {
 
           <CyberneticBentoGrid>
             <BentoItem
-              className="lg:col-span-3 lg:row-span-2"
+              className="lg:col-span-6"
               title="Flight info"
               description="Live flight status, gate, terminal, and boarding countdown."
               icon={<Plane className="h-4 w-4 text-primary" />}
@@ -87,7 +91,7 @@ export default function ResultsPage() {
             </BentoItem>
 
             <BentoItem
-              className="lg:col-span-3"
+              className="lg:col-span-6"
               title="Preference filters"
               description="Tune dietary, cuisine, and service preferences."
               icon={<SlidersHorizontal className="h-4 w-4 text-primary" />}

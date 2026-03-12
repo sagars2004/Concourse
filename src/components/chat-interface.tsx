@@ -58,7 +58,11 @@ export function ChatInterface() {
                     variant={msg.role === "user" ? "sent" : "received"}
                   >
                     <ChatBubbleAvatar
-                      className="h-8 w-8 shrink-0"
+                      className={
+                        msg.role === "user"
+                          ? "h-8 w-8 shrink-0"
+                          : "h-8 w-8 shrink-0 concourse-avatar"
+                      }
                       icon={
                         msg.role === "user" ? (
                           <User className="h-4 w-4" />
@@ -70,6 +74,9 @@ export function ChatInterface() {
                     />
                     <ChatBubbleMessage
                       variant={msg.role === "user" ? "sent" : "received"}
+                      className={
+                        msg.role === "user" ? undefined : "concourse-bubble"
+                      }
                     >
                       {msg.content}
                     </ChatBubbleMessage>
@@ -79,11 +86,11 @@ export function ChatInterface() {
                 {isSending && (
                   <ChatBubble variant="received">
                     <ChatBubbleAvatar
-                      className="h-8 w-8 shrink-0"
+                  className="h-8 w-8 shrink-0 concourse-avatar"
                       icon={<Plane className="h-4 w-4 text-primary" />}
                       fallback="C"
                     />
-                    <ChatBubbleMessage isLoading />
+                <ChatBubbleMessage className="concourse-bubble" isLoading />
                   </ChatBubble>
                 )}
               </ChatMessageList>
@@ -95,7 +102,7 @@ export function ChatInterface() {
             onValueChange={setInputValue}
             isLoading={isSending}
             onSubmit={handleSubmit}
-            className="border-border/70 bg-background/80"
+            className="border-border/70 bg-background/80 concourse-chat-input"
           >
             <PromptInputTextarea placeholder="Ask Concourse anything..." />
             <div className="flex items-center justify-end pt-2">

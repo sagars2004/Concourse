@@ -245,7 +245,7 @@ export function FlightStatus() {
                 {flightData.departureAirportName?.replace(/\s*(International|Intl|Airport).*$/i, "").trim() || "—"}
               </p>
               <p className="text-sm font-semibold text-primary">{departureTimeDisplay}</p>
-              <p className="text-[10px] text-muted-foreground">Departure{isEastern ? " (ET)" : ""}</p>
+              <p className="text-[10px] text-muted-foreground">Departure{isEastern ? " (EST)" : ""}</p>
             </div>
             {/* Connecting line with flight time */}
             <div className="relative flex flex-1 items-center px-2">
@@ -270,20 +270,10 @@ export function FlightStatus() {
               </p>
               <p className="text-sm font-semibold text-primary">{arrivalTimeDisplay}</p>
               <p className="text-[10px] text-muted-foreground">
-                Arrival{arrivalTz === EASTERN_TIMEZONE ? " (ET)" : arrivalTz !== departureTz ? ` (${arrivalTimeZoneLabel})` : ""}
+                Arrival{arrivalTz === EASTERN_TIMEZONE ? " (EST)" : arrivalTz !== departureTz ? ` (${arrivalTimeZoneLabel})` : ""}
               </p>
             </div>
           </div>
-          <p className="mt-3 text-center text-[10px] text-muted-foreground">
-            {isEastern ? (
-              <>All times in <strong>Eastern Time (ET)</strong>. Demo focuses on Northeast flights (JFK, LGA, EWR, BOS, PHL, etc.).</>
-            ) : (
-              <>Boarding and departure in {timeZoneLabel}</>
-            )}
-            {departureTz !== Intl.DateTimeFormat().resolvedOptions().timeZone && (
-              <> · Your timezone: {Intl.DateTimeFormat().resolvedOptions().timeZone}</>
-            )}
-          </p>
         </div>
 
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
@@ -291,14 +281,19 @@ export function FlightStatus() {
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
               Airline
             </p>
-            <p className="font-medium">{flightData.airline}</p>
+            <p className="font-medium text-foreground">
+              {flightData.airline}
+            </p>
           </div>
           {(flightData.departureAirportIata ?? flightData.departureAirportName) && (
             <div className="space-y-1.5">
               <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 Departure
               </p>
-              <p className="font-medium" title={flightData.departureAirportName}>
+              <p
+                className="font-medium text-foreground"
+                title={flightData.departureAirportName}
+              >
                 {flightData.departureAirportName ?? flightData.departureAirportIata}
               </p>
             </div>
@@ -325,7 +320,7 @@ export function FlightStatus() {
                 <>
                   <div className="flex items-center gap-1.5">
                     <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
-                    <p className="font-medium">{terminal}</p>
+                    <p className="font-medium text-foreground">{terminal}</p>
                   </div>
                   <Button variant="ghost" size="sm" className="h-6 px-2 text-xs text-primary" onClick={startEditTerminal}>
                     Edit
@@ -361,7 +356,7 @@ export function FlightStatus() {
                 <>
                   <div className="flex items-center gap-1.5">
                     <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
-                    <p className="font-medium">{gate}</p>
+                    <p className="font-medium text-foreground">{gate}</p>
                   </div>
                   <Button
                     variant="ghost"
@@ -381,9 +376,10 @@ export function FlightStatus() {
             </p>
             <div className="flex items-center gap-1.5">
               <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-              <p className="font-medium">{departureTimeDisplay}</p>
+              <p className="font-medium text-foreground">
+                {departureTimeDisplay}
+              </p>
             </div>
-            <p className="text-[10px] text-muted-foreground">{timeZoneLabel}</p>
           </div>
           <div className="space-y-1.5">
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
@@ -407,7 +403,9 @@ export function FlightStatus() {
                 <>
                   <div className="flex items-center gap-1.5">
                     <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                    <p className="font-medium">{boardingTime}</p>
+                    <p className="font-medium text-foreground">
+                      {boardingTime}
+                    </p>
                   </div>
                   <Button variant="ghost" size="sm" className="h-6 px-2 text-xs text-primary" onClick={startEditBoardingTime}>
                     Edit
@@ -442,17 +440,6 @@ export function FlightStatus() {
               </div>
             </div>
           )}
-        </div>
-        <div className="mt-4 flex justify-end border-t border-border pt-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="gap-1.5 text-muted-foreground hover:text-foreground"
-            onClick={() => simulateGateChange()}
-          >
-            <RefreshCw className="h-3.5 w-3.5" />
-            Simulate gate change (demo)
-          </Button>
         </div>
       </CardContent>
     </Card>

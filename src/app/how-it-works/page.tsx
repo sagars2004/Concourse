@@ -1,25 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Plane, ArrowLeft } from "lucide-react";
+import { Plane } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BackToConcourseLink } from "@/components/back-to-concourse-link";
 
 export const metadata: Metadata = {
   title: "How It Works — Concourse",
-  description:
-    "Here is a technical overview of my app, Concourse.",
+  description: "Here is a technical overview of my app, Concourse.",
 };
 
 export default function HowItWorksPage() {
+
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-        <Link
-          href="/"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Concourse
-        </Link>
+        <BackToConcourseLink />
 
         <header className="mb-12">
           <div className="mb-4 flex items-center gap-3">
@@ -85,13 +80,38 @@ export default function HowItWorksPage() {
             <Card>
               <CardContent className="pt-5">
                 <ul className="space-y-2 text-muted-foreground">
-                  <li><strong className="text-foreground">Frontend:</strong> Next.js 16 (App Router), React 19, Tailwind CSS 4, Shadcn/ui, Lucide icons</li>
-                  <li><strong className="text-foreground">Maps:</strong> Mapbox GL JS (terminal visualization)</li>
-                  <li><strong className="text-foreground">Backend:</strong> Next.js API Routes (server-side, same repo)</li>
-                  <li><strong className="text-foreground">AI & agents:</strong> DigitalOcean Gradient — multi-agent orchestration, RAG knowledge bases, serverless inference</li>
-                  <li><strong className="text-foreground">Flight data:</strong> AviationStack API (free tier)</li>
-                  <li><strong className="text-foreground">Database:</strong> Supabase (free tier) — user preferences and session data</li>
-                  <li><strong className="text-foreground">Deployment:</strong> DigitalOcean App Platform</li>
+                  <li>
+                    <strong className="text-foreground">Frontend:</strong> Next.js 16 (App Router), React 19, Tailwind CSS 4, shadcn/ui,
+                    Lucide icons, Cobe (WebGL globe), custom bento layout, and a global light/dark theme driven by{" "}
+                    <code className="rounded bg-muted px-1 py-0.5 font-mono">next-themes</code>.
+                  </li>
+                  <li>
+                    <strong className="text-foreground">Maps:</strong> Mapbox GL JS for terminal visualization and gate/vendor overlays.
+                  </li>
+                  <li>
+                    <strong className="text-foreground">Backend:</strong> Next.js API Routes (in this repo) deployed to DigitalOcean App
+                    Platform.
+                  </li>
+                  <li>
+                    <strong className="text-foreground">AI & agents:</strong> DigitalOcean Gradient — multi-agent orchestration, RAG
+                    knowledge bases, serverless inference, and tool calling for flight + food agents.
+                  </li>
+                  <li>
+                    <strong className="text-foreground">Flight data:</strong> AviationStack API (free tier) for live schedules, gates and
+                    delays.
+                  </li>
+                  <li>
+                    <strong className="text-foreground">Database:</strong> DigitalOcean Managed PostgreSQL (target) or Supabase in this
+                    demo — stores preference filters, sessions, and analytics events.
+                  </li>
+                  <li>
+                    <strong className="text-foreground">Object storage:</strong> DigitalOcean Spaces for static assets (airport JSON,
+                    map overlays, marketing images) and future export/report files.
+                  </li>
+                  <li>
+                    <strong className="text-foreground">Deployment & infra:</strong> DigitalOcean App Platform for the web app, Functions
+                    for lightweight webhooks/utilities, Gradient for AI workloads, and Spaces + Managed DB for data.
+                  </li>
                 </ul>
               </CardContent>
             </Card>
@@ -105,15 +125,35 @@ export default function HowItWorksPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li><code className="rounded bg-muted px-1.5 py-0.5 font-mono">POST /api/flight/lookup</code> — Flight number → AviationStack → airline, terminal, gate, boarding time, delay status</li>
-                  <li><code className="rounded bg-muted px-1.5 py-0.5 font-mono">POST /api/recommendations</code> — Terminal, gate, preferences → ranked food options with walk times (from in-app data + RAG)</li>
-                  <li><code className="rounded bg-muted px-1.5 py-0.5 font-mono">POST /api/chat</code> — User message → DigitalOcean Gradient lead agent → persona response</li>
-                  <li><code className="rounded bg-muted px-1.5 py-0.5 font-mono">GET /api/gate/status</code> — Gate change polling / simulation</li>
-                  <li><code className="rounded bg-muted px-1.5 py-0.5 font-mono">POST /api/preferences</code> — Save dietary preferences to Supabase</li>
-                  <li><code className="rounded bg-muted px-1.5 py-0.5 font-mono">GET /api/preferences</code> — Retrieve stored preferences</li>
+                  <li>
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono">POST /api/flight/lookup</code> — Flight number →
+                    AviationStack → airline, terminal, gate, boarding time, delay status (optionally cached in a DigitalOcean Managed DB).
+                  </li>
+                  <li>
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono">POST /api/recommendations</code> — Terminal, gate, and
+                    preferences → ranked food options with walk times using in-repo JSON and Gradient RAG knowledge bases.
+                  </li>
+                  <li>
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono">POST /api/chat</code> — User message → DigitalOcean
+                    Gradient lead agent → persona response, with calls out to flight + food tools as needed.
+                  </li>
+                  <li>
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono">GET /api/gate/status</code> — Gate change polling /
+                    simulation endpoint used by the app and agents.
+                  </li>
+                  <li>
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono">POST /api/preferences</code> — Persist dietary preferences
+                    to Supabase / DigitalOcean Managed PostgreSQL.
+                  </li>
+                  <li>
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono">GET /api/preferences</code> — Retrieve stored preferences
+                    per session.
+                  </li>
                 </ul>
                 <p className="text-sm text-muted-foreground">
-                  <strong className="text-foreground">External:</strong> AviationStack (flight lookup), DigitalOcean Gradient (agents + RAG), Mapbox (maps), Supabase (preferences).
+                  <strong className="text-foreground">External & cloud:</strong> AviationStack (flight lookup), DigitalOcean Gradient
+                  (agents + RAG), DigitalOcean App Platform (app + API), DigitalOcean Spaces (static assets), Mapbox (maps), and
+                  Supabase / DigitalOcean Managed PostgreSQL (preferences and session state).
                 </p>
               </CardContent>
             </Card>
@@ -159,11 +199,27 @@ export default function HowItWorksPage() {
             <Card>
               <CardContent className="pt-5">
                 <ul className="space-y-2 text-muted-foreground">
-                  <li><strong className="text-foreground">Flight data:</strong> Live via AviationStack (free tier).</li>
-                  <li><strong className="text-foreground">Food/vendor data:</strong> Curated JSON in repo + RAG knowledge base (JFK, LGA, EWR, RDU) for agent answers.</li>
-                  <li><strong className="text-foreground">Maps:</strong> Mapbox with seeded coordinates per airport/terminal.</li>
-                  <li><strong className="text-foreground">Preferences:</strong> Supabase (session/user).</li>
-                  <li><strong className="text-foreground">Gate changes:</strong> Demo supports simulation; can be wired to live polling.</li>
+                  <li>
+                    <strong className="text-foreground">Flight data:</strong> Live via AviationStack (free tier), with results cached for a
+                    short TTL in the app/DB to avoid rate limits.
+                  </li>
+                  <li>
+                    <strong className="text-foreground">Food/vendor data:</strong> Curated JSON in-repo plus a Gradient RAG knowledge base
+                    (JFK, LGA, EWR, RDU) stored in DigitalOcean infrastructure for low-latency retrieval.
+                  </li>
+                  <li>
+                    <strong className="text-foreground">Maps:</strong> Mapbox with seeded coordinates per airport/terminal and optional
+                    static overlays served from DigitalOcean Spaces.
+                  </li>
+                  <li>
+                    <strong className="text-foreground">Preferences:</strong> Supabase / DigitalOcean Managed PostgreSQL keyed by
+                    anonymous session ID.
+                  </li>
+                  <li>
+                    <strong className="text-foreground">Gate changes:</strong> Demo supports simulation and polling via{" "}
+                    <code className="rounded bg-muted px-1 py-0.5 font-mono">/api/gate/status</code>; in production this would be wired to
+                    airline/webhook feeds and Gradient background agents.
+                  </li>
                 </ul>
               </CardContent>
             </Card>

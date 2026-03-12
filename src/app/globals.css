@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @theme inline {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
@@ -42,6 +43,142 @@
   --radius-xl: 0.75rem;
 }
 
+/* Light theme overrides when html has class="light" */
+.light {
+  /* Force plain white background in light mode */
+  --color-background: #ffffff;
+  --color-foreground: #020617;
+
+  --color-card: #ffffff;
+  --color-card-foreground: #020617;
+
+  --color-popover: #ffffff;
+  --color-popover-foreground: #020617;
+
+  --color-primary: #0f172a;
+  --color-primary-foreground: #e0f2fe;
+
+  --color-secondary: #e2e8f0;
+  --color-secondary-foreground: #0f172a;
+
+  --color-muted: #e5e7eb;
+  --color-muted-foreground: #4b5563;
+
+  --color-accent: #e5e7eb;
+  --color-accent-foreground: #020617;
+
+  --color-destructive: #b91c1c;
+  --color-destructive-foreground: #fef2f2;
+
+  --color-border: #d4d4d8;
+  --color-input: #e5e7eb;
+  --color-ring: #0f172a;
+
+  --color-success: #16a34a;
+  --color-warning: #ca8a04;
+  --color-danger: #b91c1c;
+}
+
+/* Ensure main surfaces are plain white in light mode */
+.light .bg-background,
+.light header,
+.light footer,
+.light .bg-card,
+.light .bg-card\/70,
+.light .bg-muted\/20,
+.light .bg-muted\/30,
+.light .bg-background\/65,
+.light .bg-background\/70 {
+  background-color: #ffffff !important;
+}
+
+/* Form control text colors by theme */
+.light input,
+.light textarea,
+.light select {
+  color: #020617; /* near-black */
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  color: #f9fafb; /* near-white */
+}
+
+/* In light mode, force any leftover white text utilities to be dark for readability */
+.light .text-white {
+  color: #020617 !important;
+}
+
+/* In light mode, make muted text darker and remove low-opacity variants for readability */
+.light .text-muted-foreground {
+  color: #4b5563 !important; /* slate-600 */
+}
+
+.light .text-muted-foreground\/60,
+.light .text-muted-foreground\/70 {
+  color: #4b5563 !important;
+}
+
+/* In light mode, ensure primary/foreground text utilities are solid dark */
+.light .text-foreground,
+.light .text-foreground\/80,
+.light .text-foreground\/70,
+.light .text-foreground\/60 {
+  color: #020617 !important;
+}
+
+/* In light mode, force key headings and primary accents to black for readability */
+.light h1,
+.light h2,
+.light h3,
+.light h4,
+.light .text-primary,
+.light .font-semibold,
+.light .font-bold {
+  color: #020617 !important;
+}
+
+/* Chat: make Concourse bubbles/avatar/input medium gray in light mode */
+.light .concourse-bubble {
+  background-color: #e5e7eb !important; /* gray-200 */
+  color: #111827 !important; /* gray-900 */
+}
+
+.light .concourse-avatar {
+  background-color: #e5e7eb !important; /* same gray as bubble */
+  color: #4b5563 !important; /* gray-600 fallback text */
+}
+
+.light .concourse-avatar span svg {
+  color: #ffffff !important; /* white airplane icon */
+}
+
+.light .concourse-chat-input {
+  background-color: #f3f4f6 !important;
+  border-color: #e5e7eb !important;
+}
+
+/* Chat scroll-down arrow hover state */
+button[aria-label="Scroll to bottom"]:hover svg {
+  color: #ffffff !important;
+}
+
+/* Light-mode code highlights (e.g. next-themes, API routes) */
+.light code {
+  background-color: #e5e7eb !important; /* light gray */
+  color: #111827 !important; /* dark text for readability */
+}
+
+/* Light mode: subtle hover color for results header buttons */
+.light .results-header-button:hover {
+  color: #9ca3af !important; /* gray-400 */
+}
+
+.light .results-back-button:hover {
+  background-color: #e5e7eb !important; /* light gray highlight */
+}
+
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
@@ -50,4 +187,14 @@ body {
 
 * {
   border-color: var(--color-border);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }

@@ -170,7 +170,7 @@ export function HomeHero() {
     <DotGlobeHero
       rotationSpeed={0.0035}
       globeRadius={1.7}
-      className="bg-gradient-to-br from-background via-background/95 to-muted/10"
+      className="bg-background"
     >
       <div className="relative w-full max-w-2xl px-4 text-center sm:px-0 lg:text-left">
         {/* Hero content */}
@@ -178,7 +178,7 @@ export function HomeHero() {
           <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10">
             <Plane className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-[3.4rem]">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-[3.4rem] min-h-[5rem] sm:min-h-[6.5rem] lg:min-h-[7.5rem]">
             {headline}
             <br />
             <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
@@ -196,7 +196,7 @@ export function HomeHero() {
           onSubmit={handleSubmit}
           autoComplete="off"
           noValidate
-          className="space-y-5 rounded-[1.75rem] border border-border/60 bg-background/65 p-5 shadow-[0_0_50px_rgba(3,7,18,0.45)] backdrop-blur-md sm:p-6"
+          className="space-y-5 rounded-[1.75rem] border border-border/60 bg-background/65 p-5 backdrop-blur-md sm:p-6"
         >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
             <div className="relative flex-1">
@@ -224,7 +224,7 @@ export function HomeHero() {
               disabled={isLoading}
               className="relative h-14 w-40 cursor-pointer overflow-hidden rounded-lg bg-primary text-base font-semibold text-primary-foreground shadow-lg shadow-primary/40 hover:bg-primary/80 before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.7)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:transition-[background-position_0s_ease] before:duration-1000 hover:before:bg-[position:-100%_0,0_0] dark:before:bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.5)_50%,transparent_75%,transparent_100%)]"
             >
-              {isLoading ? "Searching..." : "Search"}
+              {isLoading ? "Searching..." : "Let's Go →"}
             </Button>
           </div>
 

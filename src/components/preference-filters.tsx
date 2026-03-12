@@ -70,13 +70,13 @@ function FilterGroup({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-3 rounded-xl border border-border/70 bg-muted/20 p-3">
-      <div className="flex items-center justify-between">
-        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+    <div className="min-w-[180px] space-y-1">
+      <div className="flex items-center gap-2">
+        <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
           {label}
         </p>
-        <span className="rounded-full border border-border/70 bg-background/70 px-2 py-0.5 text-[10px] text-muted-foreground">
-          {selectedCount} selected
+        <span className="text-[10px] text-muted-foreground/70">
+          {selectedCount}
         </span>
       </div>
       {children}
@@ -189,32 +189,24 @@ export function PreferenceFiltersSection() {
           Refine what shows up in your recommendations
         </p>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border/70 bg-muted/20 p-3">
+      <CardContent className="space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs text-muted-foreground">
-            Adjust filters quickly to refine recommendations in real-time.
+            Adjust filters to instantly update your food matches.
           </p>
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={clearAll}
-              className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border/70 bg-background/60 px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="inline-flex h-7 items-center gap-1.5 rounded-md border border-primary/40 bg-primary/10 px-2.5 text-[11px] font-medium text-primary transition-colors hover:bg-primary/15"
             >
-              <X className="h-3.5 w-3.5" />
-              Clear all
-            </button>
-            <button
-              type="button"
-              onClick={resetDefaults}
-              className="inline-flex h-8 items-center gap-1.5 rounded-md border border-primary/40 bg-primary/10 px-2.5 text-xs font-medium text-primary transition-colors hover:bg-primary/15"
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-              Reset defaults
+              <X className="h-3 w-3" />
+              Clear
             </button>
           </div>
         </div>
 
-        <div className="grid gap-3 xl:grid-cols-2">
+        <div className="flex flex-wrap gap-4">
           <FilterGroup label="Dietary" selectedCount={preferenceFilters.dietary.length}>
             <FilterChips
               options={DIETARY_OPTIONS}

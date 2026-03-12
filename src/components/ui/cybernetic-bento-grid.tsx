@@ -60,25 +60,8 @@ export function BentoItem({
         className
       )}
     >
-      <div
-        className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background:
-            "radial-gradient(320px circle at var(--mouse-x) var(--mouse-y), rgba(56,189,248,0.2), transparent 40%)",
-        }}
-      />
-      <div className="relative space-y-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 text-foreground">
-            {icon}
-            <h3 className="text-sm font-semibold tracking-wide">{title}</h3>
-          </div>
-          {description ? (
-            <p className="text-xs text-muted-foreground">{description}</p>
-          ) : null}
-        </div>
-        <div>{children}</div>
-      </div>
+      {/* Hover glow removed for a flatter, less “vibe-coded” look */}
+      <div className="relative h-full w-full">{children}</div>
     </section>
   );
 }
