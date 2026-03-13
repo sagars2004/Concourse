@@ -125,17 +125,13 @@ export function FlightStatus() {
     return target.getTime();
   }, [boardingTime, flightData.flightDate]);
 
-  const [countdownRemainingMs, setCountdownRemainingMs] = useState<number>(() => {
-    if (boardingTargetMs != null) return Math.max(0, boardingTargetMs - Date.now());
-    return 0;
-  });
+  const [countdownRemainingMs, setCountdownRemainingMs] = useState<number>(0);
   useEffect(() => {
     if (boardingTargetMs == null) return;
     const tick = () => {
       const remaining = Math.max(0, boardingTargetMs - Date.now());
       setCountdownRemainingMs(remaining);
     };
-    tick();
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
   }, [boardingTargetMs]);

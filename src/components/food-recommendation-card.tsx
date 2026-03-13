@@ -25,14 +25,11 @@ export function FoodRecommendationCard({
   tags,
 }: FoodRecommendationProps) {
   return (
-    <Card className="transition-colors hover:border-primary/30">
-      <CardContent className="space-y-3 p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h4 className="truncate font-semibold">{name}</h4>
-            <p className="text-sm text-muted-foreground">{cuisine}</p>
-          </div>
-          <TimeIndicator level={level} />
+    <Card className="flex h-full min-h-0 flex-col transition-colors hover:border-primary/30">
+      <CardContent className="flex min-h-0 flex-1 flex-col space-y-3 p-5">
+        <div className="min-w-0">
+          <h4 className="truncate font-semibold">{name}</h4>
+          <p className="text-sm text-muted-foreground">{cuisine}</p>
         </div>
 
         <div className="flex flex-wrap gap-1.5">
@@ -62,6 +59,10 @@ export function FoodRecommendationCard({
         <p className="border-l-2 border-primary/30 pl-3 text-sm italic text-muted-foreground">
           &ldquo;{opinion}&rdquo;
         </p>
+
+        <div className="shrink-0 pt-2">
+          <TimeIndicator level={level} />
+        </div>
       </CardContent>
     </Card>
   );

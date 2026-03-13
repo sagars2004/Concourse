@@ -106,7 +106,7 @@ export function FoodRecommendations() {
           I&apos;m feeling lucky
         </button>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {recommendations.map((rec) => (
           <div
             key={rec.name}
@@ -119,7 +119,7 @@ export function FoodRecommendations() {
                 handleVendorClick(rec.name);
               }
             }}
-            className="cursor-pointer"
+            className="h-full cursor-pointer"
           >
             <FoodRecommendationCard {...toCardProps(rec)} />
           </div>

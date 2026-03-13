@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Check, RotateCcw, SlidersHorizontal, X } from "lucide-react";
+import { Check, RotateCcw, SlidersHorizontal } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useConcourse } from "@/context/concourse-context";
 import type { PreferenceFilters } from "@/lib/preference-filters";
@@ -179,8 +179,8 @@ export function PreferenceFiltersSection() {
   if (step !== "results") return null;
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
+    <Card className="flex h-full min-h-0 flex-col">
+      <CardHeader className="shrink-0 pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
           <SlidersHorizontal className="h-5 w-5 text-primary" />
           Your preferences
@@ -189,22 +189,10 @@ export function PreferenceFiltersSection() {
           Refine what shows up in your recommendations
         </p>
       </CardHeader>
-      <CardContent className="space-y-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-xs text-muted-foreground">
-            Adjust filters to instantly update your food matches.
-          </p>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={clearAll}
-              className="inline-flex h-7 items-center gap-1.5 rounded-md border border-primary/40 bg-primary/10 px-2.5 text-[11px] font-medium text-primary transition-colors hover:bg-primary/15"
-            >
-              <X className="h-3 w-3" />
-              Clear
-            </button>
-          </div>
-        </div>
+      <CardContent className="flex min-h-0 flex-1 flex-col gap-3">
+        <p className="text-xs text-muted-foreground">
+          Adjust filters to instantly update your food matches.
+        </p>
 
         <div className="flex flex-wrap gap-4">
           <FilterGroup label="Dietary" selectedCount={preferenceFilters.dietary.length}>
@@ -243,6 +231,20 @@ export function PreferenceFiltersSection() {
               onToggle={toggleMeal}
             />
           </FilterGroup>
+        </div>
+
+        <div className="mt-auto shrink-0 space-y-2 border-t border-border/60 pt-4">
+          <button
+            type="button"
+            onClick={resetDefaults}
+            className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border/80 bg-muted/30 px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            Reset preferences
+          </button>
+          <p className="text-[11px] text-muted-foreground/80">
+            Recommendations update as you change filters.
+          </p>
         </div>
       </CardContent>
     </Card>

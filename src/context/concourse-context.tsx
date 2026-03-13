@@ -54,6 +54,7 @@ interface ConcourseContextValue extends ConcourseState {
   savePreferences: (filters: PreferenceFilters) => Promise<void>;
   loadRecommendations: (filtersOverride?: Partial<PreferenceFilters>, terminalOverride?: string | null, minutesUntilBoardingOverride?: number | null) => Promise<void>;
   sendChatMessage: (content: string) => Promise<void>;
+  addAssistantMessage: (content: string) => void;
   setInitialMessages: (messages: ChatMessage[]) => void;
   clearResults: () => void;
   dismissGateAlert: () => void;
@@ -280,6 +281,14 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
     [state.messages]
   );
 
+  const addAssistantMessage = useCallback((content: string) => {
+    if (!content.trim()) return;
+    setState((s) => ({
+      ...s,
+      messages: [...s.messages, { role: "assistant", content: content.trim() }],
+    }));
+  }, []);
+
   const setInitialMessages = useCallback((messages: ChatMessage[]) => {
     setState((s) => ({ ...s, messages }));
   }, []);
@@ -386,6 +395,7 @@ export function ConcourseProvider({ children }: { children: React.ReactNode }) {
       savePreferences,
       loadRecommendations,
       sendChatMessage,
+      addAssistantMessage,
       setInitialMessages,
       clearResults,
       dismissGateAlert,

@@ -2,11 +2,13 @@
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
 import { Map, Navigation } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useConcourse } from "@/context/concourse-context";
 import { getTerminalMapData } from "@/data/airports/map-coordinates";
 
+const LIGHT_STYLE = "mapbox://styles/mapbox/light-v11";
 const DARK_STYLE = "mapbox://styles/mapbox/dark-v11";
 
 function getMapboxToken(): string {
@@ -18,12 +20,14 @@ export function TerminalMap() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<unknown>(null);
   const [ready, setReady] = useState(false);
+  const { resolvedTheme } = useTheme();
   const { flightData, gateOverride, terminalOverride, recommendations, step } = useConcourse();
 
   const mapboxToken = getMapboxToken();
   const terminal = terminalOverride ?? flightData?.terminal ?? "";
   const gate = gateOverride ?? flightData?.gate ?? "B12";
   const airportIata = flightData?.departureAirportIata ?? null;
+  const mapStyle = resolvedTheme === "light" ? LIGHT_STYLE : DARK_STYLE;
 
   useEffect(() => {
     if (step !== "results" || !flightData || !mapboxToken || !containerRef.current) {
@@ -41,6 +45,7 @@ export function TerminalMap() {
 
     let cancelled = false;
     let map: import("mapbox-gl").Map | null = null;
+    let resizeObserver: ResizeObserver | null = null;
 
     import("mapbox-gl").then((mapboxglMod) => {
       if (cancelled || !containerRef.current) return;
@@ -51,15 +56,22 @@ export function TerminalMap() {
 
       map = new MapboxGL.Map({
         container: containerRef.current,
-        style: DARK_STYLE,
+        style: mapStyle,
         center: mapData.center,
         zoom: mapData.zoom,
       });
 
       map.addControl(new MapboxGL.NavigationControl(), "top-right");
 
+      const container = containerRef.current;
+      resizeObserver = new ResizeObserver(() => {
+        if (map && !cancelled) map.resize();
+      });
+      resizeObserver.observe(container);
+
       map.on("load", () => {
         if (!map || cancelled) return;
+        map.resize();
 
         mapData.points.forEach((pt) => {
           const el = document.createElement("div");
@@ -109,10 +121,20 @@ export function TerminalMap() {
 
     return () => {
       cancelled = true;
+      resizeObserver?.disconnect();
+      resizeObserver = null;
       if (map) map.remove();
       mapRef.current = null;
     };
   }, [step, flightData, recommendations, terminal, gate, airportIata, mapboxToken]);
+
+  // When theme changes, update map style without changing main effect deps (keeps dependency array size constant)
+  useEffect(() => {
+    const map = mapRef.current as import("mapbox-gl").Map | null;
+    if (!map || typeof map.setStyle !== "function") return;
+    const nextStyle = resolvedTheme === "light" ? LIGHT_STYLE : DARK_STYLE;
+    map.setStyle(nextStyle);
+  }, [resolvedTheme]);
 
   if (step !== "results") return null;
 
@@ -208,7 +230,7 @@ export function TerminalMap() {
   }
 
   return (
-    <section className="space-y-4">
+    <section className="w-full min-w-0 space-y-4">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Map className="h-5 w-5 text-primary" />
@@ -216,11 +238,11 @@ export function TerminalMap() {
         </div>
         <p className="text-xs text-muted-foreground">Schematic — gate and food locations are approximate.</p>
       </div>
-      <Card className="overflow-hidden">
+      <Card className="w-full overflow-hidden">
         <CardContent className="relative p-0">
           <div
             ref={containerRef}
-            className="h-64 w-full bg-card sm:h-80"
+            className="h-64 w-full min-w-0 bg-card sm:h-80"
             style={{ minHeight: 256 }}
           />
           {!ready && (

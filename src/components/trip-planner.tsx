@@ -8,11 +8,10 @@ import { Button } from "@/components/ui/button";
 import { useConcourse } from "@/context/concourse-context";
 
 export function TripPlanner() {
-  const { step, flightData, preferenceFilters } = useConcourse();
+  const { step, flightData, preferenceFilters, addAssistantMessage } = useConcourse();
   const [nextAirport, setNextAirport] = useState("");
   const [layoverMinutes, setLayoverMinutes] = useState("");
   const [loading, setLoading] = useState(false);
-  const [plan, setPlan] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   if (step !== "results" || !flightData) return null;
@@ -20,7 +19,6 @@ export function TripPlanner() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setPlan(null);
     setLoading(true);
     try {
       const layover = layoverMinutes.trim()
@@ -40,7 +38,9 @@ export function TripPlanner() {
       if (!res.ok) {
         throw new Error(data?.error ?? "Trip plan failed");
       }
-      setPlan(typeof data.plan === "string" ? data.plan : JSON.stringify(data));
+      const planText =
+        typeof data.plan === "string" ? data.plan : JSON.stringify(data);
+      addAssistantMessage(planText);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Something went wrong planning your trip."
@@ -66,15 +66,15 @@ export function TripPlanner() {
             Start with your current flight, then optionally add a connection so Concourse can suggest a meal at each stop.
           </p>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <form onSubmit={handleSubmit} className="space-y-3">
+        <CardContent className="space-y-2 pb-0">
+          <form onSubmit={handleSubmit} className="space-y-3 pb-2">
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Next airport (connection) – IATA
+                  Connection airport:
                 </label>
                 <Input
-                  placeholder="e.g. LAX, ORD"
+                  placeholder=""
                   value={nextAirport}
                   onChange={(e) => setNextAirport(e.target.value.toUpperCase().slice(0, 3))}
                   className="h-9 text-sm uppercase"
@@ -82,14 +82,14 @@ export function TripPlanner() {
                   disabled={loading}
                 />
               </div>
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Layover minutes at next airport
+                  Layover time (minutes):
                 </label>
                 <div className="relative">
                   <Clock className="pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
                   <Input
-                    placeholder="e.g. 60"
+                    placeholder=""
                     value={layoverMinutes}
                     onChange={(e) => setLayoverMinutes(e.target.value.replace(/[^0-9]/g, ""))}
                     className="h-9 pl-7 text-sm"
@@ -99,7 +99,7 @@ export function TripPlanner() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-end">
+            <div className="pt-1 pb-2 flex justify-center">
               <Button type="submit" size="sm" disabled={loading}>
                 {loading ? "Planning your trip…" : "Plan my trip"}
               </Button>
@@ -112,17 +112,7 @@ export function TripPlanner() {
             </p>
           )}
 
-          {plan && (
-            <div className="mt-3 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                <Route className="h-3.5 w-3.5 text-primary" />
-                <span>Concourse says:</span>
-              </div>
-              <div className="rounded-md border border-border bg-muted/20 p-3 text-sm text-muted-foreground whitespace-pre-line">
-                {plan}
-              </div>
-            </div>
-          )}
+          {/* Trip planner details are surfaced in the Chat with Concourse window */}
         </CardContent>
       </Card>
     </section>

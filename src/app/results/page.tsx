@@ -91,7 +91,7 @@ export default function ResultsPage() {
             </BentoItem>
 
             <BentoItem
-              className="lg:col-span-6"
+              className="lg:col-span-3 lg:row-span-2"
               title="Preference filters"
               description="Tune dietary, cuisine, and service preferences."
               icon={<SlidersHorizontal className="h-4 w-4 text-primary" />}
@@ -100,25 +100,7 @@ export default function ResultsPage() {
             </BentoItem>
 
             <BentoItem
-              className="lg:col-span-3 lg:row-span-2"
-              title="Recommended for you"
-              description="Personalized options based on your gate and timing."
-              icon={<UtensilsCrossed className="h-4 w-4 text-primary" />}
-            >
-              <FoodRecommendations />
-            </BentoItem>
-
-            <BentoItem
-              className="lg:col-span-3 lg:row-span-2"
-              title="Terminal map"
-              description="Quick visual orientation near your departure area."
-              icon={<Map className="h-4 w-4 text-primary" />}
-            >
-              <TerminalMap />
-            </BentoItem>
-
-            <BentoItem
-              className="lg:col-span-3 lg:row-span-2"
+              className="lg:col-span-3"
               title="Trip planner"
               description="Plan pre-boarding steps with your available time."
               icon={<Route className="h-4 w-4 text-primary" />}
@@ -127,12 +109,30 @@ export default function ResultsPage() {
             </BentoItem>
 
             <BentoItem
-              className="lg:col-span-3 lg:row-span-2"
+              className="lg:col-span-3"
               title="Concourse chat"
               description="Ask follow-up questions about food, flights, and airport logistics."
               icon={<MessageSquare className="h-4 w-4 text-primary" />}
             >
               <ChatInterface />
+            </BentoItem>
+
+            <BentoItem
+              className="lg:col-span-6"
+              title="Recommended for you"
+              description="Personalized options based on your gate and timing."
+              icon={<UtensilsCrossed className="h-4 w-4 text-primary" />}
+            >
+              <FoodRecommendations />
+            </BentoItem>
+
+            <BentoItem
+              className="lg:col-span-6"
+              title="Terminal map"
+              description="Quick visual orientation near your departure area."
+              icon={<Map className="h-4 w-4 text-primary" />}
+            >
+              <TerminalMap />
             </BentoItem>
           </CyberneticBentoGrid>
         </div>

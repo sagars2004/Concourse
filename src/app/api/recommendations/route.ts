@@ -13,7 +13,7 @@ const MOCK_RECOMMENDATIONS: FoodRecommendationItem[] = [
     location: "Near Gate B14, Terminal 4",
     level: "green",
     opinion:
-      "Best burger in T4, hands down. The ShackBurger is worth every second of that walk.",
+      "Best burger in T4, hands down. The ShackBurger is worth every second.",
     tags: ["Fast Casual", "Burgers"],
     dietaryTags: ["vegetarian"],
   },
